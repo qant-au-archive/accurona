@@ -137,12 +137,13 @@ underside; `facing: 'down'` mirrors them inside the item's height. `mountFrom` a
 `facing` are decided in [the scene format](docs/scene-format.md#mounting-and-facing-version-2)
 and are in scene format version 2. Every element with a `mount` names its `mountFrom`:
 ceiling gear (detectors, dome cameras, access points, ceiling speakers, the AC
-cassette, cable tray) is `'ceiling'`, most of it flush (`mount: 0`) and facing down;
+cassette, cable tray, downlights, pendant lights) is `'ceiling'`, most of it flush
+(`mount: 0`) and facing down, recessed items at a negative `mount`;
 wall gear stays `'floor'`. Items put on top of something else stand on it: an element
 whose top carries things (tables, desks, benches, base cabinets, sideboards, TV units,
 bedside tables, filing cabinets) gives that top's height as `surface`, and bench-top
 gear (monitors, the laptop, the desk phone, the router and desktop switch, the NAS, the
-microwave) is `mountFrom: 'surface'`, standing on whatever carrying item an editor places
+microwave, the table lamp) is `mountFrom: 'surface'`, standing on whatever carrying item an editor places
 it over and on the floor when there is none. The renderers draw an element as installed:
 
 - **Isometric**: the solids mirrored (a dome hangs below its rim), front and side

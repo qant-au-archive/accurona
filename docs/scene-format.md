@@ -268,8 +268,10 @@ interface PlanPlacement {
   x: number;              // mm: the centre of the footprint
   y: number;              // mm
   rotation?: number;      // degrees clockwise; default 0
-  mirror?: { x?: boolean; y?: boolean }; // flips, e.g. a door's hinge side and swing
-  mountMm?: number;       // underside above the floor; default the element's `mount`, else 0
+  mirror?: { x?: boolean; y?: boolean; z?: boolean }; // flips, e.g. a door's hinge side and swing; z: top to bottom
+  mountFrom?: 'floor' | 'ceiling' | 'surface'; // what mountMm is measured from, see Mounting and facing
+  mountMm?: number;       // the offset from mountFrom; default the element's `mount`, else 0
+  mountOn?: Id;           // 'surface' only: the object this one stands on
   size?: { w?: number; d?: number; h?: number }; // mm; overrides the element's size
   attach?: { wall: Id };  // doors, windows and anything else fixed into a wall
   layer?: Id;
@@ -289,12 +291,13 @@ interface PlanPlacement {
 
 ### Mounting and facing (version 2)
 
-**Status: in `@accurona/core` (schema, validation and the version 1 migration) and
-the element renderers (see the README, Mounting and facing); the editors follow.** Version 1 has one number for height,
+**Status: built.** In `@accurona/core` (schema, validation and the version 1
+migration), the element renderers (see the README, Mounting and facing), Axonometra
+(stored, edited, and drawn in plan, isometric and 3D) and Reticulyne (kept as found).
+Version 1 has one number for height,
 `mountMm`, measured from the floor, and nothing for which way an item faces, so a
 downlight is placed at a fixed 2700 mm whatever the ceiling height, and a dome camera
-draws with its dome pointing up. Version 2 fixes both. The worked examples further down
-are still version 1 files, which load through the migration below.
+draws with its dome pointing up. Version 2 fixes both.
 
 ```ts
 interface PlanPlacement {
@@ -531,7 +534,7 @@ describing a network in words. So:
 ### Smallest valid scene
 
 ```json
-{ "format": "accurona-scene", "version": 1, "id": "empty", "objects": [] }
+{ "format": "accurona-scene", "version": 2, "id": "empty", "objects": [] }
 ```
 
 ### A network with no drawing yet
@@ -539,7 +542,7 @@ describing a network in words. So:
 ```json
 {
   "format": "accurona-scene",
-  "version": 1,
+  "version": 2,
   "id": "branch-office",
   "title": "Branch office",
   "objects": [
@@ -556,16 +559,21 @@ describing a network in words. So:
 
 ### A plan
 
-One room, 4 m by 3 m (4000 by 3000 mm), with a door and a rack.
+One room, 4 m by 3 m (4000 by 3000 mm) with a 2.4 m ceiling: a door, a rack, a desk with a
+monitor standing on it, and a recessed downlight that hangs from the ceiling, so it
+follows the ceiling if the wall height changes.
 
 ```json
 {
   "format": "accurona-scene",
-  "version": 1,
+  "version": 2,
   "id": "comms-room",
   "objects": [
     { "id": "door-1", "element": "door" },
-    { "id": "rack-1", "element": "rack-600x1000-42u", "name": "Rack A" }
+    { "id": "rack-1", "element": "rack-600x1000-42u", "name": "Rack A" },
+    { "id": "desk-1", "element": "desk" },
+    { "id": "monitor-1", "element": "monitor" },
+    { "id": "light-1", "element": "downlight" }
   ],
   "views": [
     {
@@ -576,6 +584,7 @@ One room, 4 m by 3 m (4000 by 3000 mm), with a door and a rack.
         {
           "id": "g",
           "name": "Ground",
+          "wallHeightMm": 2400,
           "nodes": [
             { "id": "n1", "x": 0, "y": 0 },
             { "id": "n2", "x": 4000, "y": 0 },
@@ -592,7 +601,10 @@ One room, 4 m by 3 m (4000 by 3000 mm), with a door and a rack.
       ],
       "placements": [
         { "object": "door-1", "floor": "g", "x": 3000, "y": 3000, "attach": { "wall": "w3" } },
-        { "object": "rack-1", "floor": "g", "x": 600, "y": 600 }
+        { "object": "rack-1", "floor": "g", "x": 600, "y": 600 },
+        { "object": "desk-1", "floor": "g", "x": 3000, "y": 600 },
+        { "object": "monitor-1", "floor": "g", "x": 3000, "y": 400, "mountFrom": "surface", "mountOn": "desk-1", "mountMm": 0 },
+        { "object": "light-1", "floor": "g", "x": 2000, "y": 1500, "mountFrom": "ceiling", "mountMm": -90 }
       ]
     }
   ]
@@ -609,7 +621,7 @@ remote-management console and a network-monitoring console.
 ```json
 {
   "format": "accurona-scene",
-  "version": 1,
+  "version": 2,
   "id": "hq",
   "title": "Head office",
   "objects": [
@@ -647,7 +659,7 @@ remote-management console and a network-monitoring console.
       "floors": [{ "id": "l2", "name": "Level 2", "elevationMm": 3500 }],
       "placements": [
         { "object": "sw-2", "floor": "l2", "x": 1200, "y": 800 },
-        { "object": "ap-2e", "floor": "l2", "x": 18400, "y": 6200, "mountMm": 2700 }
+        { "object": "ap-2e", "floor": "l2", "x": 18400, "y": 6200, "mountFrom": "ceiling", "mountMm": 0 }
       ]
     },
     {
