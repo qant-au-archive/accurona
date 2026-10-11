@@ -287,6 +287,80 @@ interface PlanPlacement {
 - **`attach`** fixes the placement into a wall of the same floor. The placement's `x`
   and `y` still say where along the wall it sits.
 
+### Mounting and facing (version 2)
+
+**Status: decided, not yet in `@accurona/core`.** Version 1 has one number for height,
+`mountMm`, measured from the floor, and nothing for which way an item faces, so a
+downlight is placed at a fixed 2700 mm whatever the ceiling height, and a dome camera
+draws with its dome pointing up. Version 2 fixes both. Until the schema ships it, every
+example in this document stays version 1, and this section is the reference the
+implementation follows.
+
+```ts
+interface PlanPlacement {
+  // ...every version 1 field, unchanged in meaning except as below
+  mountFrom?: 'floor' | 'ceiling' | 'surface'; // default the element's `mountFrom`, else 'floor'
+  mountMm?: number;       // the offset from that reference, see below
+  mountOn?: Id;           // 'surface' only: the object this one stands on
+  mirror?: { x?: boolean; y?: boolean; z?: boolean }; // z: flips top to bottom
+}
+```
+
+**Height is a reference plus an offset.** `mountFrom` names what the height is measured
+from, and `mountMm` is the offset from it. The item's underside, above its floor's level:
+
+| `mountFrom` | `mountMm` means | Underside at | Default `mountMm` |
+|---|---|---|---|
+| `floor` | underside above the floor | `mountMm` | the element's `mount`, else 0 |
+| `ceiling` | gap from the ceiling down to the item's **top**; 0 is flush | `wallHeightMm - mountMm - h` | the element's `mount`, else 0 |
+| `surface` | gap from the supporting item's top to this item's underside | the support's top `+ mountMm` | 0 |
+
+- `h` is the placement's `size.h`, else the element's `size.h`. `wallHeightMm` is the
+  placement's floor's (default 2700). So a flush downlight (`ceiling`, 0) sits at the
+  ceiling on a 2400, a 2550 and a 2700 mm floor, and moves when the floor's wall height
+  changes, which nothing does in version 1.
+- **The file stores the reference and the offset, never only the resolved height.** An
+  editor that knows the absolute height of a ceiling item does not write it back as a
+  floor offset; doing so would detach the item from the ceiling it hangs from.
+- **`surface`** requires `mountOn`, the id of an object placed on the same floor of the
+  same view, and is refused without it (and `mountOn` is refused with any other
+  `mountFrom`). The support's top is its resolved underside plus the element's surface
+  height, else its `h`; what makes an element a support, and what an editor does when a
+  support is moved away or deleted, is the element library's and the editor's business,
+  not the file's. A file never holds a cycle of `mountOn`.
+- Elements carry the same reference: an element's `mountFrom` (default `floor`) says
+  what its `mount` is measured from, so `mount: 0, mountFrom: 'ceiling'` is a flush
+  ceiling item.
+
+**Facing.** Parts are always authored facing up: z counts up from the item's underside.
+An element's `facing` (`'up'`, the default, or `'down'`) says how it is installed, and
+`mirror.z` on a placement flips it against that default, beside `mirror.x` and
+`mirror.y`, which already flip in place. Facing down mirrors every part inside the
+item's own height (a part at `z` of height `p` moves to `H - z - p`), so a dome narrows
+downwards and a top-face decal moves to the underside. The item occupies the same box
+either way: facing never moves the underside.
+
+**From version 1.** A version 1 file loads, and is written back as version 2, by one
+forward migration:
+
+- A placement with `mountMm` and no `mountFrom` gets `mountFrom: 'floor'`, so a stored
+  height keeps meaning exactly what it meant. Axonometra writes `mountMm` on every
+  placement it saves, so an Axonometra file opens with every item where it was.
+- A placement with no `mountMm` is left as it is: in version 1 it already followed the
+  element's `mount`, and in version 2 it follows the element's `mount` and `mountFrom`.
+- Facing is not pinned. A version 1 placement has no `mirror.z`, so it takes the
+  element's `facing`; the item is drawn the right way up where it was always drawn
+  wrong, and its position does not change.
+
+**Reticulyne.** Reticulyne reads and writes the same scene file but does not draw plans:
+it keeps every plan view as it found it and writes it back unchanged, and reads only a
+placement's floor and `x`, `y` (to say where a device sits on the building). The new
+fields therefore need nothing from it beyond validation, with one consequence: the
+schema is strict and a reader refuses a version newer than its own, so a Reticulyne
+build carrying a version 1 schema refuses a version 2 file outright (it does not drop the
+fields). Reticulyne takes the version 2 schema by re-syncing its copy of
+`@accurona/core` when the schema ships, and has nothing else to change.
+
 ### Diagram views (`iso` and `schematic`)
 
 A diagram view is a network drawing on a grid of tiles. `iso` draws the grid
@@ -741,6 +815,9 @@ And no object is placed twice in one view.
   silently dropping the field.
 - Migrations are append-only: never edit a released one.
 - Readers accept every version they have a migration for, and refuse anything newer.
+- **Version 2** adds [mounting and facing](#mounting-and-facing-version-2): placement
+  `mountFrom`, `mountOn` and `mirror.z`, and gives `mountMm` a meaning that depends on
+  `mountFrom`. Its migration from version 1 is described there.
 
 ## Out of scope
 
