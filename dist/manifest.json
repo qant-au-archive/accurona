@@ -261,6 +261,55 @@
       }
     },
     {
+      "id": "table-lamp",
+      "name": "Table Lamp",
+      "group": "living",
+      "size": {
+        "w": 30,
+        "d": 30,
+        "h": 50
+      },
+      "mountFrom": "surface",
+      "footprint": {
+        "w": 30,
+        "d": 30
+      }
+    },
+    {
+      "id": "pendant-light",
+      "name": "Pendant Light",
+      "group": "living",
+      "size": {
+        "w": 40,
+        "d": 40,
+        "h": 80
+      },
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "footprint": {
+        "w": 40,
+        "d": 40
+      }
+    },
+    {
+      "id": "downlight",
+      "name": "Downlight, Recessed",
+      "group": "living",
+      "size": {
+        "w": 11,
+        "d": 11,
+        "h": 10
+      },
+      "mount": -9,
+      "mountFrom": "ceiling",
+      "facing": "down",
+      "footprint": {
+        "w": 40,
+        "d": 40
+      },
+      "symbol": true
+    },
+    {
       "id": "rug-rect",
       "name": "Rug",
       "group": "living",

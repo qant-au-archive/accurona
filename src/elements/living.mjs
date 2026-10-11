@@ -214,6 +214,61 @@ export default [
       { cyl: [20, 20, 14], z: 0, h: 3, role: 'metal' }
     ]
   },
+  // Table lamp: stands on whatever carrying item it is placed over (a
+  // bedside table, a side table), on the floor when there is none.
+  {
+    id: 'table-lamp',
+    name: 'Table Lamp',
+    group: 'living',
+    size: { w: 30, d: 30, h: 50 },
+    mountFrom: 'surface',
+    parts: [
+      {
+        cyl: [15, 15, 15], z: 30, h: 20, role: 'soft',
+        top: [{ circle: [15, 15, 10] }, { circle: [15, 15, 3], fill: 'body' }]
+      },
+      { cyl: [15, 15, 1], z: 2, h: 28, role: 'metal' },
+      { cyl: [15, 15, 7], z: 0, h: 2, role: 'metal' }
+    ]
+  },
+  // Pendant light: a shade on a 55 cm drop, hung flush from the ceiling by
+  // its canopy. Authored as installed, so it faces up like the floor lamp.
+  {
+    id: 'pendant-light',
+    name: 'Pendant Light',
+    group: 'living',
+    size: { w: 40, d: 40, h: 80 },
+    mount: 0,
+    mountFrom: 'ceiling',
+    parts: [
+      { dome: [20, 20, 20], z: 0, h: 23, role: 'soft' },
+      { cyl: [20, 20, 0.5], z: 23, h: 55, role: 'metal' },
+      { cyl: [20, 20, 6], z: 78, h: 2, role: 'metal' }
+    ]
+  },
+  // Recessed downlight: the can in the ceiling void, the 1 cm trim below.
+  // Authored facing up (trim on top), installed facing down.
+  {
+    id: 'downlight',
+    name: 'Downlight, Recessed',
+    group: 'living',
+    size: { w: 11, d: 11, h: 10 },
+    mount: -9,
+    mountFrom: 'ceiling',
+    facing: 'down',
+    symbol: {
+      frame: 'circle',
+      glyph: [
+        { circle: [20, 20, 9], fill: 'glass', stroke: 'outline' },
+        { line: [[13.6, 13.6], [26.4, 26.4]], stroke: 'outline' },
+        { line: [[26.4, 13.6], [13.6, 26.4]], stroke: 'outline' }
+      ]
+    },
+    parts: [
+      { cyl: [5.5, 5.5, 4.5], z: 0, h: 9, role: 'metal' },
+      { cyl: [5.5, 5.5, 5.5], z: 9, h: 1, role: 'glass' }
+    ]
+  },
   {
     id: 'rug-rect',
     name: 'Rug',

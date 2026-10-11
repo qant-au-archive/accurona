@@ -29,6 +29,9 @@ Every row below, and every rack the comms note describes, is built in
 | bookcase           | Bookcase             | 90×35×200        |
 | display-cabinet    | Display Cabinet      | 100×40×190       |
 | floor-lamp         | Floor Lamp           | 40×40×170        |
+| table-lamp         | Table Lamp           | 30×30×50, s      |
+| pendant-light      | Pendant Light        | 40×40×80, c 0    |
+| downlight          | Downlight, Recessed  | 40×40 symbol, 11×11×10, c -9, down |
 | rug-rect           | Rug                  | 200×140×1        |
 | rug-round          | Round Rug            | 160×160×1        |
 | piano-upright      | Upright Piano        | 150×60×125       |
