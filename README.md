@@ -113,8 +113,9 @@ packages to npm (`.github/workflows/publish.yml`).
   tags: ['network'],         // optional: network, power, cooling, security, fire, av, safe
   size: { w: 210, d: 90, h: 85 },  // cm: width (x), depth (y), height (z)
   mount: 210,                // optional: cm from mountFrom (wall and ceiling gear)
-  mountFrom: 'floor',        // optional: 'floor' (default; mount = underside above the floor)
-                             //   or 'ceiling' (mount = gap from the ceiling to the top; 0 = flush)
+  mountFrom: 'floor',        // optional: 'floor' (default; mount = underside above the floor),
+                             //   'ceiling' (mount = gap from the ceiling to the top; 0 = flush)
+                             //   or 'surface' (mount = gap above the item it stands on)
   facing: 'up',              // optional: 'up' (default) or 'down', e.g. a dome camera or downlight
   parts: [ /* solids, below */ ],
   plan: [ /* optional decals drawn on top of the plan, in footprint cm */ ],
@@ -130,7 +131,7 @@ bottom. In the isometric view the front (y = d) and right (x = w) faces show.
 **Mounting and facing.** Parts are always authored facing up, z counting up from the
 underside; `facing: 'down'` mirrors them inside the item's height. `mountFrom` and
 `facing` are decided in [the scene format](docs/scene-format.md#mounting-and-facing-version-2)
-and land with scene format version 2; until then no element sets them.
+and are in scene format version 2; no element sets them yet.
 
 ### Parts
 

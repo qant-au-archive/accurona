@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { GROUPS, loadElements } from '../src/index.mjs';
 import { TAGS } from '../src/palette.mjs';
 import { bounds } from '../src/render/geometry.mjs';
+import { mountingErrors } from '../src/mounting.mjs';
 import { planSvg } from '../src/render/plan.mjs';
 import { isoSvg } from '../src/render/iso.mjs';
 import { schematicSvg } from '../src/render/schematic.mjs';
@@ -30,6 +31,16 @@ test('ids are unique kebab-case', () => {
   }
 });
 
+test('mounting values are checked', () => {
+  assert.deepEqual(mountingErrors({ mount: 0, mountFrom: 'ceiling', facing: 'down' }), []);
+  assert.deepEqual(mountingErrors({ mount: 30, mountFrom: 'surface' }), []);
+  assert.deepEqual(mountingErrors({}), []);
+  assert.equal(mountingErrors({ mount: -1 }).length, 1);
+  assert.equal(mountingErrors({ mount: '270' }).length, 1);
+  assert.equal(mountingErrors({ mountFrom: 'wall' }).length, 1);
+  assert.equal(mountingErrors({ facing: 'sideways' }).length, 1);
+});
+
 test('legacy Axonometra ids are present', () => {
   for (const id of LEGACY_IDS)
     assert.ok(
@@ -44,6 +55,7 @@ for (const el of elements) {
     assert.equal(el.name, titleCase(el.name), 'name is Title Case');
     assert.ok(groupIds.has(el.group), `group ${el.group}`);
     for (const t of el.tags ?? []) assert.ok(TAGS.includes(t), `tag ${t}`);
+    assert.deepEqual(mountingErrors(el), [], 'mount, mountFrom, facing');
     const { w, d, h } = el.size;
     assert.ok(w > 0 && d > 0 && h > 0, 'size');
     assert.ok(el.parts?.length, 'parts');

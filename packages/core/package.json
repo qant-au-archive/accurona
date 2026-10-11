@@ -32,7 +32,8 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./schema/scene-v1.json": "./schema/scene-v1.json"
+    "./schema/scene-v1.json": "./schema/scene-v1.json",
+    "./schema/scene-v2.json": "./schema/scene-v2.json"
   },
   "files": [
     "dist",

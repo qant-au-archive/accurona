@@ -10,6 +10,7 @@ import {
   parseJson,
   parseScene,
   redactScene,
+  sceneSchema,
   serializeScene,
   validateScene
 } from '../dist/index.js';
@@ -172,7 +173,7 @@ test('link and icon urls are restricted', () => {
 
 test('a newer version is refused, not half-read', () => {
   const s = base();
-  s.version = 2;
+  s.version = 3;
   assert.match(errorsOf(s), /newer than this editor reads/);
 });
 
@@ -419,5 +420,150 @@ test('redaction removes plan walls and detaches what was fixed into them', () =>
   assert.deepEqual(out.views[0].floors[0].walls, []);
   assert.deepEqual(out.views[0].placements, [
     { object: 'door', floor: 'f', x: 500, y: 0 }
+  ]);
+});
+
+// Mounting and facing, scene version 2 (docs/scene-format.md).
+const planScene = (placements, version = 2) => ({
+  format: 'accurona-scene',
+  version,
+  id: 'm',
+  objects: [{ id: 'light' }, { id: 'desk' }, { id: 'lamp' }],
+  views: [
+    {
+      id: 'plan',
+      kind: 'plan',
+      name: 'Plan',
+      floors: [
+        { id: 'f', wallHeightMm: 2400 },
+        { id: 'g', wallHeightMm: 2700 }
+      ],
+      placements
+    }
+  ]
+});
+
+test('a version 1 placement with mountMm only loads as floor-referenced', () => {
+  const v1 = planScene(
+    [
+      { object: 'light', floor: 'f', x: 0, y: 0, mountMm: 2100 },
+      { object: 'desk', floor: 'f', x: 0, y: 0 }
+    ],
+    1
+  );
+  const result = validateScene(v1);
+  assert.equal(result.ok, true, result.ok ? '' : result.errors.join('\n'));
+  assert.equal(result.scene.version, 2);
+  const [light, desk] = result.scene.views[0].placements;
+  assert.equal(light.mountFrom, 'floor');
+  assert.equal(light.mountMm, 2100);
+  assert.equal(desk.mountFrom, undefined, 'no mountMm: follows the element');
+  assert.equal(v1.version, 1, 'the input is untouched');
+  assert.equal(v1.views[0].placements[0].mountFrom, undefined);
+});
+
+test('sceneSchema migrates a version 1 file itself, for readers that call it directly', () => {
+  const v1 = planScene([{ object: 'light', floor: 'f', x: 0, y: 0, mountMm: 900 }], 1);
+  const result = sceneSchema.safeParse(v1);
+  assert.equal(result.success, true);
+  assert.equal(result.data.version, 2);
+  assert.equal(result.data.views[0].placements[0].mountFrom, 'floor');
+});
+
+test('a version 1 file holding version 2 fields is refused', () => {
+  const v1 = planScene(
+    [{ object: 'light', floor: 'f', x: 0, y: 0, mirror: { z: true } }],
+    1
+  );
+  assert.match(errorsOf(v1), /mirror\.z: Not in scene version 1/);
+  const v1b = planScene(
+    [{ object: 'light', floor: 'f', x: 0, y: 0, mountFrom: 'ceiling' }],
+    1
+  );
+  assert.match(errorsOf(v1b), /mountFrom: Not in scene version 1/);
+});
+
+test('a ceiling placement facing down round-trips', () => {
+  const scene = planScene([
+    {
+      object: 'light',
+      floor: 'f',
+      x: 1200,
+      y: 800,
+      mountFrom: 'ceiling',
+      mountMm: 0,
+      mirror: { z: true }
+    }
+  ]);
+  const text = serializeScene(scene);
+  const result = parseScene(text);
+  assert.equal(result.ok, true, result.ok ? '' : result.errors.join('\n'));
+  assert.deepEqual(
+    result.scene.views[0].placements,
+    scene.views[0].placements
+  );
+  assert.equal(JSON.parse(text).version, 2);
+});
+
+test('mirror.z is accepted beside x and y', () => {
+  const scene = planScene([
+    { object: 'light', floor: 'f', x: 0, y: 0, mirror: { x: true, y: false, z: true } }
+  ]);
+  const result = validateScene(scene);
+  assert.equal(result.ok, true, result.ok ? '' : result.errors.join('\n'));
+});
+
+test('bad mounting and facing values are refused', () => {
+  const at = (p) => planScene([{ object: 'light', floor: 'f', x: 0, y: 0, ...p }]);
+  assert.match(errorsOf(at({ mountFrom: 'wall' })), /mountFrom/);
+  assert.match(errorsOf(at({ mountFrom: 'Ceiling' })), /mountFrom/);
+  assert.match(errorsOf(at({ mirror: { z: 'yes' } })), /mirror\.z/);
+  assert.match(errorsOf(at({ mirror: { w: true } })), /mirror/);
+  assert.match(errorsOf(at({ mountMm: '2700' })), /mountMm/);
+  assert.match(errorsOf(at({ facing: 'down' })), /facing/, 'facing is the element\'s; a placement flips with mirror.z');
+});
+
+test('a surface mount stands on an object on the same floor', () => {
+  const ok = planScene([
+    { object: 'desk', floor: 'f', x: 0, y: 0 },
+    { object: 'lamp', floor: 'f', x: 0, y: 0, mountFrom: 'surface', mountOn: 'desk' }
+  ]);
+  const result = validateScene(ok);
+  assert.equal(result.ok, true, result.ok ? '' : result.errors.join('\n'));
+
+  const noSupport = planScene([
+    { object: 'lamp', floor: 'f', x: 0, y: 0, mountFrom: 'surface' }
+  ]);
+  assert.match(errorsOf(noSupport), /surface mount needs mountOn/);
+
+  const notSurface = planScene([
+    { object: 'desk', floor: 'f', x: 0, y: 0 },
+    { object: 'lamp', floor: 'f', x: 0, y: 0, mountFrom: 'floor', mountOn: 'desk' }
+  ]);
+  assert.match(errorsOf(notSurface), /only for mountFrom "surface"/);
+
+  const otherFloor = planScene([
+    { object: 'desk', floor: 'g', x: 0, y: 0 },
+    { object: 'lamp', floor: 'f', x: 0, y: 0, mountFrom: 'surface', mountOn: 'desk' }
+  ]);
+  assert.match(errorsOf(otherFloor), /not placed on floor "f"/);
+
+  const cycle = planScene([
+    { object: 'desk', floor: 'f', x: 0, y: 0, mountFrom: 'surface', mountOn: 'lamp' },
+    { object: 'lamp', floor: 'f', x: 0, y: 0, mountFrom: 'surface', mountOn: 'desk' }
+  ]);
+  assert.match(errorsOf(cycle), /stands on itself/);
+});
+
+test('redaction stands an item on the floor when its support is removed', () => {
+  const scene = planScene([
+    { object: 'desk', floor: 'f', x: 0, y: 0, layer: 'redacted' },
+    { object: 'lamp', floor: 'f', x: 0, y: 0, mountFrom: 'surface', mountOn: 'desk' }
+  ]);
+  assert.equal(validateScene(scene).ok, true);
+  const out = redactScene(scene);
+  assert.equal(validateScene(out).ok, true);
+  assert.deepEqual(out.views[0].placements, [
+    { object: 'lamp', floor: 'f', x: 0, y: 0, mountFrom: 'floor' }
   ]);
 });

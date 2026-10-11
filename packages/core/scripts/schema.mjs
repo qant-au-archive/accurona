@@ -1,4 +1,4 @@
-// Writes schema/scene-v1.json: the JSON Schema (Draft 2020-12) generated from
+// Writes schema/scene-v<SCENE_VERSION>.json (earlier versions stay as released): the JSON Schema (Draft 2020-12) generated from
 // the Zod schema, published with each release so a scene can be validated in
 // any language. Structure only: id references are checked by the library.
 // Run after tsc (it reads dist/).

@@ -36,7 +36,10 @@ export type SceneResult =
 const describe = (path: PropertyKey[], message: string) =>
   path.length ? `${path.map(String).join('.')}: ${message}` : message;
 
-/** Validates an already-parsed value as a scene. */
+/**
+ * Validates an already-parsed value as a scene. An older version is migrated
+ * forward (by sceneSchema), so the result is always the current version.
+ */
 export function validateScene(value: unknown): SceneResult {
   if (isSceneDocument(value)) {
     const version = (value as { version?: unknown }).version;

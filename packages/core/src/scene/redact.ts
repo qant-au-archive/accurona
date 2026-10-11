@@ -36,7 +36,8 @@ export function hasRedacted(scene: Scene): boolean {
  *   begin with is kept.
  * - A connector that ends on an object no longer placed in its view, or on an anchor of a removed
  *   connector, is removed; a placement fixed into a removed wall keeps its
- *   position and loses the `attach`.
+ *   position and loses the `attach`; one standing on a removed placement
+ *   loses its `mountOn` and stands on the floor.
  */
 export function redactScene(scene: Scene): Scene {
   const views = (scene.views ?? []).map((view): View => {
@@ -74,12 +75,20 @@ export function redactScene(scene: Scene): Scene {
         view.floors.flatMap((f) => (f.walls ?? []).map((w) => w.id))
       );
       if (!view.placements) return view;
+      const placed = new Set(placedIn(view));
       return {
         ...view,
         placements: view.placements.map((p) => {
-          if (!p.attach || wallIds.has(p.attach.wall)) return p;
-          const { attach: _attach, ...rest } = p;
-          return rest;
+          let out = p;
+          if (out.attach && !wallIds.has(out.attach.wall)) {
+            const { attach: _attach, ...rest } = out;
+            out = rest;
+          }
+          if (out.mountOn !== undefined && !placed.has(out.mountOn)) {
+            const { mountOn: _mountOn, ...rest } = out;
+            out = { ...rest, mountFrom: 'floor' };
+          }
+          return out;
         })
       };
     }

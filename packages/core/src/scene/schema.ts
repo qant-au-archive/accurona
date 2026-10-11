@@ -1,15 +1,16 @@
 import { z } from 'zod';
 import { LENGTH_UNITS } from '../units.js';
+import { migrateScene } from './migrate.js';
 import { checkReferences } from './references.js';
 
-// The scene format, version 1: the native file format of Accurona,
+// The scene format, version 2: the native file format of Accurona,
 // Axonometra and Reticulyne. docs/scene-format.md is the prose; this is the
 // definition. Keep the two in step.
 
 export const SCENE_FORMAT = 'accurona-scene';
-export const SCENE_VERSION = 1;
+export const SCENE_VERSION = 2;
 export const SCENE_SCHEMA_URL =
-  'https://cdn.jsdelivr.net/npm/@accurona/core@0/schema/scene-v1.json';
+  'https://cdn.jsdelivr.net/npm/@accurona/core@0/schema/scene-v2.json';
 
 export const SCENE_LIMITS = {
   OBJECTS: 10_000,
@@ -162,16 +163,29 @@ export const floorSchema = z.strictObject({
   walls: z.array(wallSchema).max(SCENE_LIMITS.WALLS).optional()
 });
 
+export const MOUNT_FROM = ['floor', 'ceiling', 'surface'] as const;
+export const FACING = ['up', 'down'] as const;
+
 export const planPlacementSchema = z.strictObject({
   object: idSchema,
   floor: idSchema,
   x: mm,
   y: mm,
   rotation: z.number().min(-360_000).max(360_000).optional(),
+  // z flips the item top to bottom against its element's facing.
   mirror: z
-    .strictObject({ x: z.boolean().optional(), y: z.boolean().optional() })
+    .strictObject({
+      x: z.boolean().optional(),
+      y: z.boolean().optional(),
+      z: z.boolean().optional()
+    })
     .optional(),
+  // What mountMm is measured from (docs/scene-format.md, Mounting and
+  // facing): absent, the element's mountFrom, else 'floor'.
+  mountFrom: z.enum(MOUNT_FROM).optional(),
   mountMm: mm.optional(),
+  // 'surface' only: the object this one stands on.
+  mountOn: idSchema.optional(),
   size: z
     .strictObject({
       w: lengthMm.optional(),
@@ -362,12 +376,26 @@ export const sceneShapeSchema = z.strictObject({
   links: links.optional()
 });
 
-/** A whole scene: its structure, and every id reference resolving. */
-export const sceneSchema = sceneShapeSchema.superRefine((scene, ctx) => {
-  for (const issue of checkReferences(scene as Scene)) {
-    ctx.addIssue({ code: 'custom', message: issue.message, path: issue.path });
-  }
-});
+/**
+ * A whole scene: its structure, and every id reference resolving. An older
+ * version is migrated forward first, so what it returns is always the
+ * current version.
+ */
+export const sceneSchema = z.preprocess(
+  (value, ctx) => {
+    const migrated = migrateScene(value);
+    if ('scene' in migrated) return migrated.scene;
+    for (const issue of migrated.issues) {
+      ctx.addIssue({ code: 'custom', message: issue.message, path: issue.path });
+    }
+    return value;
+  },
+  sceneShapeSchema.superRefine((scene, ctx) => {
+    for (const issue of checkReferences(scene as Scene)) {
+      ctx.addIssue({ code: 'custom', message: issue.message, path: issue.path });
+    }
+  })
+);
 
 export type Scene = z.infer<typeof sceneShapeSchema>;
 export type SceneObject = z.infer<typeof sceneObjectSchema>;
@@ -391,3 +419,5 @@ export type Group = z.infer<typeof groupSchema>;
 export type Layer = z.infer<typeof layerSchema>;
 export type Icon = z.infer<typeof iconSchema>;
 export type Color = z.infer<typeof colorSchema>;
+export type MountFrom = (typeof MOUNT_FROM)[number];
+export type Facing = (typeof FACING)[number];

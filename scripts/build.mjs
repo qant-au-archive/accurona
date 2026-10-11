@@ -6,6 +6,7 @@
 // Consumers vendor dist/.
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { GROUPS, loadElements } from '../src/index.mjs';
+import { mountingErrors } from '../src/mounting.mjs';
 import { footprint, planSvg } from '../src/render/plan.mjs';
 import { isoSvg } from '../src/render/iso.mjs';
 import { modelOf } from '../src/render/model.mjs';
@@ -18,6 +19,14 @@ mkdirSync(new URL('iso/', out), { recursive: true });
 mkdirSync(new URL('schematic/', out), { recursive: true });
 
 const elements = await loadElements();
+// Checked here as well as in the tests, so a bad value never reaches dist/.
+const invalid = elements.flatMap((el) =>
+  mountingErrors(el).map((e) => `${el.id}: ${e}`)
+);
+if (invalid.length) {
+  console.error(invalid.join('\n'));
+  process.exit(1);
+}
 const manifest = {
   version: 1,
   groups: GROUPS,
@@ -32,6 +41,8 @@ const manifest = {
       ...(el.tags?.length ? { tags: el.tags } : {}),
       size: el.size,
       ...(el.mount != null ? { mount: el.mount } : {}),
+      ...(el.mountFrom ? { mountFrom: el.mountFrom } : {}),
+      ...(el.facing ? { facing: el.facing } : {}),
       footprint: footprint(el),
       ...(el.symbol ? { symbol: true } : {})
     };

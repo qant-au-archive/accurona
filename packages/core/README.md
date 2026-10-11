@@ -30,8 +30,8 @@ if (result.ok) {
 The schema is a [Zod](https://zod.dev) schema (`sceneSchema`) with a JSON Schema
 generated from it, for validating a scene in any language:
 
-- in this package: `@accurona/core/schema/scene-v1.json`
-- online: <https://cdn.jsdelivr.net/npm/@accurona/core@0/schema/scene-v1.json>, the
+- in this package: `@accurona/core/schema/scene-v2.json`
+- online: <https://cdn.jsdelivr.net/npm/@accurona/core@0/schema/scene-v2.json>, the
   `$schema` every saved scene names
 
 ## Length units

@@ -1,6 +1,6 @@
 # Accurona scene format
 
-**Status: specification, version 1.** This is the **native file format** of Accurona,
+**Status: specification, version 2.** This is the **native file format** of Accurona,
 [Axonometra](https://github.com/qant-au/axonometra) and
 [Reticulyne](https://github.com/qant-au/reticulyne): each saves and opens a scene as a
 plain `.json` file, not as an import or export target beside a format of its own.
@@ -41,7 +41,7 @@ Reticulyne already works this way for its own views (model `items`, placed by vi
 interface Scene {
   $schema?: string;         // URL of the published JSON Schema for this version
   format: 'accurona-scene'; // fixed; identifies the file
-  version: 1;               // schema version, see Versioning
+  version: 2;               // schema version, see Versioning
   id: Id;                   // this scene's own id
   title?: string;           // max 100; default 'Untitled'
   description?: string;     // max 1000
@@ -60,7 +60,7 @@ A scene with `objects` and no `views` is valid: it says what exists and how it
 connects, and leaves the drawing to an editor (see [Writing a scene from code](#writing-a-scene-from-code)).
 
 - **`$schema`** points at the JSON Schema published for this version, in the form
-  `https://cdn.jsdelivr.net/npm/@accurona/core@<major>/schema/scene-v1.json`. It is
+  `https://cdn.jsdelivr.net/npm/@accurona/core@<major>/schema/scene-v2.json`. It is
   optional and never changes how a file is read; it lets an editor or a validator in any
   language find the schema. Editors write it on save.
 - **`units`** is how lengths are **shown and typed**, not how they are stored. Every
@@ -289,12 +289,12 @@ interface PlanPlacement {
 
 ### Mounting and facing (version 2)
 
-**Status: decided, not yet in `@accurona/core`.** Version 1 has one number for height,
+**Status: in `@accurona/core` (schema, validation and the version 1 migration); the
+editors and renderers follow.** Version 1 has one number for height,
 `mountMm`, measured from the floor, and nothing for which way an item faces, so a
 downlight is placed at a fixed 2700 mm whatever the ceiling height, and a dome camera
-draws with its dome pointing up. Version 2 fixes both. Until the schema ships it, every
-example in this document stays version 1, and this section is the reference the
-implementation follows.
+draws with its dome pointing up. Version 2 fixes both. The worked examples further down
+are still version 1 files, which load through the migration below.
 
 ```ts
 interface PlanPlacement {
@@ -481,7 +481,8 @@ opts in. It exists so a diagram can carry addresses and other sensitive notes in
 the working copy without them leaking into the copy that gets sent out.
 `redactScene(scene)` in `@accurona/core` gives that copy, still a valid scene: an object
 whose every placement was redacted goes with it, as do the connections and connectors
-that end on it, and a placement fixed into a redacted wall loses its `attach`.
+that end on it, a placement fixed into a redacted wall loses its `attach`, and one
+standing on a redacted placement loses its `mountOn` and stands on the floor.
 `hasRedacted(scene)` says whether there is anything to leave out, so an editor can
 offer the opt-in only when it means something.
 
@@ -794,6 +795,8 @@ be `http:` or `https:`. Everything else is rejected, percent-encoded schemes inc
 - a plan placement's `floor` to a floor of that view, and `attach.wall` to a wall of
   that floor;
 - a wall's `from` and `to` to nodes of the same floor;
+- a plan placement's `mountOn` to an object placed on the same floor of that view, only
+  with `mountFrom: 'surface'` (which requires it), with no cycles;
 - a connector anchor's `object` to an object placed in that view, and `anchor` to
   another anchor of a connector in that view;
 - a `group` to a group in the same view, with no cycles;
@@ -804,9 +807,9 @@ And no object is placed twice in one view.
 
 ## Versioning
 
-- `version` is a single integer. This document is version 1. The Zod schema in
+- `version` is a single integer. This document is version 2. The Zod schema in
   `@accurona/core` and the JSON Schema generated from it are published per version
-  (`scene-v1.json`), so a file's `$schema` keeps pointing at the schema it was written
+  (`scene-v1.json`, `scene-v2.json`), so a file's `$schema` keeps pointing at the schema it was written
   against.
 - A new required field, a removed field, or a change to what a field means bumps the
   version, and adds a forward-only migration from the previous version.
