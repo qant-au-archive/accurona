@@ -84,12 +84,13 @@ function svg(w, d, body) {
 // Ceiling and wall devices: a 40 cm frame with a pictogram, so they read on a
 // plan at any zoom. Pictogram coordinates are in the 40 × 40 symbol box. The
 // 2D schematic view draws the same pictogram (see schematic.mjs).
-export function symbolBody(el) {
+export function symbolBody(el, { reflected = false } = {}) {
   const { frame = 'circle', glyph = [] } = el.symbol;
+  const dash = reflected ? ' stroke-dasharray="4 3"' : '';
   const edge =
     frame === 'circle'
-      ? `<circle cx="20" cy="20" r="19.5" fill="${fillFor('body')}" stroke="${OUTLINE}" stroke-width="1"/>`
-      : `<rect x="0.5" y="0.5" width="39" height="39" rx="6" fill="${fillFor('body')}" stroke="${OUTLINE}" stroke-width="1"/>`;
+      ? `<circle cx="20" cy="20" r="19.5" fill="${fillFor('body')}" stroke="${OUTLINE}" stroke-width="1"${dash}/>`
+      : `<rect x="0.5" y="0.5" width="39" height="39" rx="6" fill="${fillFor('body')}" stroke="${OUTLINE}" stroke-width="1"${dash}/>`;
   const marks = glyph
     .filter(forPlan)
     .map((dc) =>
@@ -103,12 +104,18 @@ export function symbolBody(el) {
   return [edge, ...marks];
 }
 
-function symbolSvg(el) {
-  return svg(SYMBOL_SIZE, SYMBOL_SIZE, symbolBody(el));
+function symbolSvg(el, opts) {
+  return svg(SYMBOL_SIZE, SYMBOL_SIZE, symbolBody(el, opts));
 }
 
-/** The top-down drawing of a modelled element, with strokes [outline, detail]. */
-export function planBody(el, [so, sd]) {
+/**
+ * The top-down drawing of a modelled element, with strokes [outline, detail].
+ * Parts are drawn as authored even when the element faces down: a ceiling item
+ * on a plan is read as a reflected ceiling plan, looking up at its face, which
+ * is the authored top seen from above. `reflected` dashes the heavy outline,
+ * the reflected-ceiling-plan convention.
+ */
+export function planBody(el, [so, sd], { reflected = false } = {}) {
   // Lower parts first, so what is on top is drawn over what is beneath.
   const parts = el.parts
     .map((p, i) => ({ p, i }))
@@ -119,9 +126,11 @@ export function planBody(el, [so, sd]) {
     // The first part takes the heavy outline unless it opts out (outline: false).
     const heavy = p.outline ?? p === el.parts[0];
     const inset = p === el.parts[0] && !p.poly && !p.noInset ? so / 2 : 0;
+    const dashed =
+      reflected && heavy ? { ...p, dash: p.dash ?? `${f(so * 3)} ${f(so * 2)}` } : p;
     body.push(
       partShape(
-        p,
+        dashed,
         fillFor(p.role ?? 'body'),
         heavy ? OUTLINE : DETAIL,
         heavy ? so : sd,
@@ -137,8 +146,9 @@ export function planBody(el, [so, sd]) {
   return body;
 }
 
-export function planSvg(el) {
-  if (el.symbol) return symbolSvg(el);
+/** The plan SVG; a ceiling-referenced element is drawn reflected (dashed) unless told otherwise. */
+export function planSvg(el, { reflected = el.mountFrom === 'ceiling' } = {}) {
+  if (el.symbol) return symbolSvg(el, { reflected });
   const { w, d } = el.size;
-  return svg(w, d, planBody(el, planStrokes(w, d)));
+  return svg(w, d, planBody(el, planStrokes(w, d), { reflected }));
 }

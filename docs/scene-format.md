@@ -289,8 +289,8 @@ interface PlanPlacement {
 
 ### Mounting and facing (version 2)
 
-**Status: in `@accurona/core` (schema, validation and the version 1 migration); the
-editors and renderers follow.** Version 1 has one number for height,
+**Status: in `@accurona/core` (schema, validation and the version 1 migration) and
+the element renderers (see the README, Mounting and facing); the editors follow.** Version 1 has one number for height,
 `mountMm`, measured from the floor, and nothing for which way an item faces, so a
 downlight is placed at a fixed 2700 mm whatever the ceiling height, and a dome camera
 draws with its dome pointing up. Version 2 fixes both. The worked examples further down

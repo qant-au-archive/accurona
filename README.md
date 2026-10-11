@@ -131,7 +131,18 @@ bottom. In the isometric view the front (y = d) and right (x = w) faces show.
 **Mounting and facing.** Parts are always authored facing up, z counting up from the
 underside; `facing: 'down'` mirrors them inside the item's height. `mountFrom` and
 `facing` are decided in [the scene format](docs/scene-format.md#mounting-and-facing-version-2)
-and are in scene format version 2; no element sets them yet.
+and are in scene format version 2; no element sets them yet. The renderers draw an
+element as installed:
+
+- **Isometric**: the solids mirrored (a dome hangs below its rim), front and side
+  decals mirrored with them, and `top` decals left out, because they are on the
+  underside the view cannot see. A down arrow on the top marks the item as facing down.
+- **3D** (`models.json`): the solids mirrored; a dome that narrows downwards carries
+  `down: true`.
+- **Plan**: drawn as authored, because a ceiling item on a plan is read as a reflected
+  ceiling plan, looking up at its face. An element with `mountFrom: 'ceiling'` has its
+  outline dashed, the reflected-ceiling-plan convention (`planSvg(el, { reflected:
+  false })` turns it off).
 
 ### Parts
 

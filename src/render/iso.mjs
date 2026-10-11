@@ -1,8 +1,21 @@
 // Isometric view (Reticulyne). EXPERIMENTAL: the element set is modelled for
 // it, but the output has not been reviewed item by item yet. Faces are shaded
 // by orientation: top lightest, front (+y) mid, side (+x) darkest.
+//
+// An element facing down is drawn as installed: its solids mirrored inside its
+// height, front and side decals mirrored with them, and its top decals left
+// out, because they are now on the underside and the view looks from above.
+// A down arrow on the top marks it, so the plain top does not read as a plain
+// item.
 import { OUTLINE, DETAIL, fillFor } from '../palette.mjs';
-import { bounds, ellipsePts, f, pts } from './geometry.mjs';
+import {
+  bounds,
+  ellipsePts,
+  f,
+  facesDown,
+  installedParts,
+  pts
+} from './geometry.mjs';
 
 const C = Math.cos(Math.PI / 6);
 const S = 0.5;
@@ -25,12 +38,17 @@ function shade(hex, k) {
 
 const forIso = (dc) => dc.view !== 'plan';
 
-// Face-local (u across, v down from the face's top edge) to world.
+// Face-local (u across, v down from the face's top edge) to world. A flipped
+// part has its front and side upside down, so v counts up from the bottom edge.
 function facePoint(b, face, u, v) {
   if (face === 'top') return [b.x + u, b.y + v, b.z + b.h];
-  if (face === 'front') return [b.x + u, b.y + b.d, b.z + b.h - v];
-  return [b.x + b.w, b.y + u, b.z + b.h - v];
+  const z = b.flipped ? b.z + v : b.z + b.h - v;
+  if (face === 'front') return [b.x + u, b.y + b.d, z];
+  return [b.x + b.w, b.y + u, z];
 }
+
+// Decals on a part's top, unless the part is flipped and they face the floor.
+const topDecals = (p) => (p.flipped ? [] : (p.top ?? []).filter(forIso));
 
 function decal(dc, b, face, sd) {
   const colour = dc.accent
@@ -77,7 +95,7 @@ function face(points, colour, so) {
 }
 
 function box(p, so, sd) {
-  const b = bounds(p);
+  const b = { ...bounds(p), flipped: p.flipped };
   const { x, y, z, w, d, h } = b;
   const [X, Y, Z] = [x + w, y + d, z + h];
   const base = fillFor(p.role ?? 'body');
@@ -104,8 +122,9 @@ function box(p, so, sd) {
   let out = '';
   for (const name of ['front', 'side', 'top']) {
     out += face(faces[name], shade(base, TONE[name]), so);
-    for (const dc of (p[name] ?? []).filter(forIso))
-      out += decal(dc, b, name, sd);
+    const marks =
+      name === 'top' ? topDecals(p) : (p[name] ?? []).filter(forIso);
+    for (const dc of marks) out += decal(dc, b, name, sd);
   }
   return out;
 }
@@ -144,7 +163,7 @@ function prism(p, so, sd) {
     shade(base, TONE.top),
     so
   );
-  for (const dc of (p.top ?? []).filter(forIso)) out += decal(dc, b, 'top', sd);
+  for (const dc of topDecals(p)) out += decal(dc, b, 'top', sd);
   return out;
 }
 
@@ -165,11 +184,57 @@ function cylinder(p, so, sd) {
     .sort((m, n) => n[0] - m[0]);
   let out = `<polygon points="${pts([...lower, ...upper])}" fill="${shade(base, TONE.front)}" stroke="${OUTLINE}" stroke-width="${f(so)}"/>`;
   out += `<polygon points="${pts(ring(b.z + b.h))}" fill="${shade(base, TONE.top)}" stroke="${OUTLINE}" stroke-width="${f(so)}"/>`;
-  for (const dc of (p.top ?? []).filter(forIso)) out += decal(dc, b, 'top', sd);
+  for (const dc of topDecals(p)) out += decal(dc, b, 'top', sd);
   return out;
 }
 
+// Convex hull (monotone chain) of screen points.
+function hull(points) {
+  const s = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cross = (o, a, b) =>
+    (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const half = (list) => {
+    const out = [];
+    for (const q of list) {
+      while (out.length > 1 && cross(out.at(-2), out.at(-1), q) <= 0)
+        out.pop();
+      out.push(q);
+    }
+    out.pop();
+    return out;
+  };
+  return [...half(s), ...half(s.reverse())];
+}
+
+// A dome facing down: a flat rim on top and the bulge hanging below it, e.g. a
+// dome camera or a downlight trim. Its outline is the hull of the bulge.
+function domeDown(p, so) {
+  const b = bounds(p);
+  const [cx, cy, r] = p.dome;
+  const base = fillFor(p.role ?? 'body');
+  const rim = b.z + b.h;
+  const bulge = [];
+  for (let i = 0; i <= 8; i++) {
+    const phi = (Math.PI / 2) * (i / 8);
+    for (const [x, y] of ellipsePts(
+      cx,
+      cy,
+      r * Math.cos(phi),
+      r * Math.cos(phi),
+      48
+    ))
+      bulge.push(iso([x, y, rim - b.h * Math.sin(phi)]));
+  }
+  const c = iso([cx, cy, rim]);
+  return (
+    `<polygon points="${pts(hull(bulge))}" fill="${shade(base, TONE.front)}" stroke="${OUTLINE}" stroke-width="${f(so)}"/>` +
+    `<polygon points="${pts(ellipsePts(cx, cy, r, r, 48).map(([x, y]) => iso([x, y, rim])))}" fill="${shade(base, TONE.top)}" stroke="${OUTLINE}" stroke-width="${f(so)}"/>` +
+    `<ellipse cx="${f(c[0] - r * C * 0.3)}" cy="${f(c[1] + b.h * 0.6)}" rx="${f(r * C * 0.25)}" ry="${f(b.h * 0.18)}" fill="#fff" fill-opacity="0.5"/>`
+  );
+}
+
 function dome(p, so) {
+  if (p.flipped) return domeDown(p, so);
   const b = bounds(p);
   const [cx, cy, r] = p.dome;
   const base = fillFor(p.role ?? 'body');
@@ -225,7 +290,7 @@ export function isoSvg(el) {
   ].map(([x, y]) => iso([x + off, y + off, 0]));
   let body = `<polygon points="${pts(shadow)}" fill="#000" fill-opacity="0.12"/>`;
   const all = [...shadow];
-  for (const p of paintOrder(el.parts)) {
+  for (const p of paintOrder(installedParts(el))) {
     body += p.dome
       ? dome(p, so)
       : p.cyl
@@ -237,6 +302,16 @@ export function isoSvg(el) {
     for (const x of [bb.x, bb.x + bb.w])
       for (const y of [bb.y, bb.y + bb.d])
         for (const z of [bb.z, bb.z + bb.h]) all.push(iso([x, y, z]));
+  }
+  if (facesDown(el)) {
+    // The facing marker: a down arrow standing on the middle of the top.
+    const [tx, ty] = iso([w / 2, d / 2, h]);
+    const len = extent * 0.18;
+    const head = len * 0.35;
+    const tip = [tx, ty - so * 2];
+    const tail = [tx, tip[1] - len];
+    body += `<g data-facing="down" fill="none" stroke="${DETAIL}" stroke-width="${f(so)}"><polyline points="${pts([tail, tip])}"/><polyline points="${pts([[tx - head * 0.7, tip[1] - head], tip, [tx + head * 0.7, tip[1] - head]])}"/></g>`;
+    all.push(tail, [tx - head * 0.7, tail[1]], [tx + head * 0.7, tail[1]]);
   }
   const xs = all.map((q) => q[0]);
   const ys = all.map((q) => q[1]);
