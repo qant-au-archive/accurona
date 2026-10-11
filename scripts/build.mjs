@@ -43,6 +43,7 @@ const manifest = {
       ...(el.mount != null ? { mount: el.mount } : {}),
       ...(el.mountFrom ? { mountFrom: el.mountFrom } : {}),
       ...(el.facing ? { facing: el.facing } : {}),
+      ...(el.surface != null ? { surface: el.surface } : {}),
       footprint: footprint(el),
       ...(el.symbol ? { symbol: true } : {})
     };

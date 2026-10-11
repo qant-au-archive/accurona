@@ -336,6 +336,13 @@ from, and `mountMm` is the offset from it. The item's underside, above its floor
 - Elements carry the same reference: an element's `mountFrom` (default `floor`) says
   what its `mount` is measured from, so `mount: 0, mountFrom: 'ceiling'` is a flush
   ceiling item.
+- **What carries what is in the element library.** An element whose top carries other
+  items has `surface`, the cm from its underside to that top (a desk 73, a breakfast bar
+  105, a workstation pod with screens 73, not its 120). An element with `mountFrom:
+  'surface'` (a monitor, a microwave) stands on one; a placement of it with no `mountOn`
+  is not refused for that, and stands on the floor at `mountMm` (default 0), as if it
+  were `floor`. An editor writes the reference it resolved, so a saved placement says
+  `surface` with its `mountOn`, or `floor`.
 
 **Facing.** Parts are always authored facing up: z counts up from the item's underside.
 An element's `facing` (`'up'`, the default, or `'down'`) says how it is installed, and

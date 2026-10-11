@@ -129,28 +129,32 @@ export default [
       }
     ]
   },
-  lowTable({ id: 'coffee-table', name: 'Coffee Table', w: 110, d: 60, h: 45 }),
+  { ...lowTable({ id: 'coffee-table', name: 'Coffee Table', w: 110, d: 60, h: 45 }), surface: 45 },
   {
     id: 'coffee-table-round',
     name: 'Round Coffee Table',
     group: 'living',
     size: { w: 80, d: 80, h: 45 },
+    surface: 45,
     parts: [
       { cyl: [40, 40, 40], z: 41, h: 4, role: 'wood', top: [{ circle: [40, 40, 35], dash: '2 2' }] },
       { cyl: [40, 40, 5], z: 3, h: 38, role: 'wood' },
       { cyl: [40, 40, 22], z: 0, h: 3, role: 'wood' }
     ]
   },
-  lowTable({ id: 'side-table', name: 'Side Table', w: 50, d: 50, h: 55 }),
-  cabinet({
-    id: 'tv-unit',
-    name: 'TV Unit',
-    w: 180,
-    d: 45,
-    h: 50,
-    role: 'wood',
-    front: [{ line: [[60, 4], [60, 46]] }, { line: [[120, 4], [120, 46]] }]
-  }),
+  { ...lowTable({ id: 'side-table', name: 'Side Table', w: 50, d: 50, h: 55 }), surface: 55 },
+  {
+    ...cabinet({
+      id: 'tv-unit',
+      name: 'TV Unit',
+      w: 180,
+      d: 45,
+      h: 50,
+      role: 'wood',
+      front: [{ line: [[60, 4], [60, 46]] }, { line: [[120, 4], [120, 46]] }]
+    }),
+    surface: 50
+  },
   // Wall-mounted TV: a slim bracket against the wall and the screen in front.
   {
     id: 'tv-wall',

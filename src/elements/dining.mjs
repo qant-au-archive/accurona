@@ -49,7 +49,7 @@ export function diningTable({ id, name, w, d, h = 75 }) {
 }
 
 export default [
-  diningTable({ id: 'table', name: 'Table', w: 150, d: 90 }),
+  { ...diningTable({ id: 'table', name: 'Table', w: 150, d: 90 }), surface: 75 },
   // Dining chair: backrest at the top, seat in front of it, four legs.
   {
     id: 'chair',
@@ -65,15 +65,16 @@ export default [
       { x: 43, y: 44, z: 0, w: 4, d: 4, h: 41, role: 'wood' }
     ]
   },
-  diningTable({ id: 'dining-table-4', name: 'Dining Table, 4-Seat', w: 120, d: 80 }),
-  diningTable({ id: 'dining-table-6', name: 'Dining Table, 6-Seat', w: 180, d: 90 }),
-  diningTable({ id: 'dining-table-8', name: 'Dining Table, 8-Seat', w: 240, d: 100 }),
+  { ...diningTable({ id: 'dining-table-4', name: 'Dining Table, 4-Seat', w: 120, d: 80 }), surface: 75 },
+  { ...diningTable({ id: 'dining-table-6', name: 'Dining Table, 6-Seat', w: 180, d: 90 }), surface: 75 },
+  { ...diningTable({ id: 'dining-table-8', name: 'Dining Table, 8-Seat', w: 240, d: 100 }), surface: 75 },
   // Round table on a pedestal, the foot shown dashed beneath the top.
   {
     id: 'dining-table-round',
     name: 'Round Dining Table',
     group: 'dining',
     size: { w: 110, d: 110, h: 75 },
+    surface: 75,
     parts: [
       { cyl: [55, 55, 55], z: 71, h: 4, role: 'wood', top: [{ circle: [55, 55, 30], dash: '3 3' }] },
       { cyl: [55, 55, 7], z: 4, h: 67, role: 'wood' },
@@ -98,6 +99,7 @@ export default [
     name: 'Sideboard',
     group: 'dining',
     size: { w: 180, d: 45, h: 80 },
+    surface: 80,
     parts: [
       { x: 0, y: 0, z: 0, w: 180, d: 42, h: 80, role: 'wood', r: 1 },
       {

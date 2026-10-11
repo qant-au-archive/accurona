@@ -160,8 +160,8 @@ export default [
     parts: [{ cyl: [11, 11, 11], z: 0, h: 4, top: [{ circle: [11, 11, 3], stroke: 'network' }, { circle: [11, 11, 1], accent: 'network' }] }]
   },
 
-  appliance({ id: 'network-switch', name: 'Network Switch (Desktop)', tags: ['network'], w: 44, d: 30, h: 5, nPorts: 16, nLeds: 4 }),
-  appliance({ id: 'router', name: 'Router', tags: ['network'], w: 30, d: 20, h: 5, nPorts: 5 }),
+  { ...appliance({ id: 'network-switch', name: 'Network Switch (Desktop)', tags: ['network'], w: 44, d: 30, h: 5, nPorts: 16, nLeds: 4 }), mountFrom: 'surface' },
+  { ...appliance({ id: 'router', name: 'Router', tags: ['network'], w: 30, d: 20, h: 5, nPorts: 5 }), mountFrom: 'surface' },
   appliance({ id: 'modem-nbn', name: 'NBN Connection Box', tags: ['network'], w: 30, d: 20, h: 10, mount: 30, role: 'body', nPorts: 4, nLeds: 4 }),
 
   // Wall data outlet, double: a plate with two jacks. Plan symbol: the data
@@ -297,11 +297,11 @@ export default [
 
   tower({ id: 'pc-tower', name: 'Desktop PC', w: 20, d: 45, h: 45, bays: 2 }),
 
-  monitor({ id: 'monitor-24', name: 'Monitor, 24"', w: 54, h: 32 }),
-  monitor({ id: 'monitor', name: 'Monitor, 27"', w: 62, h: 35 }),
-  monitor({ id: 'monitor-34-ultrawide', name: 'Monitor, Ultrawide 34"', w: 81, h: 37, radius: 180, foot: 30 }),
-  monitor({ id: 'monitor-38-ultrawide', name: 'Monitor, Ultrawide 38"', w: 90, h: 40, radius: 230, foot: 30 }),
-  monitor({ id: 'monitor-49-ultrawide', name: 'Monitor, Super-Ultrawide 49"', w: 120, h: 36, radius: 180, foot: 34 }),
+  { ...monitor({ id: 'monitor-24', name: 'Monitor, 24"', w: 54, h: 32 }), mountFrom: 'surface' },
+  { ...monitor({ id: 'monitor', name: 'Monitor, 27"', w: 62, h: 35 }), mountFrom: 'surface' },
+  { ...monitor({ id: 'monitor-34-ultrawide', name: 'Monitor, Ultrawide 34"', w: 81, h: 37, radius: 180, foot: 30 }), mountFrom: 'surface' },
+  { ...monitor({ id: 'monitor-38-ultrawide', name: 'Monitor, Ultrawide 38"', w: 90, h: 40, radius: 230, foot: 30 }), mountFrom: 'surface' },
+  { ...monitor({ id: 'monitor-49-ultrawide', name: 'Monitor, Super-Ultrawide 49"', w: 120, h: 36, radius: 180, foot: 34 }), mountFrom: 'surface' },
   // Two 27" monitors on a desk-clamped arm: the pole at the back, a crossbar,
   // and a panel on each end.
   {
@@ -310,6 +310,7 @@ export default [
     group: 'network',
     tags: ['network'],
     size: { w: 126, d: 16, h: 60 },
+    mountFrom: 'surface',
     parts: [
       ...[0, 64].map((x) => ({
         x, y: 11, z: 22, w: 62, d: 3, h: 35, role: 'dark', r: 1, outline: true,
@@ -333,6 +334,7 @@ export default [
     group: 'network',
     tags: ['network'],
     size: { w: 34, d: 24, h: 23 },
+    mountFrom: 'surface',
     parts: [
       {
         x: 0, y: 1.5, z: 0, w: 34, d: 22.5, h: 2, role: 'metal', r: 1.5,
@@ -353,6 +355,7 @@ export default [
     group: 'network',
     tags: ['network'],
     size: { w: 22, d: 20, h: 15 },
+    mountFrom: 'surface',
     schematic: 'plan',
     parts: [
       {
@@ -378,6 +381,7 @@ export default [
     group: 'network',
     tags: ['network'],
     size: { w: 20, d: 25, h: 25 },
+    mountFrom: 'surface',
     parts: [
       {
         x: 0, y: 0, z: 0, w: 20, d: 25, h: 25, role: 'dark', r: 1,

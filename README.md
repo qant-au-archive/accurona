@@ -116,8 +116,11 @@ packages to npm (`.github/workflows/publish.yml`).
   mountFrom: 'floor',        // optional: 'floor' (default; mount = underside above the floor),
                              //   'ceiling' (mount = gap from the ceiling to the top; 0 = flush,
                              //   negative = recessed, the top that far above the ceiling)
-                             //   or 'surface' (mount = gap above the item it stands on)
+                             //   or 'surface' (mount = gap above the item it stands on,
+                             //   on the floor when it stands on nothing)
   facing: 'up',              // optional: 'up' (default) or 'down', e.g. a dome camera or downlight
+  surface: 73,               // optional: cm from the underside to a top that carries other
+                             //   items (desks, tables, benches, base cabinets); <= size.h
   parts: [ /* solids, below */ ],
   plan: [ /* optional decals drawn on top of the plan, in footprint cm */ ],
   symbol: { /* optional: draw on plans as a 40 cm symbol, below */ }
@@ -135,7 +138,12 @@ underside; `facing: 'down'` mirrors them inside the item's height. `mountFrom` a
 and are in scene format version 2. Every element with a `mount` names its `mountFrom`:
 ceiling gear (detectors, dome cameras, access points, ceiling speakers, the AC
 cassette, cable tray) is `'ceiling'`, most of it flush (`mount: 0`) and facing down;
-wall gear stays `'floor'`. The renderers draw an element as installed:
+wall gear stays `'floor'`. Items put on top of something else stand on it: an element
+whose top carries things (tables, desks, benches, base cabinets, sideboards, TV units,
+bedside tables, filing cabinets) gives that top's height as `surface`, and bench-top
+gear (monitors, the laptop, the desk phone, the router and desktop switch, the NAS, the
+microwave) is `mountFrom: 'surface'`, standing on whatever carrying item an editor places
+it over and on the floor when there is none. The renderers draw an element as installed:
 
 - **Isometric**: the solids mirrored (a dome hangs below its rim), front and side
   decals mirrored with them, and `top` decals left out, because they are on the

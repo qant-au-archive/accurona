@@ -142,17 +142,20 @@ export default [
       { x: 6, y: 50, z: 45, w: 63, d: 79, h: 3, role: 'soft', r: 3, top: [{ line: [[0, 6], [63, 6]] }] }
     ]
   },
-  cabinet({
-    id: 'bedside-table',
-    name: 'Bedside Table',
-    w: 45,
-    d: 40,
-    h: 55,
-    role: 'wood',
-    front: drawers(45, 55, 2)
-  }),
-  cabinet({ id: 'chest-of-drawers', name: 'Chest of Drawers', w: 90, d: 45, h: 100, role: 'wood', front: drawers(90, 100, 5) }),
-  cabinet({ id: 'dresser', name: 'Dresser', w: 140, d: 50, h: 80, role: 'wood', front: drawers(140, 80, 3, 2) }),
+  {
+    ...cabinet({
+      id: 'bedside-table',
+      name: 'Bedside Table',
+      w: 45,
+      d: 40,
+      h: 55,
+      role: 'wood',
+      front: drawers(45, 55, 2)
+    }),
+    surface: 55
+  },
+  { ...cabinet({ id: 'chest-of-drawers', name: 'Chest of Drawers', w: 90, d: 45, h: 100, role: 'wood', front: drawers(90, 100, 5) }), surface: 100 },
+  { ...cabinet({ id: 'dresser', name: 'Dresser', w: 140, d: 50, h: 80, role: 'wood', front: drawers(140, 80, 3, 2) }), surface: 80 },
   wardrobe({ id: 'wardrobe-2', name: 'Wardrobe, 2-Door', w: 100, doors: 2 }),
   wardrobe({ id: 'wardrobe-3', name: 'Wardrobe, 3-Door', w: 150, doors: 3 }),
   // Built-in robe: two sliding doors on staggered tracks across the front.
@@ -183,6 +186,7 @@ export default [
     name: 'Dressing Table',
     group: 'bedroom',
     size: { w: 100, d: 45, h: 75 },
+    surface: 75,
     parts: [
       {
         x: 0, y: 0, z: 71, w: 100, d: 45, h: 4, role: 'wood', r: 1,

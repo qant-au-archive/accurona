@@ -43,6 +43,11 @@ test('mounting values are checked', () => {
   assert.equal(mountingErrors({ mount: '270' }).length, 1);
   assert.equal(mountingErrors({ mountFrom: 'wall' }).length, 1);
   assert.equal(mountingErrors({ facing: 'sideways' }).length, 1);
+  // A support's top is above its underside and no higher than the item.
+  assert.deepEqual(mountingErrors({ size: { h: 73 }, surface: 73 }), []);
+  assert.equal(mountingErrors({ size: { h: 73 }, surface: 74 }).length, 1);
+  assert.equal(mountingErrors({ size: { h: 73 }, surface: 0 }).length, 1);
+  assert.equal(mountingErrors({ size: { h: 73 }, surface: 73, mountFrom: 'surface' }).length, 1);
 });
 
 test('legacy Axonometra ids are present', () => {

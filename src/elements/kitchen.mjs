@@ -151,13 +151,14 @@ export function tallCupboard({ id, name, group, w, d, h, extra = [], front = [] 
 }
 
 export default [
-  baseCabinet({ id: 'base-cabinet-600', name: 'Base Cabinet 600', w: 60 }),
-  baseCabinet({ id: 'base-cabinet-900', name: 'Base Cabinet 900', w: 90 }),
+  { ...baseCabinet({ id: 'base-cabinet-600', name: 'Base Cabinet 600', w: 60 }), surface: 90 },
+  { ...baseCabinet({ id: 'base-cabinet-900', name: 'Base Cabinet 900', w: 90 }), surface: 90 },
   {
     id: 'corner-cabinet',
     name: 'Corner Base Cabinet',
     group: 'kitchen',
     size: { w: 90, d: 90, h: 90 },
+    surface: 90,
     // Walls at the top and the left; the L opens to the bottom right.
     parts: [
       {
@@ -298,8 +299,7 @@ export default [
     name: 'Microwave',
     group: 'kitchen',
     size: { w: 50, d: 40, h: 30 },
-    mount: 90,
-    mountFrom: 'floor',
+    mountFrom: 'surface',
     parts: [
       {
         x: 0, y: 0, z: 0, w: 50, d: 37, h: 30, r: 1,
@@ -316,6 +316,7 @@ export default [
     name: 'Island Bench',
     group: 'kitchen',
     size: { w: 240, d: 100, h: 90 },
+    surface: 90,
     // Cupboards open to the front; the benchtop overhangs 35 at the back for stools.
     parts: [
       {
@@ -331,6 +332,7 @@ export default [
     name: 'Breakfast Bar',
     group: 'kitchen',
     size: { w: 180, d: 50, h: 105 },
+    surface: 105,
     // A raised top on a back panel; stools pull up at the front.
     parts: [
       { x: 0, y: 0, z: 102, w: 180, d: 50, h: TOP, role: 'wood', r: 1, top: [{ line: [[2, 12], [178, 12]], dash: '3 2', view: 'plan' }] },

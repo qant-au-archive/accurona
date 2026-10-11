@@ -129,12 +129,12 @@ function storage({ id, name, w, d, h, cols = 1, rows = 1, casters = false, vents
 }
 
 export default [
-  desk({ id: 'desk', name: 'Desk', w: 150, d: 75 }),
-  desk({ id: 'desk-small', name: 'Desk, Compact', w: 120, d: 60 }),
-  deskL({ id: 'desk-l', name: 'L-Shaped Desk', w: 160, d: 160 }),
-  desk({ id: 'desk-sit-stand', name: 'Sit-Stand Desk', w: 160, d: 80, sitStand: true }),
-  pod({ id: 'workstation-pod-2', name: 'Workstation Pod, 2', cols: 1 }),
-  pod({ id: 'workstation-pod-4', name: 'Workstation Pod, 4', cols: 2, screen: true }),
+  { ...desk({ id: 'desk', name: 'Desk', w: 150, d: 75 }), surface: 73 },
+  { ...desk({ id: 'desk-small', name: 'Desk, Compact', w: 120, d: 60 }), surface: 73 },
+  { ...deskL({ id: 'desk-l', name: 'L-Shaped Desk', w: 160, d: 160 }), surface: 73 },
+  { ...desk({ id: 'desk-sit-stand', name: 'Sit-Stand Desk', w: 160, d: 80, sitStand: true }), surface: 73 },
+  { ...pod({ id: 'workstation-pod-2', name: 'Workstation Pod, 2', cols: 1 }), surface: 73 },
+  { ...pod({ id: 'workstation-pod-4', name: 'Workstation Pod, 4', cols: 2, screen: true }), surface: 73 },
 
   // Task chair: seat and backrest as solids on a gas column; the five-star
   // base is drawn on the hub so its arms and castors show round the seat.
@@ -180,13 +180,14 @@ export default [
     ]
   },
 
-  table({ id: 'meeting-table-4', name: 'Meeting Table, 4', w: 120, d: 120 }),
-  table({ id: 'meeting-table-8', name: 'Boardroom Table, 8', w: 300, d: 120, hatch: 50 }),
+  { ...table({ id: 'meeting-table-4', name: 'Meeting Table, 4', w: 120, d: 120 }), surface: 73 },
+  { ...table({ id: 'meeting-table-8', name: 'Boardroom Table, 8', w: 300, d: 120, hatch: 50 }), surface: 73 },
   {
     id: 'meeting-table-round',
     name: 'Round Meeting Table',
     group: 'office',
     size: { w: 100, d: 100, h: H },
+    surface: 73,
     parts: [
       { cyl: [50, 50, 50], z: H - TOP, h: TOP, role: 'wood', top: [{ circle: [50, 50, 30], dash: '3 2' }, { circle: [50, 50, 5] }] },
       { cyl: [50, 50, 5], z: 4, h: H - TOP - 4, role: 'metal' },
@@ -201,6 +202,7 @@ export default [
     name: 'Reception Desk',
     group: 'office',
     size: { w: 240, d: 80, h: 110 },
+    surface: 73,
     parts: [
       { x: 0, y: 0, z: 70, w: 240, d: 60, h: 3, role: 'wood', top: [{ circle: [60, 8, 3] }, { circle: [180, 8, 3] }] },
       { x: 0, y: 50, z: 106, w: 240, d: 30, h: 4, role: 'soft', r: 1, outline: true, top: [{ line: [[3, 26], [237, 26]] }] },
@@ -210,8 +212,8 @@ export default [
     ]
   },
 
-  storage({ id: 'filing-cabinet', name: 'Filing Cabinet, 4-Drawer', w: 47, d: 62, h: 132, rows: 4 }),
-  storage({ id: 'lateral-filer', name: 'Lateral Filer', w: 90, d: 45, h: 100, rows: 3 }),
+  { ...storage({ id: 'filing-cabinet', name: 'Filing Cabinet, 4-Drawer', w: 47, d: 62, h: 132, rows: 4 }), surface: 132 },
+  { ...storage({ id: 'lateral-filer', name: 'Lateral Filer', w: 90, d: 45, h: 100, rows: 3 }), surface: 100 },
   storage({ id: 'storage-cupboard', name: 'Storage Cupboard', w: 90, d: 45, h: 200, cols: 2 }),
   storage({ id: 'lockers', name: 'Lockers, Bank of 4', w: 120, d: 45, h: 180, cols: 4, vents: true }),
   storage({ id: 'mobile-pedestal', name: 'Mobile Pedestal', w: 40, d: 55, h: 60, rows: 3, casters: true }),

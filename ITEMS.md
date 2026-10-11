@@ -3,7 +3,9 @@
 The specification each element is built from. Sizes are width × depth ×
 height in cm. `m` is the mount height in cm, underside above the floor; `c` is
 the gap in cm from the ceiling down to the top, 0 = flush, negative = recessed;
-`down` means installed facing down. "symbol" means the element is drawn on plans
+`down` means installed facing down; `top` is the height in cm of the top that
+carries other items (a desk, a bench); `s` means the item stands on whatever
+carrying item it is placed over, and on the floor when there is none. "symbol" means the element is drawn on plans
 as a 40 cm symbol; see the README. Beds are 100 cm tall to the top of the headboard.
 
 Every row below, and every rack the comms note describes, is built in
@@ -19,10 +21,10 @@ Every row below, and every rack the comms note describes, is built in
 | armchair           | Armchair             | 85×85×85         |
 | recliner           | Recliner             | 90×95×100        |
 | ottoman            | Ottoman              | 60×60×45         |
-| coffee-table       | Coffee Table         | 110×60×45        |
-| coffee-table-round | Round Coffee Table   | 80×80×45         |
-| side-table         | Side Table           | 50×50×55         |
-| tv-unit            | TV Unit              | 180×45×50        |
+| coffee-table       | Coffee Table         | 110×60×45, top 45 |
+| coffee-table-round | Round Coffee Table   | 80×80×45, top 45 |
+| side-table         | Side Table           | 50×50×55, top 55 |
+| tv-unit            | TV Unit              | 180×45×50, top 50 |
 | tv-wall            | Wall-Mounted TV, 65" | 145×10×85, m 110 |
 | bookcase           | Bookcase             | 90×35×200        |
 | display-cabinet    | Display Cabinet      | 100×40×190       |
@@ -43,13 +45,13 @@ Every row below, and every rack the comms note describes, is built in
 | bed-king         | Bed, King                             | 183×203×100 |
 | bunk-bed         | Bunk Bed                              | 97×200×160  |
 | cot              | Cot                                   | 75×135×90   |
-| bedside-table    | Bedside Table                         | 45×40×55    |
-| chest-of-drawers | Chest of Drawers                      | 90×45×100   |
-| dresser          | Dresser                               | 140×50×80   |
+| bedside-table    | Bedside Table                         | 45×40×55, top 55 |
+| chest-of-drawers | Chest of Drawers                      | 90×45×100, top 100 |
+| dresser          | Dresser                               | 140×50×80, top 80 |
 | wardrobe-2       | Wardrobe, 2-Door                      | 100×60×200  |
 | wardrobe-3       | Wardrobe, 3-Door                      | 150×60×200  |
 | wardrobe-sliding | Built-In Robe, Sliding                | 240×60×240  |
-| dressing-table   | Dressing Table                        | 100×45×75   |
+| dressing-table   | Dressing Table                        | 100×45×75, top 75 |
 
 Note: the legacy `bed` keeps its original Axonometra footprint, 200 × 150 (length along x, head at the left), so saved plans do not change shape. Every new bed is drawn head-to-the-top.
 
@@ -57,14 +59,14 @@ Note: the legacy `bed` keeps its original Axonometra footprint, 200 × 150 (leng
 
 | id                 | name                 | W×D×H      |
 | ------------------ | -------------------- | ---------- |
-| table              | Table (Existing Id)  | 150×90×75  |
+| table              | Table (Existing Id)  | 150×90×75, top 75 |
 | chair              | Chair (Existing Id)  | 50×50×90   |
-| dining-table-4     | Dining Table, 4-Seat | 120×80×75  |
-| dining-table-6     | Dining Table, 6-Seat | 180×90×75  |
-| dining-table-8     | Dining Table, 8-Seat | 240×100×75 |
-| dining-table-round | Round Dining Table   | 110×110×75 |
+| dining-table-4     | Dining Table, 4-Seat | 120×80×75, top 75 |
+| dining-table-6     | Dining Table, 6-Seat | 180×90×75, top 75 |
+| dining-table-8     | Dining Table, 8-Seat | 240×100×75, top 75 |
+| dining-table-round | Round Dining Table   | 110×110×75, top 75 |
 | bar-stool          | Bar Stool            | 40×40×75   |
-| sideboard          | Sideboard            | 180×45×80  |
+| sideboard          | Sideboard            | 180×45×80, top 80 |
 | high-chair         | High Chair           | 55×70×105  |
 | bench-seat         | Bench Seat           | 150×40×45  |
 
@@ -72,9 +74,9 @@ Note: the legacy `bed` keeps its original Axonometra footprint, 200 × 150 (leng
 
 | id                | name                | W×D×H           |
 | ----------------- | ------------------- | --------------- |
-| base-cabinet-600  | Base Cabinet 600    | 60×60×90        |
-| base-cabinet-900  | Base Cabinet 900    | 90×60×90        |
-| corner-cabinet    | Corner Base Cabinet | 90×90×90        |
+| base-cabinet-600  | Base Cabinet 600    | 60×60×90, top 90 |
+| base-cabinet-900  | Base Cabinet 900    | 90×60×90, top 90 |
+| corner-cabinet    | Corner Base Cabinet | 90×90×90, top 90 |
 | wall-cabinet-600  | Wall Cabinet 600    | 60×35×70, m 145 |
 | pantry            | Pantry Cupboard     | 60×60×220       |
 | sink-single       | Sink, Single Bowl   | 60×60×90        |
@@ -90,9 +92,9 @@ Note: the legacy `bed` keeps its original Axonometra footprint, 200 × 150 (leng
 | fridge            | Fridge              | 70×70×180       |
 | fridge-french     | Fridge, French Door | 90×75×180       |
 | dishwasher        | Dishwasher          | 60×60×85        |
-| microwave         | Microwave           | 50×40×30, m 90  |
-| island-bench      | Island Bench        | 240×100×90      |
-| breakfast-bar     | Breakfast Bar       | 180×50×105      |
+| microwave         | Microwave           | 50×40×30, s |
+| island-bench      | Island Bench        | 240×100×90, top 90 |
+| breakfast-bar     | Breakfast Bar       | 180×50×105, top 105 |
 | kitchen-bin       | Kitchen Bin         | 40×35×65        |
 | butler-sink       | Butler's Sink       | 80×60×90        |
 
@@ -123,20 +125,20 @@ Note: the legacy `bed` keeps its original Axonometra footprint, 200 × 150 (leng
 
 | id                  | name                     | W×D×H            |
 | ------------------- | ------------------------ | ---------------- |
-| desk                | Desk                     | 150×75×73        |
-| desk-small          | Desk, Compact            | 120×60×73        |
-| desk-l              | L-Shaped Desk            | 160×160×73       |
-| desk-sit-stand      | Sit-Stand Desk           | 160×80×73        |
-| workstation-pod-2   | Workstation Pod, 2       | 160×150×73       |
-| workstation-pod-4   | Workstation Pod, 4       | 320×150×120      |
+| desk                | Desk                     | 150×75×73, top 73 |
+| desk-small          | Desk, Compact            | 120×60×73, top 73 |
+| desk-l              | L-Shaped Desk            | 160×160×73, top 73 |
+| desk-sit-stand      | Sit-Stand Desk           | 160×80×73, top 73 |
+| workstation-pod-2   | Workstation Pod, 2       | 160×150×73, top 73 |
+| workstation-pod-4   | Workstation Pod, 4       | 320×150×120, top 73 |
 | office-chair        | Office Chair             | 65×65×110        |
 | visitor-chair       | Visitor Chair            | 55×55×85         |
-| meeting-table-4     | Meeting Table, 4         | 120×120×73       |
-| meeting-table-8     | Boardroom Table, 8       | 300×120×73       |
-| meeting-table-round | Round Meeting Table      | 100×100×73       |
-| reception-desk      | Reception Desk           | 240×80×110       |
-| filing-cabinet      | Filing Cabinet, 4-Drawer | 47×62×132        |
-| lateral-filer       | Lateral Filer            | 90×45×100        |
+| meeting-table-4     | Meeting Table, 4         | 120×120×73, top 73 |
+| meeting-table-8     | Boardroom Table, 8       | 300×120×73, top 73 |
+| meeting-table-round | Round Meeting Table      | 100×100×73, top 73 |
+| reception-desk      | Reception Desk           | 240×80×110, top 73 |
+| filing-cabinet      | Filing Cabinet, 4-Drawer | 47×62×132, top 132 |
+| lateral-filer       | Lateral Filer            | 90×45×100, top 100 |
 | storage-cupboard    | Storage Cupboard         | 90×45×200        |
 | lockers             | Lockers, Bank of 4       | 120×45×180       |
 | mobile-pedestal     | Mobile Pedestal          | 40×55×60         |
@@ -182,8 +184,8 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 | id                          | name                              | W×D×H                            | tags              |
 | --------------------------- | --------------------------------- | -------------------------------- | ----------------- |
 | wifi-ap                     | Wi-Fi Access Point                | 40×40 symbol, 22×22×4, c 0, down | network           |
-| network-switch              | Network Switch (Desktop)          | 44×30×5                          | network           |
-| router                      | Router                            | 30×20×5                          | network           |
+| network-switch              | Network Switch (Desktop)          | 44×30×5, s | network           |
+| router                      | Router                            | 30×20×5, s | network           |
 | modem-nbn                   | NBN Connection Box                | 30×20×10, m 30                   | network           |
 | data-outlet                 | Data Outlet                       | 40×40 symbol, m 30               | network           |
 | floor-box                   | Floor Box                         | 40×40×10                         | network, power    |
@@ -194,21 +196,21 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 | speaker-ceiling             | Ceiling Speaker                   | 40×40 symbol, c -11, down        | av                |
 | video-bar                   | Video Conferencing Bar            | 90×10×10, m 150                  | av                |
 | pc-tower                    | Desktop PC                        | 20×45×45                         | network           |
-| monitor-24                  | Monitor, 24"                      | 54×20×42                         | network           |
-| monitor                     | Monitor, 27"                      | 62×20×45                         | network           |
-| monitor-34-ultrawide        | Monitor, Ultrawide 34"            | 81×20×47, 1800R                  | network           |
-| monitor-38-ultrawide        | Monitor, Ultrawide 38"            | 90×20×50, 2300R                  | network           |
-| monitor-49-ultrawide        | Monitor, Super-Ultrawide 49"      | 120×22×46, 1800R                 | network           |
-| monitor-arm-dual            | Dual Monitor Arm, 2 × 27"         | 126×16×60                        | network           |
+| monitor-24                  | Monitor, 24"                      | 54×20×42, s | network           |
+| monitor                     | Monitor, 27"                      | 62×20×45, s | network           |
+| monitor-34-ultrawide        | Monitor, Ultrawide 34"            | 81×20×47, 1800R, s | network           |
+| monitor-38-ultrawide        | Monitor, Ultrawide 38"            | 90×20×50, 2300R, s | network           |
+| monitor-49-ultrawide        | Monitor, Super-Ultrawide 49"      | 120×22×46, 1800R, s | network           |
+| monitor-arm-dual            | Dual Monitor Arm, 2 × 27"         | 126×16×60, s | network           |
 | display-wall-43             | Wall Display, 43"                 | 97×10×56, m 124                  | av                |
 | display-wall-55             | Wall Display, 55"                 | 124×10×71, m 117                 | av                |
 | display-wall-75             | Wall Display, 75"                 | 168×10×96, m 104                 | av                |
 | display-wall-86             | Wall Display, 86"                 | 193×10×110, m 97                 | av                |
-| laptop                      | Laptop                            | 34×24×2                          | network           |
-| ip-phone                    | Desk Phone                        | 22×20×15                         | network           |
+| laptop                      | Laptop                            | 34×24×2, s | network           |
+| ip-phone                    | Desk Phone                        | 22×20×15, s | network           |
 | firewall                    | Firewall Appliance (Desktop)      | 30×20×5                          | network, security |
 | server-tower                | Tower Server                      | 20×60×45                         | network           |
-| nas                         | Network Storage (NAS)             | 20×25×25                         | network           |
+| nas                         | Network Storage (NAS)             | 20×25×25, s | network           |
 
 ### Security (`security`)
 
