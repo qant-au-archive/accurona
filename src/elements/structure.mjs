@@ -257,7 +257,8 @@ export default [
     name: 'Skylight',
     group: 'structure',
     size: { w: 60, d: 120, h: 1 },
-    mount: 270,
+    mount: 0,
+    mountFrom: 'ceiling',
     parts: [
       // Overhead, so dashed on the plan.
       { x: 0, y: 0, z: 0, w: 60, d: 120, h: 0.5, role: 'soft', dash: '6 4' },

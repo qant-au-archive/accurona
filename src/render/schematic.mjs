@@ -8,14 +8,16 @@
 // - an element whose telling face is its top (a desk phone's keypad) sets
 //   `schematic: 'plan'` and draws its top-down view instead.
 import { DETAIL, OUTLINE, SYMBOL_SIZE, fillFor } from '../palette.mjs';
-import { bounds, ellipsePts, f, pts } from './geometry.mjs';
+import { bounds, ellipsePts, f, installedParts, pts } from './geometry.mjs';
 import { planBody, symbolBody } from './plan.mjs';
 
 const forSchematic = (dc) => dc.view !== 'plan';
 
 // Face-local (u across, v down from the part's top edge) to drawing space:
-// x to the right, y down from the element's top (z = h).
-const at = (b, H) => (u, v) => [b.x + u, H - (b.z + b.h) + v];
+// x to the right, y down from the element's top (z = h). A flipped part
+// (facing down) has its front face upside down, so v counts up from its bottom.
+const at = (b, H, flipped) => (u, v) =>
+  flipped ? [b.x + u, H - b.z - v] : [b.x + u, H - (b.z + b.h) + v];
 
 function decal(dc, map, sd) {
   const colour = dc.accent
@@ -35,7 +37,8 @@ function decal(dc, map, sd) {
   }
   if (dc.rect) {
     const [u, v, w, h] = dc.rect;
-    const [x, y] = map(u, v);
+    const [x, y0] = map(u, v);
+    const y = Math.min(y0, map(u, v + h)[1]);
     return `<rect x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" rx="${dc.r ?? 0}" ${paint}/>`;
   }
   if (dc.circle) {
@@ -63,8 +66,8 @@ function decal(dc, map, sd) {
   throw new Error(`unknown decal ${JSON.stringify(dc)}`);
 }
 
-// One solid seen from the front: a dome is a half ellipse, anything else the
-// rectangle of its x and z extent.
+// One solid seen from the front: a dome is a half ellipse (hanging down when
+// the part is flipped), anything else the rectangle of its x and z extent.
 function solid(p, H, so, sd) {
   const b = bounds(p);
   const fill = fillFor(p.role ?? 'body');
@@ -72,8 +75,9 @@ function solid(p, H, so, sd) {
   const paint = `fill="${fill}" stroke="${OUTLINE}" stroke-width="${f(so)}"`;
   let out;
   if (p.dome) {
-    const c = [b.x + b.w / 2, H - b.z];
-    const arc = ellipsePts(c[0], c[1], b.w / 2, b.h, 32, Math.PI, 2 * Math.PI);
+    const arc = p.flipped
+      ? ellipsePts(b.x + b.w / 2, top, b.w / 2, b.h, 32, 0, Math.PI)
+      : ellipsePts(b.x + b.w / 2, H - b.z, b.w / 2, b.h, 32, Math.PI, 2 * Math.PI);
     out = `<polygon points="${pts(arc)}" ${paint}/>`;
   } else {
     const r = Math.min(p.r ?? 0, b.w / 2, b.h / 2);
@@ -82,7 +86,7 @@ function solid(p, H, so, sd) {
   // A box's front face carries its decals; other solids have no flat front.
   if (!p.cyl && !p.dome && !p.poly)
     for (const dc of (p.front ?? []).filter(forSchematic))
-      out += decal(dc, at(b, H), sd);
+      out += decal(dc, at(b, H, p.flipped), sd);
   return out;
 }
 
@@ -93,7 +97,7 @@ function frontSvg(el) {
   const so = extent / 60;
   const sd = extent / 120;
   // Back to front: what is nearer the viewer (larger y + d) is drawn last.
-  const parts = el.parts
+  const parts = installedParts(el)
     .map((p, i) => ({ p, i, b: bounds(p) }))
     .sort((m, n) => m.b.y + m.b.d - (n.b.y + n.b.d) || m.i - n.i);
   const body = parts.map(({ p }) => solid(p, h, so, sd));

@@ -413,6 +413,7 @@ export default [
     tags: ['power'],
     size: { w: 45, d: 20, h: 60 },
     mount: 120,
+    mountFrom: 'floor',
     parts: [
       {
         x: 0, y: 0, z: 0, w: 45, d: 20, h: 60, r: 2,

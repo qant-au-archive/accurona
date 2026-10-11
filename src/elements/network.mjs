@@ -27,7 +27,7 @@ function appliance({ id, name, tags, w, d, h, mount, role = 'dark', accent = tag
   return {
     id, name, group: 'network', tags,
     size: { w, d, h },
-    ...(mount ? { mount } : {}),
+    ...(mount ? { mount, mountFrom: 'floor' } : {}),
     parts: [
       {
         x: 0, y: 0, z: 0, w, d, h, role, r: 1,
@@ -105,6 +105,7 @@ function wallDisplay({ id, name, w, h }) {
     tags: ['av'],
     size: { w, d: 10, h },
     mount: Math.round(152 - h / 2),
+    mountFrom: 'floor',
     parts: [
       { x: 0, y: 4, z: 0, w, d: 6, h, role: 'dark', r: 1, front: [{ rect: [1.5, 1.5, w - 3, h - 3], fill: 'outline', stroke: 'outline' }] },
       { x: w / 2 - 20, y: 0, z: h / 2 - 20, w: 40, d: 4, h: 40, role: 'metal' }
@@ -121,7 +122,9 @@ export default [
     group: 'network',
     tags: ['network'],
     size: { w: 22, d: 22, h: 4 },
-    mount: 270,
+    mount: 0,
+    mountFrom: 'ceiling',
+    facing: 'down',
     symbol: {
       frame: 'circle',
       glyph: [
@@ -147,6 +150,7 @@ export default [
     tags: ['network'],
     size: { w: 7, d: 1.5, h: 11.5 },
     mount: 30,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -187,13 +191,15 @@ export default [
   },
 
   // Ceiling projector on a drop pole; the lens faces the front (bottom).
+  // Authored as it hangs (ceiling plate on top), so it faces up.
   {
     id: 'projector',
     name: 'Ceiling Projector',
     group: 'network',
     tags: ['av'],
     size: { w: 35, d: 30, h: 25 },
-    mount: 270,
+    mount: 0,
+    mountFrom: 'ceiling',
     symbol: {
       frame: 'circle',
       glyph: [
@@ -219,6 +225,7 @@ export default [
     tags: ['av'],
     size: { w: 240, d: 15, h: 180 },
     mount: 90,
+    mountFrom: 'floor',
     parts: [
       {
         x: 0, y: 0, z: 170, w: 240, d: 15, h: 10, r: 3,
@@ -231,13 +238,16 @@ export default [
   },
 
   // Ceiling speaker: round grille flush with the ceiling, back can above.
+  // Authored facing up (grille on top) and installed facing down.
   {
     id: 'speaker-ceiling',
     name: 'Ceiling Speaker',
     group: 'network',
     tags: ['av'],
     size: { w: 21, d: 21, h: 12 },
-    mount: 270,
+    mount: 0,
+    mountFrom: 'ceiling',
+    facing: 'down',
     symbol: {
       frame: 'circle',
       glyph: [
@@ -248,8 +258,8 @@ export default [
       ]
     },
     parts: [
-      { cyl: [10.5, 10.5, 10.5], z: 0, h: 1 },
-      { cyl: [10.5, 10.5, 8], z: 1, h: 11, role: 'metal' }
+      { cyl: [10.5, 10.5, 8], z: 0, h: 11, role: 'metal' },
+      { cyl: [10.5, 10.5, 10.5], z: 11, h: 1 }
     ]
   },
 
@@ -261,6 +271,7 @@ export default [
     tags: ['av'],
     size: { w: 90, d: 10, h: 10 },
     mount: 150,
+    mountFrom: 'floor',
     parts: [
       {
         x: 0, y: 0, z: 0, w: 90, d: 10, h: 10, role: 'dark', r: 3,

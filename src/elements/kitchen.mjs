@@ -174,6 +174,7 @@ export default [
     group: 'kitchen',
     size: { w: 60, d: 35, h: 70 },
     mount: 145,
+    mountFrom: 'floor',
     // Overhead: dashed cross, the plan convention for units above the cut line.
     parts: [
       {
@@ -229,6 +230,7 @@ export default [
     group: 'kitchen',
     size: { w: 90, d: 50, h: 60 },
     mount: 160,
+    mountFrom: 'floor',
     // Canopy and chimney. Ridges from the chimney to the canopy corners read as
     // a hood from above; dashed like every other overhead unit's cross.
     parts: [
@@ -297,6 +299,7 @@ export default [
     group: 'kitchen',
     size: { w: 50, d: 40, h: 30 },
     mount: 90,
+    mountFrom: 'floor',
     parts: [
       {
         x: 0, y: 0, z: 0, w: 50, d: 37, h: 30, r: 1,

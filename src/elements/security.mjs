@@ -1,8 +1,8 @@
 // Security. Most devices here are plan symbols (see README, "Symbols"): the
 // plan shows a 40 cm symbol, while `size` and `parts` model the real device.
 //
-// Symbol frames: a circle for ceiling devices (mounted at 260 cm or higher), a
-// rounded square for wall devices. Cameras are drawn dark, like the dome;
+// Symbol frames: a circle for ceiling devices (mountFrom 'ceiling', and the
+// PTZ camera), a rounded square for wall devices. Cameras are drawn dark, like the dome;
 // every other device body is `soft`. One small security-red mark per glyph.
 
 // A filled arrowhead with its tip at [x, y], pointing along `deg` (0° = +x, 90° = down).
@@ -27,7 +27,9 @@ const symbols = [
     group: 'security',
     tags: ['security'],
     size: { w: 14, d: 14, h: 10 },
-    mount: 270,
+    mount: 0,
+    mountFrom: 'ceiling',
+    facing: 'down',
     symbol: {
       frame: 'circle',
       glyph: [
@@ -50,6 +52,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 9, d: 30, h: 9 },
     mount: 250,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -74,6 +77,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 22, d: 22, h: 21 },
     mount: 300,
+    mountFrom: 'floor',
     symbol: {
       frame: 'circle',
       glyph: [
@@ -96,7 +100,9 @@ const symbols = [
     group: 'security',
     tags: ['security'],
     size: { w: 15, d: 15, h: 5 },
-    mount: 270,
+    mount: 0,
+    mountFrom: 'ceiling',
+    facing: 'down',
     symbol: {
       frame: 'circle',
       glyph: [
@@ -117,6 +123,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 18, d: 3, h: 12 },
     mount: 140,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -140,6 +147,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 6, d: 5, h: 11 },
     mount: 240,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -161,6 +169,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 7, d: 1.5, h: 1.5 },
     mount: 200,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -184,6 +193,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 9, d: 2.5, h: 9 },
     mount: 240,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -208,6 +218,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 20, d: 9, h: 25 },
     mount: 250,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -231,6 +242,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 5, d: 2, h: 15 },
     mount: 110,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -253,6 +265,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 8, d: 4, h: 12 },
     mount: 110,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -274,6 +287,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 25, d: 5, h: 10 },
     mount: 200,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -297,6 +311,7 @@ const symbols = [
     tags: ['security'],
     size: { w: 12, d: 3.5, h: 25 },
     mount: 140,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -343,6 +358,7 @@ const equipment = [
     tags: ['security'],
     size: { w: 40, d: 10, h: 40 },
     mount: 150,
+    mountFrom: 'floor',
     parts: [{
       x: 0, y: 0, z: 0, w: 40, d: 10, h: 40, r: 1,
       top: [{ rect: [14, 6.5, 12, 2], r: 1, accent: 'security', view: 'plan' }],
@@ -431,6 +447,7 @@ const equipment = [
     tags: ['security'],
     size: { w: 40, d: 10, h: 50 },
     mount: 140,
+    mountFrom: 'floor',
     parts: [{
       x: 0, y: 0, z: 0, w: 40, d: 10, h: 50, role: 'metal', r: 1,
       top: [{ rect: [14, 6.5, 12, 2], r: 1, accent: 'security', view: 'plan' }],

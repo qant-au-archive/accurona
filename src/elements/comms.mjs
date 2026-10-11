@@ -16,7 +16,7 @@ function rack({ id, name, w, d, u, mount, sizeLabel }) {
     group: 'comms',
     tags: ['network'],
     size: { w, d, h },
-    ...(mount ? { mount } : {}),
+    ...(mount ? { mount, mountFrom: 'floor' } : {}),
     parts: [
       {
         x: 0, y: 0, z: 0, w, d, h, role: 'dark', r: 1,
@@ -119,7 +119,7 @@ function cabinet({ id, name, tag, w, d, h, role = 'dark', doors = 1, display = t
 // Wall-mounted panels: a shallow box whose door faces the room.
 function wallPanel({ id, name, tag, w, d, h, mount, role = 'body', window: win }) {
   return {
-    id, name, group: 'comms', tags: [tag], size: { w, d, h }, mount,
+    id, name, group: 'comms', tags: [tag], size: { w, d, h }, mount, mountFrom: 'floor',
     parts: [{
       x: 0, y: 0, z: 0, w, d, h, role, r: 1,
       top: [planStrip(w, d, tag)],
@@ -184,11 +184,15 @@ const cooling = [
     group: 'comms',
     tags: ['cooling'],
     size: { w: 84, d: 84, h: 25 },
-    mount: 270,
+    mount: 0,
+    mountFrom: 'ceiling',
+    facing: 'down',
     // The plan shows the grille face: four louvre slots round a return grille.
+    // Authored facing up (body below, grille face on top), installed facing
+    // down, so the grille is the underside and the body sits in the ceiling.
     parts: [
       {
-        x: 0, y: 0, z: 0, w: 84, d: 84, h: 3, r: 3,
+        x: 0, y: 0, z: 22, w: 84, d: 84, h: 3, r: 3,
         top: [
           { rect: [18, 4, 48, 5], r: 2, fill: 'soft' },
           { rect: [18, 75, 48, 5], r: 2, fill: 'soft' },
@@ -196,7 +200,7 @@ const cooling = [
           { rect: [75, 18, 5, 48], r: 2, fill: 'soft' }
         ]
       },
-      { x: 14, y: 14, z: 3, w: 56, d: 56, h: 22, role: 'soft' }
+      { x: 14, y: 14, z: 0, w: 56, d: 56, h: 22, role: 'soft' }
     ],
     plan: [
       { rect: [18, 18, 48, 48], fill: 'body' },
@@ -288,7 +292,7 @@ const fire = [
 ];
 
 // Cable tray fittings. They match the 1 m straight section: 30 cm wide, a
-// 1.5 cm base, 8.5 cm side rails 1.5 cm thick, mounted at 250, three dashed
+// 1.5 cm base, 8.5 cm side rails 1.5 cm thick, hung below the ceiling, three dashed
 // cable runs down the middle. Every fitting's straight ends meet a section
 // flush, entering from the left. The bends and junctions draw their top
 // view as the 2D schematic: from the front each is only a length of rail
@@ -296,7 +300,7 @@ const fire = [
 // that tells them apart is the one seen from above.
 const TRAY = 30; // width
 const RAIL = 1.5;
-const TRAY_MOUNT = 250;
+const TRAY_GAP = 10; // hung 10 cm below the ceiling (top at 2.6 m under a 2.7 m one)
 const rr = (n) => Math.round(n * 100) / 100;
 const arcPts = (cx, cy, r, a0, a1, n = 12) =>
   Array.from({ length: n + 1 }, (_, i) => {
@@ -330,7 +334,8 @@ function trayBend(deg, id) {
     group: 'comms',
     tags: ['network'],
     size: { w: extent(0), d: extent(1), h: 10 },
-    mount: TRAY_MOUNT,
+    mount: TRAY_GAP,
+    mountFrom: 'ceiling',
     schematic: 'plan',
     parts: [
       trayBase(band(R, R + TRAY), [9, 15, 21].map((v) => ({ arc: [cx, cy, R + TRAY - v, -90, a1], dash: '4 3' }))),
@@ -379,7 +384,8 @@ function trayJunction({ id, name, back }) {
     group: 'comms',
     tags: ['network'],
     size: { w: L, d, h: 10 },
-    mount: TRAY_MOUNT,
+    mount: TRAY_GAP,
+    mountFrom: 'ceiling',
     schematic: 'plan',
     parts: [
       trayBase([...topEdge, ...bottomEdge], [...runs, ...branches]),
@@ -397,7 +403,8 @@ const network = [
     group: 'comms',
     tags: ['network'],
     size: { w: 100, d: 30, h: 10 },
-    mount: 250,
+    mount: TRAY_GAP,
+    mountFrom: 'ceiling',
     parts: [
       {
         x: 0, y: 0, z: 0, w: 100, d: 30, h: 1.5, role: 'metal', noInset: true,
@@ -421,7 +428,8 @@ const network = [
     group: 'comms',
     tags: ['network'],
     size: { w: 100, d: 45, h: 5 },
-    mount: 240,
+    mount: 25,
+    mountFrom: 'ceiling',
     parts: [
       { x: 0, y: 0, z: 0, w: 100, d: 4, h: 5, role: 'metal' },
       { x: 0, y: 41, z: 0, w: 100, d: 4, h: 5, role: 'metal', outline: true, top: [{ rect: [44, 1, 12, 2], r: 1, accent: 'network' }] },
@@ -435,6 +443,7 @@ const network = [
     tags: ['network'],
     size: { w: 60, d: 30, h: 60 },
     mount: 120,
+    mountFrom: 'floor',
     parts: [{
       x: 0, y: 0, z: 0, w: 60, d: 30, h: 60, role: 'metal', r: 1,
       top: [
@@ -489,6 +498,7 @@ export default [
     tags: ['cooling'],
     size: { w: 90, d: 25, h: 30 },
     mount: 210,
+    mountFrom: 'floor',
     parts: [
       {
         x: 0, y: 0, z: 0, w: 90, d: 25, h: 30, r: 4,

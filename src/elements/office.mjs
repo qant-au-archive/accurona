@@ -268,6 +268,7 @@ export default [
     group: 'office',
     size: { w: 170, d: 10, h: 100 },
     mount: 90,
+    mountFrom: 'floor',
     parts: [
       { x: 0, y: 4, z: 0, w: 170, d: 6, h: 100, role: 'dark', r: 1, front: [{ rect: [2, 2, 166, 94], fill: 'outline', stroke: 'outline' }] },
       { x: 60, y: 0, z: 30, w: 50, d: 4, h: 40, role: 'metal' }

@@ -9,6 +9,7 @@ import { installedParts } from '../src/render/geometry.mjs';
 import { isoSvg } from '../src/render/iso.mjs';
 import { modelOf } from '../src/render/model.mjs';
 import { planSvg } from '../src/render/plan.mjs';
+import { schematicSvg } from '../src/render/schematic.mjs';
 
 const dir = new URL('./snapshots/', import.meta.url);
 
@@ -125,4 +126,17 @@ test('a ceiling element is drawn reflected (dashed) on the plan', () => {
   snapshot('box-ceiling.plan.svg', plan);
   const symbol = { ...ceiling, symbol: { frame: 'circle', glyph: [] } };
   assert.match(planSvg(symbol), /<circle [^>]*stroke-dasharray="4 3"/);
+});
+
+test('the schematic front view is drawn as installed', () => {
+  // The box's front badge, 3 cm down from its top, is 3 cm up from its bottom
+  // when the box faces down: y = 25 - 3 - 4 = 18.
+  assert.match(schematicSvg(box), /<rect x="5" y="3" width="10" height="4"/);
+  assert.match(schematicSvg(down(box)), /<rect x="5" y="18" width="10" height="4"/);
+  // The dome hangs below its ring: its points reach the bottom of the drawing.
+  const ys = (s) => [...s.matchAll(/<polygon points="([^"]+)"/g)][0][1]
+    .split(' ').map((p) => +p.split(',')[1]);
+  assert.equal(Math.max(...ys(schematicSvg(dome))), 11);
+  assert.equal(Math.max(...ys(schematicSvg(down(dome)))), 14);
+  snapshot('dome-down.schematic.svg', schematicSvg(down(dome)));
 });

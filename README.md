@@ -131,8 +131,10 @@ bottom. In the isometric view the front (y = d) and right (x = w) faces show.
 **Mounting and facing.** Parts are always authored facing up, z counting up from the
 underside; `facing: 'down'` mirrors them inside the item's height. `mountFrom` and
 `facing` are decided in [the scene format](docs/scene-format.md#mounting-and-facing-version-2)
-and are in scene format version 2; no element sets them yet. The renderers draw an
-element as installed:
+and are in scene format version 2. Every element with a `mount` names its `mountFrom`:
+ceiling gear (detectors, dome cameras, access points, ceiling speakers, the AC
+cassette, cable tray) is `'ceiling'`, most of it flush (`mount: 0`) and facing down;
+wall gear stays `'floor'`. The renderers draw an element as installed:
 
 - **Isometric**: the solids mirrored (a dome hangs below its rim), front and side
   decals mirrored with them, and `top` decals left out, because they are on the

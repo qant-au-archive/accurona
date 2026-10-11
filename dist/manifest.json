@@ -208,6 +208,7 @@
         "h": 85
       },
       "mount": 110,
+      "mountFrom": "floor",
       "footprint": {
         "w": 145,
         "d": 10
@@ -699,6 +700,7 @@
         "h": 70
       },
       "mount": 145,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 35
@@ -868,6 +870,7 @@
         "h": 60
       },
       "mount": 160,
+      "mountFrom": "floor",
       "footprint": {
         "w": 90,
         "d": 50
@@ -925,6 +928,7 @@
         "h": 30
       },
       "mount": 90,
+      "mountFrom": "floor",
       "footprint": {
         "w": 50,
         "d": 40
@@ -1010,6 +1014,7 @@
         "h": 60
       },
       "mount": 50,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 35
@@ -1053,6 +1058,7 @@
         "h": 20
       },
       "mount": 80,
+      "mountFrom": "floor",
       "footprint": {
         "w": 50,
         "d": 40
@@ -1166,6 +1172,7 @@
         "h": 90
       },
       "mount": 60,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 10
@@ -1517,6 +1524,7 @@
         "h": 100
       },
       "mount": 90,
+      "mountFrom": "floor",
       "footprint": {
         "w": 170,
         "d": 10
@@ -1577,6 +1585,7 @@
         "h": 40
       },
       "mount": 150,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 45
@@ -1595,6 +1604,7 @@
         "h": 53
       },
       "mount": 150,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 45
@@ -1613,6 +1623,7 @@
         "h": 66
       },
       "mount": 150,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 45
@@ -1631,6 +1642,7 @@
         "h": 80
       },
       "mount": 150,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 45
@@ -2023,6 +2035,7 @@
         "h": 30
       },
       "mount": 210,
+      "mountFrom": "floor",
       "footprint": {
         "w": 90,
         "d": 25
@@ -2092,6 +2105,7 @@
         "h": 90
       },
       "mount": 110,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 20
@@ -2110,6 +2124,7 @@
         "h": 80
       },
       "mount": 110,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 25
@@ -2178,7 +2193,9 @@
         "d": 84,
         "h": 25
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "facing": "down",
       "footprint": {
         "w": 84,
         "d": 84
@@ -2264,7 +2281,8 @@
         "d": 30,
         "h": 10
       },
-      "mount": 250,
+      "mount": 10,
+      "mountFrom": "ceiling",
       "footprint": {
         "w": 100,
         "d": 30
@@ -2282,7 +2300,8 @@
         "d": 33,
         "h": 10
       },
-      "mount": 250,
+      "mount": 10,
+      "mountFrom": "ceiling",
       "footprint": {
         "w": 23,
         "d": 33
@@ -2300,7 +2319,8 @@
         "d": 39,
         "h": 10
       },
-      "mount": 250,
+      "mount": 10,
+      "mountFrom": "ceiling",
       "footprint": {
         "w": 43,
         "d": 39
@@ -2318,7 +2338,8 @@
         "d": 60,
         "h": 10
       },
-      "mount": 250,
+      "mount": 10,
+      "mountFrom": "ceiling",
       "footprint": {
         "w": 60,
         "d": 60
@@ -2336,7 +2357,8 @@
         "d": 60,
         "h": 10
       },
-      "mount": 250,
+      "mount": 10,
+      "mountFrom": "ceiling",
       "footprint": {
         "w": 90,
         "d": 60
@@ -2354,7 +2376,8 @@
         "d": 90,
         "h": 10
       },
-      "mount": 250,
+      "mount": 10,
+      "mountFrom": "ceiling",
       "footprint": {
         "w": 90,
         "d": 90
@@ -2372,7 +2395,8 @@
         "d": 45,
         "h": 5
       },
-      "mount": 240,
+      "mount": 25,
+      "mountFrom": "ceiling",
       "footprint": {
         "w": 100,
         "d": 45
@@ -2391,6 +2415,7 @@
         "h": 60
       },
       "mount": 120,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 30
@@ -2425,7 +2450,9 @@
         "d": 22,
         "h": 4
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "facing": "down",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2479,6 +2506,7 @@
         "h": 10
       },
       "mount": 30,
+      "mountFrom": "floor",
       "footprint": {
         "w": 30,
         "d": 20
@@ -2497,6 +2525,7 @@
         "h": 11.5
       },
       "mount": 30,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2533,7 +2562,8 @@
         "d": 30,
         "h": 25
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2553,6 +2583,7 @@
         "h": 180
       },
       "mount": 90,
+      "mountFrom": "floor",
       "footprint": {
         "w": 240,
         "d": 15
@@ -2570,7 +2601,9 @@
         "d": 21,
         "h": 12
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "facing": "down",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2590,6 +2623,7 @@
         "h": 10
       },
       "mount": 150,
+      "mountFrom": "floor",
       "footprint": {
         "w": 90,
         "d": 10
@@ -2727,6 +2761,7 @@
         "h": 56
       },
       "mount": 124,
+      "mountFrom": "floor",
       "footprint": {
         "w": 97,
         "d": 10
@@ -2745,6 +2780,7 @@
         "h": 71
       },
       "mount": 117,
+      "mountFrom": "floor",
       "footprint": {
         "w": 124,
         "d": 10
@@ -2763,6 +2799,7 @@
         "h": 96
       },
       "mount": 104,
+      "mountFrom": "floor",
       "footprint": {
         "w": 168,
         "d": 10
@@ -2781,6 +2818,7 @@
         "h": 110
       },
       "mount": 97,
+      "mountFrom": "floor",
       "footprint": {
         "w": 193,
         "d": 10
@@ -2884,7 +2922,9 @@
         "d": 14,
         "h": 10
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "facing": "down",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2904,6 +2944,7 @@
         "h": 9
       },
       "mount": 250,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2923,6 +2964,7 @@
         "h": 21
       },
       "mount": 300,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2941,7 +2983,9 @@
         "d": 15,
         "h": 5
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "facing": "down",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2961,6 +3005,7 @@
         "h": 12
       },
       "mount": 140,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2980,6 +3025,7 @@
         "h": 11
       },
       "mount": 240,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -2999,6 +3045,7 @@
         "h": 1.5
       },
       "mount": 200,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3018,6 +3065,7 @@
         "h": 9
       },
       "mount": 240,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3037,6 +3085,7 @@
         "h": 25
       },
       "mount": 250,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3056,6 +3105,7 @@
         "h": 15
       },
       "mount": 110,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3075,6 +3125,7 @@
         "h": 12
       },
       "mount": 110,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3094,6 +3145,7 @@
         "h": 10
       },
       "mount": 200,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3113,6 +3165,7 @@
         "h": 25
       },
       "mount": 140,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3150,6 +3203,7 @@
         "h": 40
       },
       "mount": 150,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 10
@@ -3219,6 +3273,7 @@
         "h": 50
       },
       "mount": 140,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 10
@@ -3253,7 +3308,9 @@
         "d": 11,
         "h": 5
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "facing": "down",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3272,7 +3329,9 @@
         "d": 11,
         "h": 5
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "facing": "down",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3310,6 +3369,7 @@
         "h": 30
       },
       "mount": 120,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3329,6 +3389,7 @@
         "h": 9
       },
       "mount": 110,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3348,6 +3409,7 @@
         "h": 20
       },
       "mount": 220,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3366,7 +3428,9 @@
         "d": 9,
         "h": 5
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "facing": "down",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3383,6 +3447,7 @@
         "h": 22
       },
       "mount": 120,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3399,6 +3464,7 @@
         "h": 42
       },
       "mount": 110,
+      "mountFrom": "floor",
       "footprint": {
         "w": 40,
         "d": 40
@@ -3418,6 +3484,7 @@
         "h": 80
       },
       "mount": 90,
+      "mountFrom": "floor",
       "footprint": {
         "w": 80,
         "d": 30
@@ -3436,6 +3503,7 @@
         "h": 80
       },
       "mount": 120,
+      "mountFrom": "floor",
       "footprint": {
         "w": 60,
         "d": 15
@@ -3741,6 +3809,7 @@
         "h": 60
       },
       "mount": 120,
+      "mountFrom": "floor",
       "footprint": {
         "w": 45,
         "d": 20
@@ -3941,6 +4010,7 @@
         "h": 35
       },
       "mount": 110,
+      "mountFrom": "floor",
       "footprint": {
         "w": 25,
         "d": 12
@@ -4112,7 +4182,8 @@
         "d": 120,
         "h": 1
       },
-      "mount": 270,
+      "mount": 0,
+      "mountFrom": "ceiling",
       "footprint": {
         "w": 60,
         "d": 120

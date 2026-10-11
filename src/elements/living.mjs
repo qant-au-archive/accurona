@@ -159,6 +159,7 @@ export default [
     tags: ['av'],
     size: { w: 145, d: 10, h: 85 },
     mount: 110,
+    mountFrom: 'floor',
     parts: [
       { x: 0, y: 4, z: 0, w: 145, d: 6, h: 85, role: 'dark', r: 1 },
       { x: 52, y: 0, z: 22, w: 40, d: 4, h: 40, role: 'metal' }

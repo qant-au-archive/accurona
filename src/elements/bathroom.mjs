@@ -161,6 +161,7 @@ export default [
     group: 'bathroom',
     size: { w: 40, d: 35, h: 60 },
     mount: 50,
+    mountFrom: 'floor',
     parts: [
       {
         poly: [[0.5, 0.5], [39.5, 0.5], ...arc(20, 5, 19.5, 29.5, 0, 180)], z: 0, h: 60,
@@ -179,6 +180,7 @@ export default [
     group: 'bathroom',
     size: { w: 50, d: 40, h: 20 },
     mount: 80,
+    mountFrom: 'floor',
     parts: [
       {
         poly: [[0.5, 0.5], [49.5, 0.5], ...arc(25, 12, 24.5, 27.5, 0, 180)], z: 0, h: 20,
@@ -266,6 +268,7 @@ export default [
     group: 'bathroom',
     size: { w: 60, d: 10, h: 90 },
     mount: 60,
+    mountFrom: 'floor',
     // Two uprights on wall brackets, rails between them.
     parts: [
       { cyl: [3, 6, 2.5], z: 0, h: 90, role: 'metal' },

@@ -157,6 +157,7 @@ const evChargerWall = {
   tags: ['power'],
   size: { w: 25, d: 12, h: 35 },
   mount: 110,
+  mountFrom: 'floor',
   parts: [
     {
       x: 0, y: 0, z: 0, w: 25, d: 12, h: 35, r: 3,

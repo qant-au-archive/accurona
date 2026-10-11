@@ -1,6 +1,6 @@
 // Fire and safety. Ceiling and wall devices are plan symbols (see README,
 // "Symbols"), with the same frame rule as security: a circle for ceiling
-// devices (mounted at 260 cm or higher), a rounded square for wall and floor
+// devices (mountFrom 'ceiling'), a rounded square for wall and floor
 // devices. One small fire-red mark per glyph; the extinguisher body is red
 // because that is how an extinguisher is recognised. First aid and the AED
 // carry no tag, so they have no accent; the emergency shower and the assembly
@@ -23,7 +23,9 @@ function detector({ id, name, glyph }) {
     group: 'safety',
     tags: ['fire'],
     size: { w: 11, d: 11, h: 5 },
-    mount: 270,
+    mount: 0,
+    mountFrom: 'ceiling',
+    facing: 'down',
     symbol: {
       frame: 'circle',
       glyph: [{ circle: [20, 20, 13], fill: 'soft', stroke: 'outline' }, ...glyph]
@@ -84,6 +86,7 @@ const symbols = [
     tags: ['fire'],
     size: { w: 26, d: 6, h: 30 },
     mount: 120,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -107,6 +110,7 @@ const symbols = [
     tags: ['fire'],
     size: { w: 9, d: 6, h: 9 },
     mount: 110,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -128,6 +132,7 @@ const symbols = [
     tags: ['fire'],
     size: { w: 35, d: 5, h: 20 },
     mount: 220,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -154,7 +159,9 @@ const symbols = [
     group: 'safety',
     tags: ['fire'],
     size: { w: 30, d: 9, h: 5 },
-    mount: 270,
+    mount: 0,
+    mountFrom: 'ceiling',
+    facing: 'down',
     symbol: {
       frame: 'circle',
       glyph: [
@@ -165,9 +172,10 @@ const symbols = [
         { line: [[27, 24], [30, 31]], stroke: 'detail' }
       ]
     },
+    // Authored facing up (diffuser on top), installed facing down.
     parts: [
-      { x: 0, y: 0, z: 2, w: 30, d: 9, h: 3, r: 1 },
-      { x: 2, y: 1.5, z: 0, w: 26, d: 6, h: 2, role: 'glass', top: [{ rect: [22, 2, 2, 2], accent: 'fire', view: 'iso' }] }
+      { x: 0, y: 0, z: 0, w: 30, d: 9, h: 3, r: 1 },
+      { x: 2, y: 1.5, z: 3, w: 26, d: 6, h: 2, role: 'glass', top: [{ rect: [22, 2, 2, 2], accent: 'fire', view: 'iso' }] }
     ]
   },
   {
@@ -177,6 +185,7 @@ const symbols = [
     group: 'safety',
     size: { w: 30, d: 12, h: 22 },
     mount: 120,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -200,6 +209,7 @@ const symbols = [
     group: 'safety',
     size: { w: 38, d: 15, h: 42 },
     mount: 110,
+    mountFrom: 'floor',
     symbol: {
       frame: 'square',
       glyph: [
@@ -228,6 +238,7 @@ const equipment = [
     tags: ['fire'],
     size: { w: 80, d: 30, h: 80 },
     mount: 90,
+    mountFrom: 'floor',
     parts: [
       {
         x: 0, y: 5, z: 0, w: 80, d: 25, h: 80, r: 3,
@@ -253,6 +264,7 @@ const equipment = [
     tags: ['fire'],
     size: { w: 60, d: 15, h: 80 },
     mount: 120,
+    mountFrom: 'floor',
     parts: [{
       x: 0, y: 0, z: 0, w: 60, d: 15, h: 80, r: 1,
       top: [{ rect: [22, 11, 16, 2.5], r: 1, accent: 'fire', view: 'plan' }],
