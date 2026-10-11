@@ -2193,7 +2193,7 @@
         "d": 84,
         "h": 25
       },
-      "mount": 0,
+      "mount": -22,
       "mountFrom": "ceiling",
       "facing": "down",
       "footprint": {
@@ -2572,7 +2572,26 @@
     },
     {
       "id": "projector-screen",
-      "name": "Projector Screen",
+      "name": "Projector Screen, Ceiling-Mounted",
+      "group": "network",
+      "tags": [
+        "av"
+      ],
+      "size": {
+        "w": 240,
+        "d": 15,
+        "h": 180
+      },
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "footprint": {
+        "w": 240,
+        "d": 15
+      }
+    },
+    {
+      "id": "projector-screen-wall",
+      "name": "Projector Screen, Wall-Mounted",
       "group": "network",
       "tags": [
         "av"
@@ -2590,6 +2609,25 @@
       }
     },
     {
+      "id": "projector-screen-in-ceiling",
+      "name": "Projector Screen, In-Ceiling",
+      "group": "network",
+      "tags": [
+        "av"
+      ],
+      "size": {
+        "w": 240,
+        "d": 15,
+        "h": 180
+      },
+      "mount": -10,
+      "mountFrom": "ceiling",
+      "footprint": {
+        "w": 240,
+        "d": 15
+      }
+    },
+    {
       "id": "speaker-ceiling",
       "name": "Ceiling Speaker",
       "group": "network",
@@ -2601,7 +2639,7 @@
         "d": 21,
         "h": 12
       },
-      "mount": 0,
+      "mount": -11,
       "mountFrom": "ceiling",
       "facing": "down",
       "footprint": {
@@ -2953,7 +2991,7 @@
     },
     {
       "id": "cctv-ptz",
-      "name": "CCTV PTZ Camera",
+      "name": "CCTV PTZ Camera, Pendant",
       "group": "security",
       "tags": [
         "security"
@@ -2961,10 +2999,53 @@
       "size": {
         "w": 22,
         "d": 22,
-        "h": 21
+        "h": 51
       },
-      "mount": 300,
+      "mount": 0,
+      "mountFrom": "ceiling",
+      "facing": "down",
+      "footprint": {
+        "w": 40,
+        "d": 40
+      },
+      "symbol": true
+    },
+    {
+      "id": "cctv-ptz-wall",
+      "name": "CCTV PTZ Camera, Wall-Mounted",
+      "group": "security",
+      "tags": [
+        "security"
+      ],
+      "size": {
+        "w": 22,
+        "d": 36,
+        "h": 25
+      },
+      "mount": 30,
+      "mountFrom": "ceiling",
+      "facing": "down",
+      "footprint": {
+        "w": 40,
+        "d": 40
+      },
+      "symbol": true
+    },
+    {
+      "id": "cctv-ptz-pole",
+      "name": "CCTV PTZ Camera, Pole-Mounted",
+      "group": "security",
+      "tags": [
+        "security"
+      ],
+      "size": {
+        "w": 22,
+        "d": 36,
+        "h": 25
+      },
+      "mount": 375,
       "mountFrom": "floor",
+      "facing": "down",
       "footprint": {
         "w": 40,
         "d": 40

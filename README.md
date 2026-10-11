@@ -114,7 +114,8 @@ packages to npm (`.github/workflows/publish.yml`).
   size: { w: 210, d: 90, h: 85 },  // cm: width (x), depth (y), height (z)
   mount: 210,                // optional: cm from mountFrom (wall and ceiling gear)
   mountFrom: 'floor',        // optional: 'floor' (default; mount = underside above the floor),
-                             //   'ceiling' (mount = gap from the ceiling to the top; 0 = flush)
+                             //   'ceiling' (mount = gap from the ceiling to the top; 0 = flush,
+                             //   negative = recessed, the top that far above the ceiling)
                              //   or 'surface' (mount = gap above the item it stands on)
   facing: 'up',              // optional: 'up' (default) or 'down', e.g. a dome camera or downlight
   parts: [ /* solids, below */ ],

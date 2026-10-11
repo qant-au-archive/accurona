@@ -312,13 +312,18 @@ from, and `mountMm` is the offset from it. The item's underside, above its floor
 | `mountFrom` | `mountMm` means | Underside at | Default `mountMm` |
 |---|---|---|---|
 | `floor` | underside above the floor | `mountMm` | the element's `mount`, else 0 |
-| `ceiling` | gap from the ceiling down to the item's **top**; 0 is flush | `wallHeightMm - mountMm - h` | the element's `mount`, else 0 |
+| `ceiling` | gap from the ceiling down to the item's **top**; 0 is flush, negative is recessed | `wallHeightMm - mountMm - h` | the element's `mount`, else 0 |
 | `surface` | gap from the supporting item's top to this item's underside | the support's top `+ mountMm` | 0 |
 
 - `h` is the placement's `size.h`, else the element's `size.h`. `wallHeightMm` is the
   placement's floor's (default 2700). So a flush downlight (`ceiling`, 0) sits at the
   ceiling on a 2400, a 2550 and a 2700 mm floor, and moves when the floor's wall height
   changes, which nothing does in version 1.
+- **A negative ceiling gap is a recess**: the item's top is that far above the ceiling,
+  in the void, and only the rest shows below it. An AC cassette 250 mm tall at `-220` hangs
+  its 30 mm panel below the ceiling and hides its body; a recessed ceiling speaker or an
+  in-ceiling projector screen casing does the same. The recess is at most the item's
+  height `h`. The resolved underside is the same formula, `wallHeightMm - mountMm - h`.
 - **The file stores the reference and the offset, never only the resolved height.** An
   editor that knows the absolute height of a ceiling item does not write it back as a
   floor offset; doing so would detach the item from the ceiling it hangs from.

@@ -1,8 +1,8 @@
 // Security. Most devices here are plan symbols (see README, "Symbols"): the
 // plan shows a 40 cm symbol, while `size` and `parts` model the real device.
 //
-// Symbol frames: a circle for ceiling devices (mountFrom 'ceiling', and the
-// PTZ camera), a rounded square for wall devices. Cameras are drawn dark, like the dome;
+// Symbol frames: a circle for ceiling devices, a rounded square for wall and
+// pole devices. Cameras are drawn dark, like the dome;
 // every other device body is `soft`. One small security-red mark per glyph.
 
 // A filled arrowhead with its tip at [x, y], pointing along `deg` (0° = +x, 90° = down).
@@ -19,6 +19,38 @@ const onCircle = (cx, cy, r, deg) => [cx + r * Math.cos((deg * Math.PI) / 180), 
 
 // A small wall device: one box, back on the wall (y = 0), face towards the room.
 const wallBox = (w, d, h, front, role = 'body') => [{ x: 0, y: 0, z: 0, w, d, h, role, r: 1, front }];
+
+// A PTZ camera on its mount: a dark dome with a double-headed pan arrow round
+// it on the plan. `parts` is the mount, and the camera (a 12 cm body and a
+// 9 cm dome) stands on it at `at` = [cx, cy, z]. Authored upside down and
+// installed facing down, so the dome hangs below the mount.
+function ptz({ id, name, frame, size, mount, mountFrom = 'ceiling', parts, at: [cx, cy, z] }) {
+  return {
+    id,
+    name,
+    group: 'security',
+    tags: ['security'],
+    size,
+    mount,
+    mountFrom,
+    facing: 'down',
+    symbol: {
+      frame,
+      glyph: [
+        { arc: [20, 20, 14, 150, 390], stroke: 'detail' },
+        arrowHead(onCircle(20, 20, 14, 30), 120),
+        arrowHead(onCircle(20, 20, 14, 150), 60),
+        { circle: [20, 20, 8], fill: 'dark', stroke: 'outline' },
+        { circle: [20, 24, 2.5], accent: 'security' }
+      ]
+    },
+    parts: [
+      ...parts,
+      { cyl: [cx, cy, 11], z, h: 12 },
+      { dome: [cx, cy, 9], z: z + 12, h: 9, role: 'dark' }
+    ]
+  };
+}
 
 const symbols = [
   {
@@ -69,30 +101,46 @@ const symbols = [
       { x: 0, y: 8, z: 0, w: 9, d: 22, h: 9, role: 'dark', r: 2, front: [{ circle: [4.5, 4.5, 2.5], accent: 'security' }] }
     ]
   },
-  {
-    // A dark body with a double-headed pan arrow round it.
+  // A PTZ camera hangs below its mount, about 30 cm down from the ceiling:
+  // from a drop tube (the default), off a wall arm, or off a pole arm.
+  ptz({
     id: 'cctv-ptz',
-    name: 'CCTV PTZ Camera',
-    group: 'security',
-    tags: ['security'],
-    size: { w: 22, d: 22, h: 21 },
-    mount: 300,
-    mountFrom: 'floor',
-    symbol: {
-      frame: 'circle',
-      glyph: [
-        { arc: [20, 20, 14, 150, 390], stroke: 'detail' },
-        arrowHead(onCircle(20, 20, 14, 30), 120),
-        arrowHead(onCircle(20, 20, 14, 150), 60),
-        { circle: [20, 20, 8], fill: 'dark', stroke: 'outline' },
-        { circle: [20, 24, 2.5], accent: 'security' }
-      ]
-    },
+    name: 'CCTV PTZ Camera, Pendant',
+    frame: 'circle',
+    size: { w: 22, d: 22, h: 51 },
+    mount: 0,
+    // Authored upside down, a 30 cm drop tube under the camera.
+    parts: [{ cyl: [11, 11, 2.5], z: 0, h: 30, role: 'metal' }],
+    at: [11, 11, 30]
+  }),
+  ptz({
+    id: 'cctv-ptz-wall',
+    name: 'CCTV PTZ Camera, Wall-Mounted',
+    frame: 'square',
+    size: { w: 22, d: 36, h: 25 },
+    mount: 30,
+    // Authored upside down: the wall plate and the arm under the camera.
     parts: [
-      { cyl: [11, 11, 11], z: 0, h: 12 },
-      { dome: [11, 11, 9], z: 12, h: 9, role: 'dark' }
-    ]
-  },
+      { x: 5, y: 0, z: 0, w: 12, d: 2, h: 15, role: 'metal' },
+      { x: 8, y: 2, z: 0, w: 6, d: 23, h: 4, role: 'metal' }
+    ],
+    at: [11, 25, 4]
+  }),
+  ptz({
+    id: 'cctv-ptz-pole',
+    name: 'CCTV PTZ Camera, Pole-Mounted',
+    frame: 'square',
+    size: { w: 22, d: 36, h: 25 },
+    // No ceiling outdoors: the arm's top at 4 m, a usual camera pole.
+    mount: 375,
+    mountFrom: 'floor',
+    // Authored upside down: the pole clamp and the arm under the camera.
+    parts: [
+      { cyl: [11, 3, 3], z: 0, h: 15, role: 'metal' },
+      { x: 8, y: 6, z: 0, w: 6, d: 19, h: 4, role: 'metal' }
+    ],
+    at: [11, 25, 4]
+  }),
   {
     // Flat disc with a centred lens and eight ticks for the all-round view.
     id: 'cctv-fisheye',

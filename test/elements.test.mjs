@@ -36,6 +36,10 @@ test('mounting values are checked', () => {
   assert.deepEqual(mountingErrors({ mount: 30, mountFrom: 'surface' }), []);
   assert.deepEqual(mountingErrors({}), []);
   assert.equal(mountingErrors({ mount: -1 }).length, 1);
+  // A ceiling mount may be negative, a recess, down to the item's height.
+  assert.deepEqual(mountingErrors({ size: { h: 25 }, mount: -22, mountFrom: 'ceiling' }), []);
+  assert.equal(mountingErrors({ size: { h: 25 }, mount: -26, mountFrom: 'ceiling' }).length, 1);
+  assert.equal(mountingErrors({ size: { h: 25 }, mount: -1, mountFrom: 'surface' }).length, 1);
   assert.equal(mountingErrors({ mount: '270' }).length, 1);
   assert.equal(mountingErrors({ mountFrom: 'wall' }).length, 1);
   assert.equal(mountingErrors({ facing: 'sideways' }).length, 1);

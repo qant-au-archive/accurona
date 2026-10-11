@@ -2,9 +2,9 @@
 
 The specification each element is built from. Sizes are width × depth ×
 height in cm. `m` is the mount height in cm, underside above the floor; `c` is
-the gap in cm from the ceiling down to the top, 0 = flush; `down` means installed
-facing down. "symbol" means the element is drawn on plans as a 40 cm symbol; see
-the README. Beds are 100 cm tall to the top of the headboard.
+the gap in cm from the ceiling down to the top, 0 = flush, negative = recessed;
+`down` means installed facing down. "symbol" means the element is drawn on plans
+as a 40 cm symbol; see the README. Beds are 100 cm tall to the top of the headboard.
 
 Every row below, and every rack the comms note describes, is built in
 `src/elements/`.
@@ -152,86 +152,90 @@ Note: the legacy `bed` keeps its original Axonometra footprint, 200 × 150 (leng
 
 Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 × 450 at 6/9/12/15U; 600 × 600 at 18/24/27U; 600 × 800 at 27/32/37/42U; server racks 600 and 800 wide × 1000/1100/1200 deep at 42 and 45U; open frame 2-post 24/42U and 4-post 42U. Also done: `split-ac-indoor`.
 
-| id                  | name                             | W×D×H               | tags    |
-| ------------------- | -------------------------------- | ------------------- | ------- |
-| ups-tower           | UPS, Tower                       | 20×45×35            | power   |
-| ups-large           | UPS, Floor-Standing              | 35×80×130           | power   |
-| battery-cabinet     | Battery Cabinet                  | 60×85×200           | power   |
-| distribution-board  | Distribution Board               | 60×20×90, m 110     | power   |
-| ats-panel           | Transfer Switch Panel            | 60×25×80, m 110     | power   |
-| generator           | Standby Generator                | 220×110×150         | power   |
-| crac-unit           | Precision Air Conditioner (CRAC) | 100×90×195          | cooling |
-| in-row-cooler       | In-Row Cooler                    | 30×120×200          | cooling |
-| ac-ceiling-cassette | AC Ceiling Cassette              | 84×84×25, c 0, down | cooling |
-| ac-condenser        | AC Outdoor Unit                  | 85×35×70            | cooling |
-| containment-door    | Aisle Containment Door           | 120×10×200          | cooling |
-| fire-suppression    | Gas Suppression Cylinder         | 40×40×170           | fire    |
-| cable-tray          | Cable Tray Section, 1 m          | 100×30×10, c 10     | network |
-| cable-tray-bend-22  | Cable Tray Bend, 22.5°           | 23×33×10, c 10      | network |
-| cable-tray-bend-45  | Cable Tray Bend, 45°             | 43×39×10, c 10      | network |
-| cable-tray-bend-90  | Cable Tray Bend, 90°             | 60×60×10, c 10      | network |
-| cable-tray-tee      | Cable Tray Tee                   | 90×60×10, c 10      | network |
-| cable-tray-cross    | Cable Tray Cross                 | 90×90×10, c 10      | network |
-| ladder-rack         | Ladder Rack Section, 1 m         | 100×45×5, c 25      | network |
-| odf-panel           | Fibre Termination Cabinet        | 60×30×60, m 120     | network |
-| kvm-console         | KVM Console Cart                 | 60×70×110           | network |
-| raised-floor-tile   | Perforated Floor Tile            | 60×60×1             | cooling |
+| id                  | name                             | W×D×H                 | tags    |
+| ------------------- | -------------------------------- | --------------------- | ------- |
+| ups-tower           | UPS, Tower                       | 20×45×35              | power   |
+| ups-large           | UPS, Floor-Standing              | 35×80×130             | power   |
+| battery-cabinet     | Battery Cabinet                  | 60×85×200             | power   |
+| distribution-board  | Distribution Board               | 60×20×90, m 110       | power   |
+| ats-panel           | Transfer Switch Panel            | 60×25×80, m 110       | power   |
+| generator           | Standby Generator                | 220×110×150           | power   |
+| crac-unit           | Precision Air Conditioner (CRAC) | 100×90×195            | cooling |
+| in-row-cooler       | In-Row Cooler                    | 30×120×200            | cooling |
+| ac-ceiling-cassette | AC Ceiling Cassette              | 84×84×25, c -22, down | cooling |
+| ac-condenser        | AC Outdoor Unit                  | 85×35×70              | cooling |
+| containment-door    | Aisle Containment Door           | 120×10×200            | cooling |
+| fire-suppression    | Gas Suppression Cylinder         | 40×40×170             | fire    |
+| cable-tray          | Cable Tray Section, 1 m          | 100×30×10, c 10       | network |
+| cable-tray-bend-22  | Cable Tray Bend, 22.5°           | 23×33×10, c 10        | network |
+| cable-tray-bend-45  | Cable Tray Bend, 45°             | 43×39×10, c 10        | network |
+| cable-tray-bend-90  | Cable Tray Bend, 90°             | 60×60×10, c 10        | network |
+| cable-tray-tee      | Cable Tray Tee                   | 90×60×10, c 10        | network |
+| cable-tray-cross    | Cable Tray Cross                 | 90×90×10, c 10        | network |
+| ladder-rack         | Ladder Rack Section, 1 m         | 100×45×5, c 25        | network |
+| odf-panel           | Fibre Termination Cabinet        | 60×30×60, m 120       | network |
+| kvm-console         | KVM Console Cart                 | 60×70×110             | network |
+| raised-floor-tile   | Perforated Floor Tile            | 60×60×1               | cooling |
 
 ### Networking and AV (`network`)
 
-| id                   | name                         | W×D×H                            | tags              |
-| -------------------- | ---------------------------- | -------------------------------- | ----------------- |
-| wifi-ap              | Wi-Fi Access Point           | 40×40 symbol, 22×22×4, c 0, down | network           |
-| network-switch       | Network Switch (Desktop)     | 44×30×5                          | network           |
-| router               | Router                       | 30×20×5                          | network           |
-| modem-nbn            | NBN Connection Box           | 30×20×10, m 30                   | network           |
-| data-outlet          | Data Outlet                  | 40×40 symbol, m 30               | network           |
-| floor-box            | Floor Box                    | 40×40×10                         | network, power    |
-| projector            | Ceiling Projector            | 40×40 symbol, c 0                | av                |
-| projector-screen     | Projector Screen             | 240×15×180, m 90                 | av                |
-| speaker-ceiling      | Ceiling Speaker              | 40×40 symbol, c 0, down          | av                |
-| video-bar            | Video Conferencing Bar       | 90×10×10, m 150                  | av                |
-| pc-tower             | Desktop PC                   | 20×45×45                         | network           |
-| monitor-24           | Monitor, 24"                 | 54×20×42                         | network           |
-| monitor              | Monitor, 27"                 | 62×20×45                         | network           |
-| monitor-34-ultrawide | Monitor, Ultrawide 34"       | 81×20×47, 1800R                  | network           |
-| monitor-38-ultrawide | Monitor, Ultrawide 38"       | 90×20×50, 2300R                  | network           |
-| monitor-49-ultrawide | Monitor, Super-Ultrawide 49" | 120×22×46, 1800R                 | network           |
-| monitor-arm-dual     | Dual Monitor Arm, 2 × 27"    | 126×16×60                        | network           |
-| display-wall-43      | Wall Display, 43"            | 97×10×56, m 124                  | av                |
-| display-wall-55      | Wall Display, 55"            | 124×10×71, m 117                 | av                |
-| display-wall-75      | Wall Display, 75"            | 168×10×96, m 104                 | av                |
-| display-wall-86      | Wall Display, 86"            | 193×10×110, m 97                 | av                |
-| laptop               | Laptop                       | 34×24×2                          | network           |
-| ip-phone             | Desk Phone                   | 22×20×15                         | network           |
-| firewall             | Firewall Appliance (Desktop) | 30×20×5                          | network, security |
-| server-tower         | Tower Server                 | 20×60×45                         | network           |
-| nas                  | Network Storage (NAS)        | 20×25×25                         | network           |
+| id                          | name                              | W×D×H                            | tags              |
+| --------------------------- | --------------------------------- | -------------------------------- | ----------------- |
+| wifi-ap                     | Wi-Fi Access Point                | 40×40 symbol, 22×22×4, c 0, down | network           |
+| network-switch              | Network Switch (Desktop)          | 44×30×5                          | network           |
+| router                      | Router                            | 30×20×5                          | network           |
+| modem-nbn                   | NBN Connection Box                | 30×20×10, m 30                   | network           |
+| data-outlet                 | Data Outlet                       | 40×40 symbol, m 30               | network           |
+| floor-box                   | Floor Box                         | 40×40×10                         | network, power    |
+| projector                   | Ceiling Projector                 | 40×40 symbol, c 0                | av                |
+| projector-screen            | Projector Screen, Ceiling-Mounted | 240×15×180, c 0                  | av                |
+| projector-screen-wall       | Projector Screen, Wall-Mounted    | 240×15×180, m 90                 | av                |
+| projector-screen-in-ceiling | Projector Screen, In-Ceiling      | 240×15×180, c -10                | av                |
+| speaker-ceiling             | Ceiling Speaker                   | 40×40 symbol, c -11, down        | av                |
+| video-bar                   | Video Conferencing Bar            | 90×10×10, m 150                  | av                |
+| pc-tower                    | Desktop PC                        | 20×45×45                         | network           |
+| monitor-24                  | Monitor, 24"                      | 54×20×42                         | network           |
+| monitor                     | Monitor, 27"                      | 62×20×45                         | network           |
+| monitor-34-ultrawide        | Monitor, Ultrawide 34"            | 81×20×47, 1800R                  | network           |
+| monitor-38-ultrawide        | Monitor, Ultrawide 38"            | 90×20×50, 2300R                  | network           |
+| monitor-49-ultrawide        | Monitor, Super-Ultrawide 49"      | 120×22×46, 1800R                 | network           |
+| monitor-arm-dual            | Dual Monitor Arm, 2 × 27"         | 126×16×60                        | network           |
+| display-wall-43             | Wall Display, 43"                 | 97×10×56, m 124                  | av                |
+| display-wall-55             | Wall Display, 55"                 | 124×10×71, m 117                 | av                |
+| display-wall-75             | Wall Display, 75"                 | 168×10×96, m 104                 | av                |
+| display-wall-86             | Wall Display, 86"                 | 193×10×110, m 97                 | av                |
+| laptop                      | Laptop                            | 34×24×2                          | network           |
+| ip-phone                    | Desk Phone                        | 22×20×15                         | network           |
+| firewall                    | Firewall Appliance (Desktop)      | 30×20×5                          | network, security |
+| server-tower                | Tower Server                      | 20×60×45                         | network           |
+| nas                         | Network Storage (NAS)             | 20×25×25                         | network           |
 
 ### Security (`security`)
 
-| id           | name                   | W×D×H                   | tags              |
-| ------------ | ---------------------- | ----------------------- | ----------------- |
-| cctv-dome    | CCTV Dome Camera       | 40×40 symbol, c 0, down | security          |
-| cctv-bullet  | CCTV Bullet Camera     | 40×40 symbol, m 250     | security          |
-| cctv-ptz     | CCTV PTZ Camera        | 40×40 symbol, m 300     | security          |
-| cctv-fisheye | CCTV 360° Camera       | 40×40 symbol, c 0, down | security          |
-| nvr          | Network Video Recorder | 44×40×10                | security, network |
-| alarm-panel  | Alarm Control Panel    | 40×10×40, m 150         | security          |
-| alarm-keypad | Alarm Keypad           | 40×40 symbol, m 140     | security          |
-| pir-sensor   | Motion Detector (PIR)  | 40×40 symbol, m 240     | security          |
-| door-contact | Door Contact           | 40×40 symbol, m 200     | security          |
-| glass-break  | Glass-Break Detector   | 40×40 symbol, m 240     | security          |
-| siren-strobe | Siren and Strobe       | 40×40 symbol, m 250     | security          |
-| card-reader  | Access Card Reader     | 40×40 symbol, m 110     | security          |
-| exit-button  | Request-to-Exit Button | 40×40 symbol, m 110     | security          |
-| maglock      | Magnetic Door Lock     | 40×40 symbol, m 200     | security          |
-| intercom     | Video Intercom         | 40×40 symbol, m 140     | security          |
-| turnstile    | Turnstile              | 50×140×100              | security          |
-| speed-gate   | Speed Gate Lane        | 120×150×100             | security          |
-| safe         | Safe                   | 50×50×70                | security          |
-| key-cabinet  | Key Cabinet            | 40×10×50, m 140         | security          |
-| bollard      | Bollard                | 30×30×100               | security          |
+| id            | name                          | W×D×H                               | tags              |
+| ------------- | ----------------------------- | ----------------------------------- | ----------------- |
+| cctv-dome     | CCTV Dome Camera              | 40×40 symbol, c 0, down             | security          |
+| cctv-bullet   | CCTV Bullet Camera            | 40×40 symbol, m 250                 | security          |
+| cctv-ptz      | CCTV PTZ Camera, Pendant      | 40×40 symbol, 22×22×51, c 0, down   | security          |
+| cctv-ptz-wall | CCTV PTZ Camera, Wall-Mounted | 40×40 symbol, 22×36×25, c 30, down  | security          |
+| cctv-ptz-pole | CCTV PTZ Camera, Pole-Mounted | 40×40 symbol, 22×36×25, m 375, down | security          |
+| cctv-fisheye  | CCTV 360° Camera              | 40×40 symbol, c 0, down             | security          |
+| nvr           | Network Video Recorder        | 44×40×10                            | security, network |
+| alarm-panel   | Alarm Control Panel           | 40×10×40, m 150                     | security          |
+| alarm-keypad  | Alarm Keypad                  | 40×40 symbol, m 140                 | security          |
+| pir-sensor    | Motion Detector (PIR)         | 40×40 symbol, m 240                 | security          |
+| door-contact  | Door Contact                  | 40×40 symbol, m 200                 | security          |
+| glass-break   | Glass-Break Detector          | 40×40 symbol, m 240                 | security          |
+| siren-strobe  | Siren and Strobe              | 40×40 symbol, m 250                 | security          |
+| card-reader   | Access Card Reader            | 40×40 symbol, m 110                 | security          |
+| exit-button   | Request-to-Exit Button        | 40×40 symbol, m 110                 | security          |
+| maglock       | Magnetic Door Lock            | 40×40 symbol, m 200                 | security          |
+| intercom      | Video Intercom                | 40×40 symbol, m 140                 | security          |
+| turnstile     | Turnstile                     | 50×140×100                          | security          |
+| speed-gate    | Speed Gate Lane               | 120×150×100                         | security          |
+| safe          | Safe                          | 50×50×70                            | security          |
+| key-cabinet   | Key Cabinet                   | 40×10×50, m 140                     | security          |
+| bollard       | Bollard                       | 30×30×100                           | security          |
 
 ### Fire and safety (`safety`)
 

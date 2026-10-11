@@ -184,7 +184,7 @@ const cooling = [
     group: 'comms',
     tags: ['cooling'],
     size: { w: 84, d: 84, h: 25 },
-    mount: 0,
+    mount: -22, // recessed: the body in the void, the 3 cm panel below
     mountFrom: 'ceiling',
     facing: 'down',
     // The plan shows the grille face: four louvre slots round a return grille.

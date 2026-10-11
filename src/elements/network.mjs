@@ -114,6 +114,29 @@ function wallDisplay({ id, name, w, h }) {
   };
 }
 
+// A motorised roller screen, the fabric let down: the 10 cm case at the top,
+// the fabric hanging to a bottom bar. Only its mounting differs by variant.
+function projectorScreen({ id, name, mount, mountFrom }) {
+  return {
+    id,
+    name,
+    group: 'network',
+    tags: ['av'],
+    size: { w: 240, d: 15, h: 180 },
+    mount,
+    mountFrom,
+    parts: [
+      {
+        x: 0, y: 0, z: 170, w: 240, d: 15, h: 10, r: 3,
+        top: [{ line: [[8, 7.5], [232, 7.5]], dash: '4 3' }, { rect: [220, 10, 12, 2.5], accent: 'av' }],
+        front: [{ rect: [220, 4, 10, 2], accent: 'av' }]
+      },
+      { x: 6, y: 7, z: 2, w: 228, d: 1, h: 168, front: [{ rect: [4, 4, 220, 3], fill: 'outline', stroke: 'outline' }] },
+      { x: 6, y: 6, z: 0, w: 228, d: 3, h: 2, role: 'metal' }
+    ]
+  };
+}
+
 export default [
   // Ceiling access point: a flat disc with a status ring.
   {
@@ -218,24 +241,11 @@ export default [
   },
 
   // Motorised roller screen: case at the top, fabric hanging to a bottom bar.
-  {
-    id: 'projector-screen',
-    name: 'Projector Screen',
-    group: 'network',
-    tags: ['av'],
-    size: { w: 240, d: 15, h: 180 },
-    mount: 90,
-    mountFrom: 'floor',
-    parts: [
-      {
-        x: 0, y: 0, z: 170, w: 240, d: 15, h: 10, r: 3,
-        top: [{ line: [[8, 7.5], [232, 7.5]], dash: '4 3' }, { rect: [220, 10, 12, 2.5], accent: 'av' }],
-        front: [{ rect: [220, 4, 10, 2], accent: 'av' }]
-      },
-      { x: 6, y: 7, z: 2, w: 228, d: 1, h: 168, front: [{ rect: [4, 4, 220, 3], fill: 'outline', stroke: 'outline' }] },
-      { x: 6, y: 6, z: 0, w: 228, d: 3, h: 2, role: 'metal' }
-    ]
-  },
+  // Hung from the ceiling (the default), on a wall, or with its case recessed
+  // into the ceiling so only the fabric shows.
+  projectorScreen({ id: 'projector-screen', name: 'Projector Screen, Ceiling-Mounted', mount: 0, mountFrom: 'ceiling' }),
+  projectorScreen({ id: 'projector-screen-wall', name: 'Projector Screen, Wall-Mounted', mount: 90, mountFrom: 'floor' }),
+  projectorScreen({ id: 'projector-screen-in-ceiling', name: 'Projector Screen, In-Ceiling', mount: -10, mountFrom: 'ceiling' }),
 
   // Ceiling speaker: round grille flush with the ceiling, back can above.
   // Authored facing up (grille on top) and installed facing down.
@@ -245,7 +255,7 @@ export default [
     group: 'network',
     tags: ['av'],
     size: { w: 21, d: 21, h: 12 },
-    mount: 0,
+    mount: -11, // recessed: the can in the void, the 1 cm grille ring below
     mountFrom: 'ceiling',
     facing: 'down',
     symbol: {
