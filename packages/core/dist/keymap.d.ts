@@ -1,4 +1,4 @@
-export type KeymapTool = 'axonometra' | 'reticulyne';
+export type KeymapTool = 'axonometra';
 export type KeymapSection = 'Tools' | 'View' | 'Edit' | 'Pointer and touch';
 export interface Chord {
     key?: string;
@@ -32,7 +32,6 @@ export interface KeyLike {
     target?: unknown;
 }
 export declare const SHARED_BINDINGS: readonly Binding[];
-export declare const RETICULYNE_BINDINGS: readonly Binding[];
 export declare const AXONOMETRA_BINDINGS: readonly Binding[];
 export declare const AXONOMETRA_WALK_KEYS: readonly {
     keys: string;

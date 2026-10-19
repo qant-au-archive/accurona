@@ -1,9 +1,8 @@
-// The shared keymap, as data plus the matching rules, so Axonometra and
-// Reticulyne bind the same keys and list them the same way in their `?`
-// dialogs. docs/keymap.md is the specification; these tables are it in code,
-// and the two change together.
+// The keymap, as data plus the matching rules, so a tool binds its keys and
+// lists them in its `?` dialog from one table. docs/keymap.md is the
+// specification; these tables are it in code, and the two change together.
 
-export type KeymapTool = 'axonometra' | 'reticulyne';
+export type KeymapTool = 'axonometra';
 
 export type KeymapSection = 'Tools' | 'View' | 'Edit' | 'Pointer and touch';
 
@@ -78,8 +77,8 @@ const gesture = (
 
 const ARROWS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
-// The shared set, both tools. Rows marked "where built" in the spec are here
-// too; a tool that has not built the feature passes its action in `omit`, and
+// The shared set, for every tool. Rows marked "where built" in the spec are
+// here too; a tool that has not built the feature passes its action in `omit`, and
 // the key stays unbound rather than going to anything else.
 export const SHARED_BINDINGS: readonly Binding[] = [
   { action: 'select', label: 'Select', section: 'Tools', chords: [k('v'), c('Digit1')], editing: false },
@@ -150,48 +149,6 @@ export const SHARED_BINDINGS: readonly Binding[] = [
   gesture('context-menu', 'Context menu', 'Right-click')
 ];
 
-// Reticulyne's own tools. A row whose action is already shared adds its
-// chords to the shared row as aliases.
-export const RETICULYNE_BINDINGS: readonly Binding[] = [
-  { action: 'rectangle', label: 'Rectangle', section: 'Tools', chords: [k('r'), c('Digit2')], editing: true },
-  { action: 'connector', label: 'Connector', section: 'Tools', chords: [k('a'), c('Digit5'), k('c')], editing: true },
-  { action: 'text', label: 'Text', section: 'Tools', chords: [k('t'), c('Digit8')], editing: true },
-  { action: 'add-item', label: 'Add item', section: 'Tools', chords: [k('i'), c('Digit9')], editing: true },
-  { action: 'select', label: 'Select', section: 'Tools', chords: [k('s')], editing: false },
-  // Named as on Reticulyne's toolbar ("Pan (H)", "Fit to view (F)").
-  { action: 'hand', label: 'Pan', section: 'Tools', chords: [], editing: false },
-  { action: 'fit-all', label: 'Fit to view', section: 'View', chords: [k('f')], editing: false },
-  { action: 'zoom-in', label: 'Zoom in', section: 'View', chords: [k('=', { shift: 'any' }), k('+', { shift: 'any' })], editing: false },
-  { action: 'zoom-out', label: 'Zoom out', section: 'View', chords: [k('-', { shift: 'any' }), k('_', { shift: 'any' })], editing: false },
-  { action: 'toggle-highlight', label: 'Toggle item highlighting', section: 'View', chords: [c('KeyI', { alt: true })], editing: false },
-  { action: 'floor-up', label: 'Show the floor above', section: 'View', chords: [k('ArrowUp', { alt: true })], editing: false },
-  { action: 'floor-down', label: 'Show the floor below', section: 'View', chords: [k('ArrowDown', { alt: true })], editing: false },
-  // Keyboard access. Tab walks the objects only while the canvas has focus,
-  // and past the last one it lets focus leave, so it is never a trap.
-  {
-    action: 'pan',
-    label: 'Pan the view',
-    section: 'View',
-    chords: ARROWS.map((key) => mod(key)),
-    editing: false,
-    keysLabel: '{mod} + Arrow keys'
-  },
-  { action: 'next-object', label: 'Select the next object', section: 'Edit', chords: [k('Tab')], editing: false },
-  { action: 'previous-object', label: 'Select the previous object', section: 'Edit', chords: [k('Tab', { shift: true })], editing: false },
-  {
-    action: 'object-menu',
-    label: "Open the selected object's menu",
-    section: 'Edit',
-    chords: [k('F10', { shift: true }), k('ContextMenu', { shift: 'any' })],
-    editing: true
-  },
-  // Right-click opens an object's menu; on empty canvas it does nothing.
-  gesture('context-menu', "Open an object's menu", 'Right-click an object'),
-  gesture('add-on-tile', 'Add an item on an empty tile', 'Double-click an empty tile | I then Enter', true),
-  gesture('enter-group', 'Work inside a group', 'Double-click the group'),
-  gesture('connect', 'Connect two items', "Drag from a port | Connect to, in the item's menu", true)
-];
-
 export const AXONOMETRA_BINDINGS: readonly Binding[] = [
   { action: 'wall', label: 'Wall', section: 'Tools', chords: [k('l'), c('Digit6')], editing: true },
   { action: 'window', label: 'Window', section: 'Tools', chords: [k('w')], editing: true },
@@ -212,7 +169,6 @@ export const AXONOMETRA_WALK_KEYS: readonly { keys: string; label: string }[] = 
 // Bindings each tool leaves out on purpose (deliberate divergences, not
 // features waiting to be built).
 const DIVERGENT: Record<KeymapTool, readonly string[]> = {
-  reticulyne: ['eraser'],
   axonometra: []
 };
 
@@ -227,18 +183,18 @@ const DIFFERENCES_SHARED: readonly Difference[] = [
     excalidraw: '{shift} + H, {shift} + V',
     action: 'flip',
     here: 'unbound',
-    why: 'Isometric items are not symmetric, and a floor plan object is rotated, not mirrored.'
+    why: 'A floor plan object is rotated, not mirrored.'
   },
   {
     excalidraw: 'Tab, {shift} + Tab',
     action: 'change shape type',
-    here: 'Reticulyne: Select the next / previous object; Axonometra: unbound',
-    why: 'No free-form shapes; the keyboard needs a way to reach each object.'
+    here: 'unbound',
+    why: 'No free-form shapes.'
   },
   {
     excalidraw: '{mod} + Arrow keys, {alt} + Arrow keys',
     action: 'create and walk a flowchart',
-    here: 'Reticulyne: {mod} + Arrow keys is Pan the view, {alt} + ↑ / ↓ is Show the floor above / below; the rest unbound',
+    here: 'unbound',
     why: 'Flowcharting.'
   },
   { excalidraw: '{mod} + K', action: 'link', here: 'unbound', why: 'No links on the canvas yet.' },
@@ -252,16 +208,6 @@ const DIFFERENCES_SHARED: readonly Difference[] = [
 ];
 
 export const DIFFERENCES: Record<KeymapTool, readonly Difference[]> = {
-  reticulyne: [
-    { excalidraw: 'D, 3', action: 'diamond', here: 'unbound', why: 'No free-form shapes.' },
-    ...DIFFERENCES_SHARED.slice(0, 2),
-    { excalidraw: 'L, 6', action: 'line', here: 'unbound', why: 'Reticulyne draws connectors, not lines.' },
-    { excalidraw: 'E, 0', action: 'eraser', here: 'unbound', why: 'Reticulyne deletes a selection instead.' },
-    { excalidraw: 'F', action: 'frame', here: 'Fit to view', why: 'No frames; F was already fit.' },
-    { excalidraw: 'I', action: 'eye-dropper', here: 'Add item', why: 'No colour picking from the canvas.' },
-    { excalidraw: 'S, G', action: 'stroke, background colour', here: 'S is Select; G unbound', why: 'Colour is set in the properties panel.' },
-    ...DIFFERENCES_SHARED.slice(2)
-  ],
   axonometra: [
     {
       excalidraw: 'D, 3',
@@ -288,7 +234,7 @@ export interface KeymapOptions {
 // its chords to the shared row, and its label replaces the shared one, so the
 // `?` dialog uses the names on that tool's own toolbar.
 export const keymapFor = (tool: KeymapTool, options: KeymapOptions = {}): Binding[] => {
-  const own = tool === 'reticulyne' ? RETICULYNE_BINDINGS : AXONOMETRA_BINDINGS;
+  const own = { axonometra: AXONOMETRA_BINDINGS }[tool];
   const skip = new Set([...DIVERGENT[tool], ...(options.omit ?? [])]);
   const result: Binding[] = SHARED_BINDINGS.filter((b) => !skip.has(b.action)).map((b) => ({
     ...b,
