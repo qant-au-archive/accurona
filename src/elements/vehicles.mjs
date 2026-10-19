@@ -161,8 +161,7 @@ const evChargerWall = {
   parts: [
     {
       x: 0, y: 0, z: 0, w: 25, d: 12, h: 35, r: 3,
-      top: [{ rect: [6.5, 8.5, 12, 2.5], r: 1, accent: 'power', view: 'plan' }],
-      front: [{ rect: [4, 4, 17, 6], r: 1, fill: 'dark' }, { rect: [11, 14, 3, 3], accent: 'power' }]
+      top: [{ rect: [6.5, 8.5, 12, 2.5], r: 1, accent: 'power', view: 'plan' }]
     }
   ]
 };

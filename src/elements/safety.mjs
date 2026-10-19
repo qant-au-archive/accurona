@@ -13,7 +13,7 @@ const pointsOnArc = (cx, cy, r, from, to, n = 8) =>
   });
 
 // A small wall device: one box, back on the wall (y = 0), face towards the room.
-const wallBox = (w, d, h, front, role = 'body') => [{ x: 0, y: 0, z: 0, w, d, h, role, r: 1, front }];
+const wallBox = (w, d, h, role = 'body') => [{ x: 0, y: 0, z: 0, w, d, h, role, r: 1 }];
 
 // Ceiling detectors: a base disc and a shallow dome, the glyph inside a ring.
 function detector({ id, name, glyph }) {
@@ -96,11 +96,7 @@ const symbols = [
         { rect: [23, 27, 4, 8], accent: 'fire' }
       ]
     },
-    parts: wallBox(26, 6, 30, [
-      { line: [[0, 6], [26, 6]] },
-      { rect: [6, 24, 3, 6], accent: 'fire' },
-      { rect: [17, 24, 3, 6], accent: 'fire' }
-    ])
+    parts: wallBox(26, 6, 30)
   },
   {
     // Box with a square frangible window and a red centre.
@@ -119,10 +115,7 @@ const symbols = [
         { rect: [17, 17, 6, 6], accent: 'fire' }
       ]
     },
-    parts: wallBox(9, 6, 9, [
-      { rect: [2, 2, 5, 5], fill: 'body' },
-      { rect: [3.5, 3.5, 2, 2], accent: 'fire' }
-    ])
+    parts: wallBox(9, 6, 9)
   },
   {
     // Sign panel with a running figure, and an arrow out of it pointing down.
@@ -145,12 +138,7 @@ const symbols = [
         { line: [[13, 29], [27, 29], [20, 37]], closed: true, accent: 'fire' }
       ]
     },
-    parts: wallBox(35, 5, 20, [
-      { rect: [3, 3, 29, 14], fill: 'glass' },
-      { line: [[17.5, 14], [17.5, 6], [14, 9.5]], stroke: 'outline' },
-      { line: [[17.5, 6], [21, 9.5]], stroke: 'outline' },
-      { rect: [28, 5, 2, 2], accent: 'fire' }
-    ])
+    parts: wallBox(35, 5, 20)
   },
   {
     // Ceiling batten with light falling from it.
@@ -197,10 +185,7 @@ const symbols = [
         }
       ]
     },
-    parts: wallBox(30, 12, 22, [
-      { rect: [13, 5, 4, 12], fill: 'body', stroke: 'body' },
-      { rect: [9, 9, 12, 4], fill: 'body', stroke: 'body' }
-    ], 'dark')
+    parts: wallBox(30, 12, 22, 'dark')
   },
   {
     // Heart with a lightning bolt through it.
@@ -220,11 +205,7 @@ const symbols = [
         { line: [[21.5, 11], [16, 21], [20, 21], [18, 29], [24.5, 18], [20.5, 18], [22.5, 11]], closed: true, fill: 'outline', stroke: 'outline' }
       ]
     },
-    parts: wallBox(38, 15, 42, [
-      { rect: [4, 4, 30, 34], fill: 'glass' },
-      { rect: [11, 12, 16, 18], r: 2, fill: 'dark' },
-      { line: [[20, 15], [17, 21], [21, 21], [18, 27]], stroke: 'body' }
-    ])
+    parts: wallBox(38, 15, 42)
   }
 ];
 
@@ -245,13 +226,6 @@ const equipment = [
         top: [
           ...[5, 10, 15, 20].map((v) => ({ line: [[6, v], [74, v]], view: 'plan' })),
           { rect: [36, 20.5, 8, 2.5], r: 1, accent: 'fire', view: 'plan' }
-        ],
-        front: [
-          { circle: [40, 40, 36] },
-          { circle: [40, 40, 28] },
-          { circle: [40, 40, 20] },
-          { circle: [40, 40, 7], fill: 'soft' },
-          { rect: [58, 64, 6, 6], accent: 'fire' }
         ]
       },
       { x: 32, y: 0, z: 20, w: 16, d: 5, h: 40, role: 'metal', outline: true }
@@ -267,15 +241,7 @@ const equipment = [
     mountFrom: 'floor',
     parts: [{
       x: 0, y: 0, z: 0, w: 60, d: 15, h: 80, r: 1,
-      top: [{ rect: [22, 11, 16, 2.5], r: 1, accent: 'fire', view: 'plan' }],
-      front: [
-        { rect: [3, 3, 54, 74] },
-        { rect: [10, 10, 40, 12], fill: 'glass' },
-        { rect: [10, 28, 3, 14], accent: 'fire' },
-        ...[30, 36, 42].map((v) => ({ line: [[18, v], [50, v]] })),
-        { circle: [45, 60, 3], fill: 'soft' },
-        { rect: [52, 36, 2.5, 10], r: 1, fill: 'dark' }
-      ]
+      top: [{ rect: [22, 11, 16, 2.5], r: 1, accent: 'fire', view: 'plan' }]
     }]
   },
   {
@@ -348,7 +314,7 @@ const equipment = [
       ]
     },
     parts: [
-      { x: 0, y: 0, z: 180, w: 45, d: 3, h: 60, role: 'body', front: [{ rect: [2, 2, 41, 56], r: 2, accent: 'safe' }] },
+      { x: 0, y: 0, z: 180, w: 45, d: 3, h: 60, role: 'body' },
       { x: 20.5, y: 3, z: 0, w: 4, d: 5, h: 240, role: 'metal' }
     ]
   }

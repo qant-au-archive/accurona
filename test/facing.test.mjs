@@ -43,7 +43,7 @@ const dome = {
   ]
 };
 
-// An AC cassette: a box with grille slots on its top and a badge on its front.
+// An AC cassette: a box with grille slots on its top.
 const box = {
   id: 'test-box',
   size: { w: 60, d: 60, h: 25 },
@@ -54,8 +54,7 @@ const box = {
       w: 60,
       d: 60,
       h: 25,
-      top: [{ rect: [10, 10, 40, 4] }, { rect: [10, 46, 40, 4] }],
-      front: [{ rect: [5, 3, 10, 4] }]
+      top: [{ rect: [10, 10, 40, 4] }, { rect: [10, 46, 40, 4] }]
     }
   ]
 };

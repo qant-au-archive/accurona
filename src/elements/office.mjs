@@ -98,23 +98,12 @@ function table({ id, name, w, d, hatch = 30 }) {
   };
 }
 
-// Storage with a front: drawers or doors in a grid of `cols` x `rows`, drawn
-// on the front face, and on the plan as the front edge with its divisions.
-function storage({ id, name, w, d, h, cols = 1, rows = 1, casters = false, vents = false }) {
+// Storage with a front of `cols` columns of drawers or doors, drawn on the
+// plan as the front edge with its divisions.
+function storage({ id, name, w, d, h, cols = 1, casters = false }) {
   const z0 = casters ? 4 : 0;
   const bh = h - z0;
   const cw = (w - 2) / cols;
-  const rh = (bh - 4) / rows;
-  const front = [];
-  for (let c = 0; c < cols; c++)
-    for (let r = 0; r < rows; r++) {
-      const u = 1 + c * cw;
-      const v = 2 + r * rh;
-      front.push({ rect: [u + 0.5, v + 0.5, cw - 1, rh - 1] });
-      if (rows > 1) front.push({ rect: [u + cw / 2 - 5, v + 3, 10, 1.5], r: 0.5, fill: 'metal' });
-      else front.push({ rect: [c % 2 ? u + 3 : u + cw - 5, v + rh / 2 - 6, 2, 12], r: 0.5, fill: 'metal' });
-      if (vents) for (let k = 0; k < 3; k++) front.push({ line: [[u + cw / 2 - 5, v + 8 + k * 3], [u + cw / 2 + 5, v + 8 + k * 3]] });
-    }
   // Plan: the door or drawer fronts as a band along the front edge, split per column.
   const top = [
     { rect: [1.5, d - 5, w - 3, 3.5], fill: 'soft' },
@@ -122,7 +111,7 @@ function storage({ id, name, w, d, h, cols = 1, rows = 1, casters = false, vents
     // Full-height storage takes the drafting cross, so it reads apart from low units.
     ...(h >= 150 ? [{ line: [[1.5, 1.5], [w - 1.5, d - 5]] }, { line: [[w - 1.5, 1.5], [1.5, d - 5]] }] : [])
   ];
-  const parts = [{ x: 0, y: 0, z: z0, w, d, h: bh, r: 1, top, front }];
+  const parts = [{ x: 0, y: 0, z: z0, w, d, h: bh, r: 1, top }];
   if (casters)
     for (const [x, y] of [[5, 5], [w - 5, 5], [5, d - 5], [w - 5, d - 5]]) parts.push({ cyl: [x, y, 2.5], z: 0, h: 4, role: 'dark' });
   return { id, name, group: 'office', size: { w, d, h }, parts };
@@ -206,17 +195,17 @@ export default [
     parts: [
       { x: 0, y: 0, z: 70, w: 240, d: 60, h: 3, role: 'wood', top: [{ circle: [60, 8, 3] }, { circle: [180, 8, 3] }] },
       { x: 0, y: 50, z: 106, w: 240, d: 30, h: 4, role: 'soft', r: 1, outline: true, top: [{ line: [[3, 26], [237, 26]] }] },
-      { x: 0, y: 60, z: 0, w: 240, d: 20, h: 106, front: [{ line: [[0, 20], [240, 20]] }, { line: [[80, 20], [80, 106]] }, { line: [[160, 20], [160, 106]] }] },
+      { x: 0, y: 60, z: 0, w: 240, d: 20, h: 106 },
       { x: 0, y: 0, z: 0, w: 3, d: 60, h: 70 },
       { x: 237, y: 0, z: 0, w: 3, d: 60, h: 70 }
     ]
   },
 
-  { ...storage({ id: 'filing-cabinet', name: 'Filing Cabinet, 4-Drawer', w: 47, d: 62, h: 132, rows: 4 }), surface: 132 },
-  { ...storage({ id: 'lateral-filer', name: 'Lateral Filer', w: 90, d: 45, h: 100, rows: 3 }), surface: 100 },
+  { ...storage({ id: 'filing-cabinet', name: 'Filing Cabinet, 4-Drawer', w: 47, d: 62, h: 132 }), surface: 132 },
+  { ...storage({ id: 'lateral-filer', name: 'Lateral Filer', w: 90, d: 45, h: 100 }), surface: 100 },
   storage({ id: 'storage-cupboard', name: 'Storage Cupboard', w: 90, d: 45, h: 200, cols: 2 }),
-  storage({ id: 'lockers', name: 'Lockers, Bank of 4', w: 120, d: 45, h: 180, cols: 4, vents: true }),
-  storage({ id: 'mobile-pedestal', name: 'Mobile Pedestal', w: 40, d: 55, h: 60, rows: 3, casters: true }),
+  storage({ id: 'lockers', name: 'Lockers, Bank of 4', w: 120, d: 45, h: 180, cols: 4 }),
+  storage({ id: 'mobile-pedestal', name: 'Mobile Pedestal', w: 40, d: 55, h: 60, casters: true }),
 
   // Floor-standing MFD: paper-tray base, print engine, then the scanner with
   // its document feeder on top and the control panel at the front.
@@ -226,12 +215,11 @@ export default [
     group: 'office',
     size: { w: 60, d: 65, h: 115 },
     parts: [
-      { x: 0, y: 0, z: 70, w: 60, d: 65, h: 30, r: 2, front: [{ rect: [8, 12, 30, 2], fill: 'soft' }] },
+      { x: 0, y: 0, z: 70, w: 60, d: 65, h: 30, r: 2 },
       { x: 2, y: 3, z: 100, w: 56, d: 47, h: 15, r: 2, role: 'soft', outline: true, top: [{ rect: [8, 6, 40, 26], r: 1 }, { line: [[8, 38], [48, 38]] }] },
       { x: 8, y: 52, z: 100, w: 44, d: 11, h: 5, r: 1, role: 'dark', top: [{ rect: [4, 2.5, 18, 6], fill: 'glass', stroke: 'glass' }] },
       {
-        x: 0, y: 0, z: 0, w: 60, d: 65, h: 70,
-        front: [0, 1, 2].map((i) => ({ line: [[2, 16 + i * 18], [58, 16 + i * 18]] })).concat([0, 1, 2].map((i) => ({ rect: [24, 6 + i * 18, 12, 2], r: 1, fill: 'soft' })))
+        x: 0, y: 0, z: 0, w: 60, d: 65, h: 70
       }
     ]
   },
@@ -243,7 +231,7 @@ export default [
     size: { w: 40, d: 30, h: 65 },
     parts: [
       { x: 0, y: 0, z: 52, w: 40, d: 30, h: 13, role: 'dark', r: 2, top: [{ rect: [6, 12, 28, 2.5], r: 1, fill: 'outline', stroke: 'outline' }, { circle: [33, 23, 2] }] },
-      { x: 1, y: 1, z: 0, w: 38, d: 28, h: 52, r: 2, front: [{ rect: [12, 6, 14, 3], r: 1.5, fill: 'soft' }] }
+      { x: 1, y: 1, z: 0, w: 38, d: 28, h: 52, r: 2 }
     ]
   },
 
@@ -272,7 +260,7 @@ export default [
     mount: 90,
     mountFrom: 'floor',
     parts: [
-      { x: 0, y: 4, z: 0, w: 170, d: 6, h: 100, role: 'dark', r: 1, front: [{ rect: [2, 2, 166, 94], fill: 'outline', stroke: 'outline' }] },
+      { x: 0, y: 4, z: 0, w: 170, d: 6, h: 100, role: 'dark', r: 1 },
       { x: 60, y: 0, z: 30, w: 50, d: 4, h: 40, role: 'metal' }
     ]
   },
@@ -297,7 +285,7 @@ export default [
       { x: 0, y: 0, z: 5, w: 100, d: 6, h: 210 },
       { x: 0, y: 6, z: 5, w: 6, d: 94, h: 210 },
       { x: 94, y: 6, z: 5, w: 6, d: 94, h: 210 },
-      { x: 6, y: 96, z: 5, w: 88, d: 4, h: 210, role: 'glass', front: [{ rect: [70, 90, 2, 30], fill: 'metal' }] },
+      { x: 6, y: 96, z: 5, w: 88, d: 4, h: 210, role: 'glass' },
       { x: 6, y: 6, z: 100, w: 88, d: 30, h: 4, role: 'wood' }
     ]
   },
@@ -326,8 +314,7 @@ export default [
     parts: [
       {
         x: 0, y: 0, z: 0, w: 35, d: 35, h: 85, r: 2,
-        top: [{ circle: [12, 32, 1.5], fill: 'dark' }, { circle: [23, 32, 1.5], fill: 'dark' }],
-        front: [{ rect: [8, 20, 19, 12], fill: 'soft' }, { rect: [10, 16, 3, 3], fill: 'dark' }, { rect: [22, 16, 3, 3], fill: 'dark' }]
+        top: [{ circle: [12, 32, 1.5], fill: 'dark' }, { circle: [23, 32, 1.5], fill: 'dark' }]
       },
       { cyl: [17.5, 16, 13], z: 85, h: 25, role: 'glass', outline: true, top: [{ circle: [13, 13, 5] }] }
     ]

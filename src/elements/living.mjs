@@ -46,7 +46,7 @@ function lowTable({ id, name, w, d, h }) {
 
 // A cabinet with its back to the wall: carcass plus a door or drawer front
 // along the front edge, so the side you open reads on the plan.
-function cabinet({ id, name, w, d, h, role = 'body', frontRole = 'soft', front = [], top = [] }) {
+function cabinet({ id, name, w, d, h, role = 'body', frontRole = 'soft', top = [] }) {
   return {
     id,
     name,
@@ -54,7 +54,7 @@ function cabinet({ id, name, w, d, h, role = 'body', frontRole = 'soft', front =
     size: { w, d, h },
     parts: [
       { x: 0, y: 0, z: 0, w, d: d - 3, h, role, r: 1, top },
-      { x: 0, y: d - 3, z: 0, w, d: 3, h, role: frontRole, outline: true, front }
+      { x: 0, y: d - 3, z: 0, w, d: 3, h, role: frontRole, outline: true }
     ]
   };
 }
@@ -150,8 +150,7 @@ export default [
       w: 180,
       d: 45,
       h: 50,
-      role: 'wood',
-      front: [{ line: [[60, 4], [60, 46]] }, { line: [[120, 4], [120, 46]] }]
+      role: 'wood'
     }),
     surface: 50
   },
@@ -182,8 +181,7 @@ export default [
     top: [
       { rect: [3, 2, 84, 28], dash: '3 2', view: 'plan' },
       ...[12, 20, 30, 44, 52, 66, 74].map((u) => ({ line: [[u, 6], [u, 28]], view: 'plan' }))
-    ],
-    front: [40, 80, 120, 160].map((v) => ({ line: [[3, v], [87, v]] }))
+    ]
   }),
   // Display cabinet: glass front and sides.
   {
@@ -194,8 +192,7 @@ export default [
     parts: [
       { x: 0, y: 0, z: 0, w: 100, d: 36, h: 190, role: 'wood', r: 1, top: [{ rect: [4, 4, 92, 28], dash: '3 2', view: 'plan' }] },
       {
-        x: 0, y: 36, z: 0, w: 100, d: 4, h: 190, role: 'glass', outline: true,
-        front: [{ line: [[50, 4], [50, 186]] }, ...[50, 95, 140].map((v) => ({ line: [[4, v], [96, v]] }))]
+        x: 0, y: 36, z: 0, w: 100, d: 4, h: 190, role: 'glass', outline: true
       }
     ]
   },

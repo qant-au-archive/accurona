@@ -51,8 +51,7 @@ function vanity({ id, name, w, d, basins }) {
         ]).flat()
       },
       {
-        x: 0, y: 0, z: 15, w, d: d - 2, h: 67,
-        front: Array.from({ length: basins * 2 }, (_, i) => ({ rect: [(i * w) / (basins * 2) + 1, 1, w / (basins * 2) - 2, 65] }))
+        x: 0, y: 0, z: 15, w, d: d - 2, h: 67
       },
       { x: 2, y: 2, z: 0, w: w - 4, d: d - 8, h: 15, role: 'soft' }
     ]
@@ -115,12 +114,7 @@ function machine({ id, name, kind }) {
         ]
       },
       {
-        x: 0, y: 56, z: 0, w: 60, d: 4, h: 85, outline: true,
-        front: [
-          { circle: [30, 45, 17], fill: dryer ? 'body' : 'glass', stroke: 'outline' },
-          { line: [[4, 12], [56, 12]] },
-          { circle: [48, 6, 2.5] }
-        ]
+        x: 0, y: 56, z: 0, w: 60, d: 4, h: 85, outline: true
       }
     ]
   };
@@ -294,11 +288,10 @@ export default [
           ...tap(30, 5, 12)
         ]
       },
-      { x: 0, y: 0, z: 0, w: 60, d: 48, h: 72, front: [{ rect: [1, 1, 28, 70] }, { rect: [31, 1, 28, 70] }] }
+      { x: 0, y: 0, z: 0, w: 60, d: 48, h: 72 }
     ]
   },
   tallCupboard({
-    id: 'linen-cupboard', name: 'Linen Cupboard', group: 'bathroom', w: 60, d: 45, h: 200,
-    front: [{ rect: [1, 1, 58, 198] }, { line: [[55, 90], [55, 115]], stroke: 'outline' }]
+    id: 'linen-cupboard', name: 'Linen Cupboard', group: 'bathroom', w: 60, d: 45, h: 200
   })
 ];

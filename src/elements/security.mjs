@@ -18,7 +18,7 @@ function arrowHead([x, y], deg, len = 3.5, half = 2.2) {
 const onCircle = (cx, cy, r, deg) => [cx + r * Math.cos((deg * Math.PI) / 180), cy + r * Math.sin((deg * Math.PI) / 180)];
 
 // A small wall device: one box, back on the wall (y = 0), face towards the room.
-const wallBox = (w, d, h, front, role = 'body') => [{ x: 0, y: 0, z: 0, w, d, h, role, r: 1, front }];
+const wallBox = (w, d, h, role = 'body') => [{ x: 0, y: 0, z: 0, w, d, h, role, r: 1 }];
 
 // A PTZ camera on its mount: a dark dome with a double-headed pan arrow round
 // it on the plan. `parts` is the mount, and the camera (a 12 cm body and a
@@ -98,7 +98,7 @@ const symbols = [
     parts: [
       { x: 1, y: 0, z: 1, w: 7, d: 3, h: 7 },
       { x: 3, y: 3, z: 3, w: 3, d: 5, h: 3, role: 'metal' },
-      { x: 0, y: 8, z: 0, w: 9, d: 22, h: 9, role: 'dark', r: 2, front: [{ circle: [4.5, 4.5, 2.5], accent: 'security' }] }
+      { x: 0, y: 8, z: 0, w: 9, d: 22, h: 9, role: 'dark', r: 2 }
     ]
   },
   // A PTZ camera hangs below its mount, about 30 cm down from the ceiling:
@@ -181,11 +181,7 @@ const symbols = [
         ...[15, 20, 25].flatMap((x) => [19, 24, 29].map((y) => ({ circle: [x, y, 0.6], fill: 'outline', stroke: 'outline' })))
       ]
     },
-    parts: wallBox(18, 3, 12, [
-      { rect: [2, 2, 8, 3], fill: 'glass' },
-      { circle: [15, 3.5, 0.8], accent: 'security' },
-      ...[2, 5, 8].map((u) => ({ rect: [u, 6.5, 2, 3.5] }))
-    ])
+    parts: wallBox(18, 3, 12)
   },
   {
     // Sensor on the wall at the top, a dashed fan of detection zones below.
@@ -204,10 +200,7 @@ const symbols = [
         { rect: [16, 8, 8, 3], r: 1.5, accent: 'security' }
       ]
     },
-    parts: wallBox(6, 5, 11, [
-      { rect: [1, 3, 4, 3], r: 1, fill: 'dark' },
-      { circle: [3, 8, 0.6], accent: 'security' }
-    ])
+    parts: wallBox(6, 5, 11)
   },
   {
     // Reed on the frame, magnet on the door leaf, dashed door swing.
@@ -229,7 +222,7 @@ const symbols = [
       ]
     },
     parts: [
-      { x: 0, y: 0, z: 0, w: 3, d: 1.5, h: 1.5, front: [{ circle: [1.5, 0.75, 0.3], accent: 'security' }] },
+      { x: 0, y: 0, z: 0, w: 3, d: 1.5, h: 1.5 },
       { x: 4, y: 0, z: 0, w: 3, d: 1.5, h: 1.5, role: 'dark' }
     ]
   },
@@ -253,10 +246,7 @@ const symbols = [
         { circle: [20, 9, 2], accent: 'security' }
       ]
     },
-    parts: wallBox(9, 2.5, 9, [
-      { circle: [4.5, 4.5, 3] },
-      { circle: [4.5, 4.5, 0.7], accent: 'security' }
-    ])
+    parts: wallBox(9, 2.5, 9)
   },
   {
     // Red strobe lens on the wall, horn and sound waves below.
@@ -278,7 +268,7 @@ const symbols = [
       ]
     },
     parts: [
-      { x: 0, y: 0, z: 0, w: 20, d: 7, h: 20, r: 2, front: [...[6, 9, 12, 15].map((v) => ({ line: [[4, v], [16, v]] }))] },
+      { x: 0, y: 0, z: 0, w: 20, d: 7, h: 20, r: 2 },
       { x: 4, y: 1, z: 20, w: 12, d: 6, h: 5, role: 'security', r: 2 }
     ]
   },
@@ -300,10 +290,7 @@ const symbols = [
         { rect: [11, 24, 6, 5], r: 1, fill: 'soft', stroke: 'detail' }
       ]
     },
-    parts: wallBox(5, 2, 15, [
-      { circle: [2.5, 2, 0.6], accent: 'security' },
-      { rect: [1, 5, 3, 7], r: 1 }
-    ], 'dark')
+    parts: wallBox(5, 2, 15, 'dark')
   },
   {
     // Plate with a round push button.
@@ -324,7 +311,7 @@ const symbols = [
     },
     parts: [
       { x: 0, y: 0, z: 0, w: 8, d: 1.5, h: 12, r: 1 },
-      { x: 2, y: 1.5, z: 4, w: 4, d: 2.5, h: 4, role: 'soft', front: [{ circle: [2, 2, 1.2], accent: 'security' }] }
+      { x: 2, y: 1.5, z: 4, w: 4, d: 2.5, h: 4, role: 'soft' }
     ]
   },
   {
@@ -347,7 +334,7 @@ const symbols = [
       ]
     },
     parts: [
-      { x: 0, y: 0, z: 4, w: 25, d: 5, h: 6, role: 'dark', r: 1, front: [{ circle: [21, 3, 0.6], accent: 'security' }] },
+      { x: 0, y: 0, z: 4, w: 25, d: 5, h: 6, role: 'dark', r: 1 },
       { x: 1, y: 2, z: 0, w: 23, d: 3, h: 3.5, role: 'metal' }
     ]
   },
@@ -370,12 +357,7 @@ const symbols = [
         { circle: [20, 30, 3.5], fill: 'body', stroke: 'outline' }
       ]
     },
-    parts: wallBox(12, 3.5, 25, [
-      { circle: [6, 4, 1.8], fill: 'dark' },
-      { circle: [6, 4, 0.6], accent: 'security' },
-      ...[9, 11, 13].map((v) => ({ line: [[3, v], [9, v]] })),
-      { circle: [6, 19, 2] }
-    ])
+    parts: wallBox(12, 3.5, 25)
   }
 ];
 
@@ -392,10 +374,6 @@ const equipment = [
         ...[8, 12, 16].map((v) => ({ line: [[8, v], [36, v]], stroke: 'soft', view: 'plan' })),
         { line: [[3, 32], [41, 32]], stroke: 'soft' },
         { rect: [16, 36.5, 12, 2.5], r: 1, accent: 'security', view: 'plan' }
-      ],
-      front: [
-        ...[3, 12, 21, 30].map((u) => ({ rect: [u, 2, 8, 6], stroke: 'soft' })),
-        { circle: [40, 4, 1], accent: 'security' }
       ]
     }]
   },
@@ -409,13 +387,7 @@ const equipment = [
     mountFrom: 'floor',
     parts: [{
       x: 0, y: 0, z: 0, w: 40, d: 10, h: 40, r: 1,
-      top: [{ rect: [14, 6.5, 12, 2], r: 1, accent: 'security', view: 'plan' }],
-      front: [
-        { rect: [3, 3, 34, 34] },
-        { rect: [8, 8, 18, 8], fill: 'soft' },
-        { circle: [31, 20, 2], fill: 'dark' },
-        { circle: [31, 9, 1.2], accent: 'security' }
-      ]
+      top: [{ rect: [14, 6.5, 12, 2], r: 1, accent: 'security', view: 'plan' }]
     }]
   },
   {
@@ -432,8 +404,7 @@ const equipment = [
           { rect: [4, 10, 17, 120], r: 2, stroke: 'soft' },
           { circle: [20, 70, 5], fill: 'soft' },
           { rect: [8, 126, 9, 2.5], r: 1, accent: 'security', view: 'plan' }
-        ],
-        front: [{ rect: [6, 8, 13, 10], fill: 'glass' }, { rect: [9, 21, 7, 2], accent: 'security' }]
+        ]
       },
       { x: 25, y: 68, z: 84, w: 25, d: 4, h: 3, role: 'metal', outline: true }
     ],
@@ -455,8 +426,7 @@ const equipment = [
         top: [
           { rect: [4, 8, 12, 134], r: 2, fill: 'glass', stroke: 'soft' },
           { rect: [6, 144, 8, 2.5], r: 1, accent: 'security', view: 'plan' }
-        ],
-        front: [{ rect: [6, 4, 8, 2], accent: 'security' }]
+        ]
       })),
       { x: 20, y: 73, z: 35, w: 38, d: 3, h: 55, role: 'glass', outline: true },
       { x: 62, y: 73, z: 35, w: 38, d: 3, h: 55, role: 'glass', outline: true }
@@ -477,14 +447,6 @@ const equipment = [
       top: [
         { line: [[3, 42], [47, 42]], stroke: 'soft' },
         { rect: [17, 46.5, 16, 2.5], r: 1, accent: 'security', view: 'plan' }
-      ],
-      front: [
-        { rect: [4, 4, 42, 62], stroke: 'soft' },
-        { circle: [20, 30, 7], stroke: 'soft' },
-        { line: [[20, 23], [20, 37]], stroke: 'soft' },
-        { line: [[13, 30], [27, 30]], stroke: 'soft' },
-        { rect: [33, 12, 8, 10], fill: 'soft', stroke: 'soft' },
-        { circle: [37, 26, 1.2], accent: 'security' }
       ]
     }]
   },
@@ -498,12 +460,7 @@ const equipment = [
     mountFrom: 'floor',
     parts: [{
       x: 0, y: 0, z: 0, w: 40, d: 10, h: 50, role: 'metal', r: 1,
-      top: [{ rect: [14, 6.5, 12, 2], r: 1, accent: 'security', view: 'plan' }],
-      front: [
-        { rect: [3, 3, 34, 44], fill: 'glass' },
-        ...[12, 24, 36].flatMap((v) => [8, 14, 20, 26].map((u) => ({ line: [[u, v - 3], [u, v]] }))),
-        { circle: [33, 25, 1.5], accent: 'security' }
-      ]
+      top: [{ rect: [14, 6.5, 12, 2], r: 1, accent: 'security', view: 'plan' }]
     }]
   },
   {

@@ -145,17 +145,16 @@ it for boxes).
 Common part options: `role` (fill, default `body`), `outline` (`true` draws
 the part with the heavy plan outline; the first part has it unless it sets
 `outline: false`), `dash` (a dashed plan outline, e.g. `'6 4'`, for overhead
-items such as skylights), and decals per face: `top`, `front`, `side`.
+items such as skylights), and `top`: decals drawn on the part's top face.
 
 **Roles:** `body`, `soft` (cushions, tops, trays), `dark` (equipment),
 `metal`, `wood`, `glass` (glass and water), `plant`, `ground` (rugs, paving).
 
 ### Decals
 
-Marks on a face, in cm relative to the face's top-left corner. On `top` that
-is the top-left corner of the part's bounding box on the plan (for a `cyl`,
-`dome` or `poly`, the box around it, not the plan origin); on `front` and `side`, v runs **down** from the
-face's top edge.
+Marks on a part's top face, in cm relative to the top-left corner of the
+part's bounding box on the plan (for a `cyl`, `dome` or `poly`, the box around
+it, not the plan origin).
 
 | Decal                                                  | Draws                                            |
 | ------------------------------------------------------ | ------------------------------------------------ |
@@ -168,8 +167,7 @@ Options: `fill` (a role or accent), `stroke` (a role, `outline` or `detail`;
 default `detail`), `accent` (a tag colour, filled, for LEDs and status marks),
 `dash`, `weight: 'outline'` (heavy line), and `view: 'plan'` to draw it on the
 plan only. A decal on `top` that only makes sense seen from above (louvres, seat
-lines on an item mounted high) takes `view: 'plan'`. The plan draws `top` decals;
-`front` and `side` decals record the marks on those faces as part of the model.
+lines on an item mounted high) takes `view: 'plan'`.
 
 ### Symbols
 

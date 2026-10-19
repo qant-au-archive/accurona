@@ -44,7 +44,7 @@ export function bed({ id, name, w, d, head = 'top' }) {
 
 // Storage with its back to the wall: carcass plus a door or drawer front
 // along the front edge, so the side you open reads on the plan.
-function cabinet({ id, name, w, d, h, role = 'body', front = [], top = [] }) {
+function cabinet({ id, name, w, d, h, role = 'body', top = [] }) {
   return {
     id,
     name,
@@ -52,22 +52,13 @@ function cabinet({ id, name, w, d, h, role = 'body', front = [], top = [] }) {
     size: { w, d, h },
     parts: [
       { x: 0, y: 0, z: 0, w, d: d - 3, h, role, r: 1, top },
-      { x: 0, y: d - 3, z: 0, w, d: 3, h, role: 'soft', outline: true, front }
+      { x: 0, y: d - 3, z: 0, w, d: 3, h, role: 'soft', outline: true }
     ]
   };
 }
 
-// Drawer fronts: `rows` drawers in `cols` columns on a front of w × h.
-function drawers(w, h, rows, cols = 1) {
-  const marks = [];
-  for (let r = 1; r < rows; r++) marks.push({ line: [[2, (h * r) / rows], [w - 2, (h * r) / rows]] });
-  for (let c = 1; c < cols; c++) marks.push({ line: [[(w * c) / cols, 2], [(w * c) / cols, h - 2]] });
-  return marks;
-}
-
-// A wardrobe: hanging rail and hangers drawn on the plan in the usual way,
-// hinged doors on the front.
-function wardrobe({ id, name, w, doors }) {
+// A wardrobe: hanging rail and hangers drawn on the plan in the usual way.
+function wardrobe({ id, name, w }) {
   const d = 60;
   const h = 200;
   const hangers = Math.round(w / 25);
@@ -83,8 +74,7 @@ function wardrobe({ id, name, w, doors }) {
         const u = (w * (i + 0.5)) / hangers;
         return { line: [[u - 5, 18], [u + 5, 39]], view: 'plan' };
       })
-    ],
-    front: Array.from({ length: doors - 1 }, (_, i) => ({ line: [[(w * (i + 1)) / doors, 4], [(w * (i + 1)) / doors, h - 4]] }))
+    ]
   });
 }
 
@@ -149,15 +139,14 @@ export default [
       w: 45,
       d: 40,
       h: 55,
-      role: 'wood',
-      front: drawers(45, 55, 2)
+      role: 'wood'
     }),
     surface: 55
   },
-  { ...cabinet({ id: 'chest-of-drawers', name: 'Chest of Drawers', w: 90, d: 45, h: 100, role: 'wood', front: drawers(90, 100, 5) }), surface: 100 },
-  { ...cabinet({ id: 'dresser', name: 'Dresser', w: 140, d: 50, h: 80, role: 'wood', front: drawers(140, 80, 3, 2) }), surface: 80 },
-  wardrobe({ id: 'wardrobe-2', name: 'Wardrobe, 2-Door', w: 100, doors: 2 }),
-  wardrobe({ id: 'wardrobe-3', name: 'Wardrobe, 3-Door', w: 150, doors: 3 }),
+  { ...cabinet({ id: 'chest-of-drawers', name: 'Chest of Drawers', w: 90, d: 45, h: 100, role: 'wood' }), surface: 100 },
+  { ...cabinet({ id: 'dresser', name: 'Dresser', w: 140, d: 50, h: 80, role: 'wood' }), surface: 80 },
+  wardrobe({ id: 'wardrobe-2', name: 'Wardrobe, 2-Door', w: 100 }),
+  wardrobe({ id: 'wardrobe-3', name: 'Wardrobe, 3-Door', w: 150 }),
   // Built-in robe: two sliding doors on staggered tracks across the front.
   {
     id: 'wardrobe-sliding',

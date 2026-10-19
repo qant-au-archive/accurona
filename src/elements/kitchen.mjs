@@ -8,23 +8,14 @@ const KICK = 10; // plinth height
 const CARCASS_D = 58;
 const TOP = 3; // benchtop thickness
 
-// Door fronts on a carcass face: `n` doors side by side, handles near the top.
-function doorFronts(w, h, n) {
-  const dw = w / n;
-  return Array.from({ length: n }, (_, i) => [
-    { rect: [i * dw + 1, 1, dw - 2, h - 2] },
-    { line: [[i * dw + (i % 2 ? 4 : dw - 4), 5], [i * dw + (i % 2 ? 4 : dw - 4), 13]], stroke: 'outline' }
-  ]).flat();
-}
-
 // Plinth, carcass and benchtop. `benchZ` lets a cooktop sit on top of the bench
 // without the element growing past 90. `top` decals go on the benchtop.
-function underBench({ w, doors, top = [], benchZ = 90 - TOP, fronts }) {
+function underBench({ w, top = [], benchZ = 90 - TOP }) {
   const ch = benchZ - KICK;
   // Benchtop first: the first part gets the heavy outline, inset to stay inside the footprint.
   return [
     { x: 0, y: 0, z: benchZ, w, d: 60, h: TOP, role: 'soft', top },
-    { x: 0, y: 0, z: KICK, w, d: CARCASS_D, h: ch, front: fronts ?? doorFronts(w, ch, doors) },
+    { x: 0, y: 0, z: KICK, w, d: CARCASS_D, h: ch },
     { x: 0, y: 0, z: 0, w, d: CARCASS_D - 5, h: KICK, role: 'soft' }
   ];
 }
@@ -33,7 +24,6 @@ function underBench({ w, doors, top = [], benchZ = 90 - TOP, fronts }) {
 const faceLine = (w, x0 = 0) => ({ line: [[x0 + 2, CARCASS_D], [x0 + w - 2, CARCASS_D]], dash: '3 2', view: 'plan' });
 
 function baseCabinet({ id, name, w }) {
-  const doors = w > 60 ? 2 : 1;
   return {
     id,
     name,
@@ -41,7 +31,6 @@ function baseCabinet({ id, name, w }) {
     size: { w, d: 60, h: 90 },
     parts: underBench({
       w,
-      doors,
       top: [faceLine(w)]
     })
   };
@@ -75,7 +64,7 @@ function sink({ id, name, w, bowls, ceramic = false }) {
     name,
     group: 'kitchen',
     size: { w, d: 60, h: 90 },
-    parts: underBench({ w, doors: w > 60 ? 2 : 1, top: [...marks, ...tap(tx, 5, bowls.length > 1 ? 14 : 12)] })
+    parts: underBench({ w, top: [...marks, ...tap(tx, 5, bowls.length > 1 ? 14 : 12)] })
   };
 }
 
@@ -127,14 +116,14 @@ function cooktop({ id, name, w, burners, plate }) {
     group: 'kitchen',
     size: { w, d: 60, h: 90 },
     parts: [
-      ...underBench({ w, doors: w > 60 ? 2 : 1, benchZ: 90 - TOP - 1 }),
+      ...underBench({ w, benchZ: 90 - TOP - 1 }),
       { x: 2, y: 4, z: 89, w: pw, d: 52, h: 1, role: 'metal', outline: true, r: 1, top: plate ? plate(pw, 52) : hobPlate(pw, 52, burners) }
     ]
   };
 }
 
 // A full-height cupboard: tall box with the diagonal cross plans use for tall units.
-export function tallCupboard({ id, name, group, w, d, h, extra = [], front = [] }) {
+export function tallCupboard({ id, name, group, w, d, h, extra = [] }) {
   return {
     id,
     name,
@@ -143,8 +132,7 @@ export function tallCupboard({ id, name, group, w, d, h, extra = [], front = [] 
     parts: [
       {
         x: 0, y: 0, z: 0, w, d, h,
-        top: [{ line: [[0, 0], [w, d]], view: 'plan' }, { line: [[w, 0], [0, d]], view: 'plan' }, ...extra],
-        front
+        top: [{ line: [[0, 0], [w, d]], view: 'plan' }, { line: [[w, 0], [0, d]], view: 'plan' }, ...extra]
       }
     ]
   };
@@ -180,14 +168,12 @@ export default [
     parts: [
       {
         x: 0, y: 0, z: 0, w: 60, d: 35, h: 70,
-        top: [{ line: [[0, 0], [60, 35]], dash: '3 2', view: 'plan' }, { line: [[60, 0], [0, 35]], dash: '3 2', view: 'plan' }],
-        front: doorFronts(60, 70, 1).map((dc) => (dc.line ? { ...dc, line: [[56, 57], [56, 65]] } : dc))
+        top: [{ line: [[0, 0], [60, 35]], dash: '3 2', view: 'plan' }, { line: [[60, 0], [0, 35]], dash: '3 2', view: 'plan' }]
       }
     ]
   },
   tallCupboard({
-    id: 'pantry', name: 'Pantry Cupboard', group: 'kitchen', w: 60, d: 60, h: 220,
-    front: [{ rect: [1, 1, 58, 218] }, { line: [[55, 100], [55, 125]], stroke: 'outline' }]
+    id: 'pantry', name: 'Pantry Cupboard', group: 'kitchen', w: 60, d: 60, h: 220
   }),
   sink({ id: 'sink-single', name: 'Sink, Single Bowl', w: 60, bowls: [44] }),
   sink({ id: 'sink-double', name: 'Sink, Double Bowl', w: 120, bowls: [44, 44] }),
@@ -206,8 +192,7 @@ export default [
     parts: [
       {
         x: 0, y: 0, z: 0, w: 60, d: 60, h: 88, role: 'metal', r: 1,
-        top: [{ line: [[1, 54], [59, 54]], view: 'plan' }],
-        front: [{ rect: [4, 18, 52, 50], r: 2, fill: 'dark' }, { line: [[8, 21], [52, 21]], stroke: 'outline' }, ...[12, 24, 36, 48].map((x) => ({ circle: [x, 8, 2], fill: 'dark' }))]
+        top: [{ line: [[1, 54], [59, 54]], view: 'plan' }]
       },
       { x: 1, y: 1, z: 88, w: 58, d: 52, h: 2, role: 'dark', outline: true, top: [[14, 14, 8], [42, 14, 6], [14, 37, 6], [42, 37, 7]].map(([x, y, r]) => ({ circle: [x, y, r], stroke: 'soft' })) }
     ],
@@ -215,15 +200,7 @@ export default [
   },
   tallCupboard({
     id: 'wall-oven', name: 'Wall Oven Tower', group: 'kitchen', w: 60, d: 60, h: 220,
-    extra: [{ line: [[4, 3], [56, 3], [56, 57], [4, 57]], closed: true, dash: '3 2', view: 'plan' }],
-    front: [
-      { rect: [1, 1, 58, 60] },
-      { rect: [1, 63, 58, 60], fill: 'metal' },
-      { rect: [7, 75, 46, 40], r: 2, fill: 'dark' },
-      { line: [[8, 68], [52, 68]], stroke: 'outline' },
-      { rect: [1, 125, 58, 45] },
-      { rect: [1, 172, 58, 37] }
-    ]
+    extra: [{ line: [[4, 3], [56, 3], [56, 57], [4, 57]], closed: true, dash: '3 2', view: 'plan' }]
   }),
   {
     id: 'rangehood',
@@ -240,8 +217,7 @@ export default [
         top: [
           { line: [[33, 25], [0, 50]], dash: '3 2', view: 'plan' },
           { line: [[57, 25], [90, 50]], dash: '3 2', view: 'plan' }
-        ],
-        front: [{ rect: [70, 3, 14, 2], fill: 'dark' }]
+        ]
       },
       { x: 33, y: 0.75, z: 8, w: 24, d: 24.25, h: 52, role: 'metal', outline: true }
     ]
@@ -254,8 +230,7 @@ export default [
     parts: [
       { x: 0, y: 0, z: 0, w: 70, d: 64, h: 180, r: 2, top: [{ line: [[6, 4], [64, 4]], view: 'plan' }, { line: [[6, 7], [64, 7]], view: 'plan' }] },
       {
-        x: 0.75, y: 64, z: 1, w: 68.5, d: 4.25, h: 178, outline: true,
-        front: [{ line: [[0, 58], [70, 58]] }, { line: [[64, 5], [64, 50]], stroke: 'outline' }, { line: [[64, 66], [64, 110]], stroke: 'outline' }]
+        x: 0.75, y: 64, z: 1, w: 68.5, d: 4.25, h: 178, outline: true
       },
       { x: 62, y: 68.25, z: 60, w: 4, d: 1.5, h: 90, role: 'metal' }
     ]
@@ -269,7 +244,7 @@ export default [
       { x: 0, y: 0, z: 0, w: 90, d: 69, h: 180, r: 2, top: [{ line: [[6, 4], [84, 4]], view: 'plan' }, { line: [[6, 7], [84, 7]], view: 'plan' }] },
       { x: 0.75, y: 69, z: 60, w: 43.75, d: 4.25, h: 119, outline: true },
       { x: 45.5, y: 69, z: 60, w: 43.75, d: 4.25, h: 119, outline: true },
-      { x: 0.75, y: 69, z: 1, w: 88.5, d: 4.25, h: 58, outline: true, front: [{ line: [[10, 5], [80, 5]], stroke: 'outline' }] },
+      { x: 0.75, y: 69, z: 1, w: 88.5, d: 4.25, h: 58, outline: true },
       { x: 39, y: 73.25, z: 90, w: 3, d: 1.5, h: 70, role: 'metal' },
       { x: 48, y: 73.25, z: 90, w: 3, d: 1.5, h: 70, role: 'metal' }
     ]
@@ -288,8 +263,7 @@ export default [
       },
       {
         x: 0.75, y: 56, z: 8, w: 58.5, d: 3.25, h: 77, role: 'metal', outline: true,
-        top: [{ rect: [40, 1, 14, 2], fill: 'dark', stroke: 'dark' }],
-        front: [{ line: [[8, 6], [52, 6]], stroke: 'outline' }]
+        top: [{ rect: [40, 1, 14, 2], fill: 'dark', stroke: 'dark' }]
       }
     ]
   },
@@ -305,8 +279,7 @@ export default [
         top: [{ line: [[3, 5], [30, 5]], view: 'plan' }, { line: [[3, 9], [30, 9]], view: 'plan' }, { line: [[3, 13], [30, 13]], view: 'plan' }]
       },
       {
-        x: 0.5, y: 37, z: 0, w: 49, d: 2.5, h: 30, role: 'dark', outline: true,
-        front: [{ rect: [4, 4, 30, 22], r: 1, fill: 'glass', stroke: 'soft' }, { rect: [38, 4, 9, 22], stroke: 'soft' }]
+        x: 0.5, y: 37, z: 0, w: 49, d: 2.5, h: 30, role: 'dark', outline: true
       }
     ]
   },
@@ -322,7 +295,7 @@ export default [
         x: 0, y: 0, z: 87, w: 240, d: 100, h: TOP, role: 'soft',
         top: [{ line: [[2, 35], [238, 35], [238, 98], [2, 98]], closed: true, dash: '3 2', view: 'plan' }]
       },
-      { x: 0, y: 35, z: KICK, w: 240, d: 63, h: 77, front: doorFronts(240, 77, 4) },
+      { x: 0, y: 35, z: KICK, w: 240, d: 63, h: 77 },
       { x: 5, y: 40, z: 0, w: 230, d: 53, h: KICK, role: 'soft' }
     ]
   },

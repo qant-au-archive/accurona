@@ -103,8 +103,7 @@ export default [
     parts: [
       { x: 0, y: 0, z: 0, w: 180, d: 42, h: 80, role: 'wood', r: 1 },
       {
-        x: 0, y: 42, z: 0, w: 180, d: 3, h: 80, role: 'soft', outline: true,
-        front: [45, 90, 135].map((u) => ({ line: [[u, 4], [u, 76]] }))
+        x: 0, y: 42, z: 0, w: 180, d: 3, h: 80, role: 'soft', outline: true
       }
     ]
   },

@@ -287,8 +287,7 @@ export default [
         ]
       },
       {
-        x: 2, y: 0, z: 10, w: 236, d: 60, h: 77,
-        front: [[2, 60], [64, 30], [158, 30], [190, 42]].map(([u, w]) => ({ rect: [u, 4, w - 2, 70] }))
+        x: 2, y: 0, z: 10, w: 236, d: 60, h: 77
       },
       { x: 4, y: 0, z: 0, w: 232, d: 55, h: 10, role: 'soft' },
       {
@@ -421,8 +420,7 @@ export default [
           { line: [[4, 5], [41, 5]], view: 'plan' },
           { line: [[4, 9], [41, 9]], view: 'plan' },
           { rect: [16, 15, 13, 2.5], accent: 'power', view: 'plan' }
-        ],
-        front: [{ rect: [16, 8, 13, 4], fill: 'dark' }, { rect: [20, 15, 5, 2], accent: 'power' }]
+        ]
       }
     ]
   },
