@@ -2,7 +2,7 @@
   "name": "accurona-verify",
   "private": true,
   "type": "module",
-  "description": "Every Accurona, Axonometra and Reticulyne package, installed from npm, on one page (see README.md).",
+  "description": "Every Accurona package, and Axonometra, installed from npm, on one page (see README.md).",
   "scripts": {
     "build": "vite build",
     "check": "node check.mjs"
@@ -16,7 +16,6 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.0.0",
     "@mui/material": "^9.0.0",
-    "@reticulyne/editor": "latest",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "zustand": "^5.0.13"

@@ -1,5 +1,5 @@
-// Every Accurona, Axonometra and Reticulyne package, installed from npm as a
-// third party would, on one page. scripts in ../verify check it (check.mjs); the Docker image serves it.
+// Every Accurona package, and Axonometra, installed from npm as a third party
+// would, on one page. scripts in ../verify check it (check.mjs); the Docker image serves it.
 import { StrictMode, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Box, Stack, ThemeProvider, Typography } from '@mui/material';
@@ -18,7 +18,6 @@ import {
 } from '@accurona/ui';
 import manifest from '@accurona/elements/manifest.json';
 import { Axonometra } from '@axonometra/editor';
-import Reticulyne, { version as reticulyneVersion } from '@reticulyne/editor';
 import { sceneWith } from './scene.js';
 
 // The plan drawings of @accurona/elements. A glob cannot go through the
@@ -145,15 +144,6 @@ function App() {
           </Typography>
           <Box sx={{ height: 420 }}>
             <Axonometra ref={axo} initialScene={scene} />
-          </Box>
-        </Section>
-
-        <Section
-          id="reticulyne"
-          title={`@reticulyne/editor ${reticulyneVersion}`}
-        >
-          <Box sx={{ height: 420, position: 'relative' }}>
-            <Reticulyne initialData={scene} editorMode="EDITABLE" />
           </Box>
         </Section>
       </Stack>

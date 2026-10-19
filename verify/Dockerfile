@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 #
-# Every Accurona, Axonometra and Reticulyne package installed from the npm
+# Every Accurona package, and Axonometra, installed from the npm
 # registry, as a third party would, built into one page and served by nginx on 8080. There is no
 # lockfile on purpose: each build resolves what is published now, so the
 # image tests the public install, not a copy of this repo.

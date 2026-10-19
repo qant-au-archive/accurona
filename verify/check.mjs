@@ -71,7 +71,7 @@ expect(
 );
 expect(
   report.axonometra.keepsDiagram,
-  "@axonometra/editor keeps Reticulyne's view on save"
+  '@axonometra/editor keeps the diagram view on save'
 );
 expect(report.axonometra.savedValid, '@axonometra/editor saves a valid scene');
 expect(
@@ -81,14 +81,6 @@ expect(
     .count()) === 1,
   '@axonometra/editor: the canvas is there'
 );
-
-const ret = page.getByTestId('reticulyne');
-for (const name of ['Access point', 'Camera', 'Firewall']) {
-  expect(
-    await ret.getByText(name).first().isVisible(),
-    `@reticulyne/editor shows ${name}`
-  );
-}
 
 expect(
   problems.length === 0,

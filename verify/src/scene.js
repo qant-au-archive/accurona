@@ -1,8 +1,8 @@
 // One building as an Accurona scene: a comms room on a floor plan, and the
-// same devices as a network diagram. Axonometra draws the plan view and
-// Reticulyne the iso view; the objects (ids ap-1, cam-1, fw-1) are shared.
-// Icons for the diagram come from @accurona/elements' plan drawings; the
-// build decides their URLs, so they are passed in.
+// same devices in an iso diagram view. Axonometra draws the plan view and must
+// keep the diagram view it does not draw; the objects (ids ap-1, cam-1, fw-1)
+// are shared. Icons come from @accurona/elements' plan drawings; the build
+// decides their URLs, so they are passed in.
 export const sceneWith = (icons) => ({
   $schema: 'https://cdn.jsdelivr.net/npm/@accurona/core@0/schema/scene-v1.json',
   format: 'accurona-scene',

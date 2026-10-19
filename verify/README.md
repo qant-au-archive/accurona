@@ -1,13 +1,13 @@
 # Verification
 
-Every Accurona, Axonometra and Reticulyne package, installed from the public npm
-registry as a third party would, on one page:
+Every Accurona package, and Axonometra, installed from the public npm registry as
+a third party would, on one page:
 
 - `@accurona/core` validates a scene and formats lengths,
 - `@accurona/ui` draws a tool button that raises a notification,
-- `@accurona/elements` supplies the plan drawings, and the diagram's icons,
-- `@axonometra/editor` opens the scene's floor plan,
-- `@reticulyne/editor` opens the same scene's network diagram.
+- `@accurona/elements` supplies the plan drawings, and the scene's icons,
+- `@axonometra/editor` opens the scene's floor plan, and keeps its diagram view
+  on save.
 
 The Docker image installs with no lockfile and no token, so each build tests what
 is published now. It is served under a strict Content-Security-Policy (no
