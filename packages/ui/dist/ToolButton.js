@@ -11,7 +11,7 @@ export const ToolButton = ({ name, icon, onClick, isActive, disabled = false, to
             : 'text.secondary';
     // A tap fires the browser's compatibility mouseover and never a
     // mouseleave, so the hover tooltip opened after a tap and stayed up
-    // (Reticulyne sweep 2026-09-30, the Flat 2D view button at 390px). A
+    // (UI sweep 2026-09-30, a toolbar button at 390px). A
     // touch or pen pointer gets MUI's long-press tooltip only; a mouse over
     // the button turns hover back on.
     const [touch, setTouch] = useState(false);

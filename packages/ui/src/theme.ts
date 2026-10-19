@@ -4,8 +4,8 @@ import {
   type ThemeOptions
 } from '@mui/material';
 
-// The shared look of Axonometra and Reticulyne (decision D12: one UI library,
-// MUI, with the shared parts here). Started from Reticulyne's theme.
+// The shared look of the editors built on Accurona (decision D12: one UI
+// library, MUI, with the shared parts here).
 
 export interface CustomThemeVars {
   appPadding: { x: number; y: number };

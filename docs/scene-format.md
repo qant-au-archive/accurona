@@ -1,14 +1,13 @@
 # Accurona scene format
 
-**Status: specification, version 2.** This is the **native file format** of Accurona,
-[Axonometra](https://github.com/qant-au/axonometra) and
-[Reticulyne](https://github.com/qant-au/reticulyne): each saves and opens a scene as a
-plain `.json` file, not as an import or export target beside a format of its own.
-Both editors read and write it, and `@accurona/core` (`packages/core`) implements it.
+**Status: specification, version 2.** This is the **native file format** of Accurona
+and [Axonometra](https://github.com/qant-au/axonometra): a scene is saved and opened as
+a plain `.json` file, not as an import or export target beside a format of its own.
+`@accurona/core` (`packages/core`) implements it.
 
 - **One schema.** A scene is validated by one [Zod 4](https://zod.dev) schema, defined
-  in the `@accurona/core` package and imported by Axonometra and Reticulyne. Neither
-  tool keeps a schema of its own. This document and that schema say the same thing:
+  in the `@accurona/core` package and imported by Axonometra, which keeps no schema
+  of its own. This document and that schema say the same thing:
   the package's tests validate every example below.
 - **A JSON Schema for everyone else.** The build generates a JSON Schema (Draft
   2020-12) from the Zod schema (`z.toJSONSchema()`), and each release publishes it, so a
@@ -18,9 +17,9 @@ Both editors read and write it, and `@accurona/core` (`packages/core`) implement
   source; a scene refers to its elements by id.
 
 One JSON document describes a floor plan, an isometric network diagram and a flat 2D
-(schematic) diagram of the same things, so that the tools open and save the same file,
-and so that code, or a language model, can write a drawing without knowing either
-editor.
+(schematic) diagram of the same things, so that different tools can open and save the
+same file, and so that code, or a language model, can write a drawing without knowing
+any editor.
 
 ## The one idea
 
@@ -31,9 +30,6 @@ one stable `id`. A **view** (a floor plan, an isometric diagram, a schematic) do
 contain objects; it **places** them. So the access point on the level 2 plan and the
 access point node in the network diagram are the same object, with the same `id`, placed
 twice. Nothing else is needed to link them.
-
-Reticulyne already works this way for its own views (model `items`, placed by view
-`items`). This format extends the same rule to floor plans.
 
 ## Top-level shape
 
@@ -113,11 +109,10 @@ interface Port {
 
 - **`element`** is the usual case for a physical thing. An
   [Accurona element](../README.md#elements) brings its real size, its plan drawing and
-  its 3D model, and its isometric view and 2D symbol where Reticulyne draws with it, so
-  the object needs nothing else to be drawn anywhere. Element ids are never renamed
+  its 3D model, so the object needs nothing else to be drawn on a plan or in 3D. Element ids are never renamed
   once shipped, which is why a scene can store them.
-- **`icon`** covers things the library does not have: a Reticulyne isopack icon or an
-  uploaded image. An object with an `icon` and no `element` can be drawn in diagram
+- **`icon`** covers things the library does not have: an icon from another collection
+  or an uploaded image. An object with an `icon` and no `element` can be drawn in diagram
   views, and in a plan view only as a symbol.
 - **Doors and windows are not in the library yet.** Until they are, `element` may also
   name one of Axonometra's built-in wall fittings (`door`, `window` and the rest), so a
@@ -125,7 +120,7 @@ interface Port {
 - An object with neither is drawn as a plain labelled box.
 - **Two catalogues.** Accurona's element library holds physical things; the things a
   diagram connects, including virtual ones that never appear on a floor plan, come from
-  Reticulyne's own catalogue, which is where ports, media and protocols are defined.
+  the diagram tool's own catalogue, which is where ports, media and protocols are defined.
   An object on both a floor plan and a diagram is still **one object**: its `id` is what
   links the two views. The catalogues relate their entries by a free-form
   cross-reference ([what belongs in the library](../README.md#what-belongs-in-the-library)),
@@ -292,8 +287,8 @@ interface PlanPlacement {
 ### Mounting and facing (version 2)
 
 **Status: built.** In `@accurona/core` (schema, validation and the version 1
-migration), the element renderers (see the README, Mounting and facing), Axonometra
-(stored, edited, and drawn in plan, isometric and 3D) and Reticulyne (kept as found).
+migration), the element renderers (see the README, Mounting and facing) and Axonometra
+(stored, edited, and drawn in plan, isometric and 3D).
 Version 1 has one number for height,
 `mountMm`, measured from the floor, and nothing for which way an item faces, so a
 downlight is placed at a fixed 2700 mm whatever the ceiling height, and a dome camera
@@ -367,19 +362,17 @@ forward migration:
   element's `facing`; the item is drawn the right way up where it was always drawn
   wrong, and its position does not change.
 
-**Reticulyne.** Reticulyne reads and writes the same scene file but does not draw plans:
-it keeps every plan view as it found it and writes it back unchanged, and reads only a
+**Tools that do not draw plans.** A diagram tool that reads and writes the same scene
+file keeps every plan view as it found it and writes it back unchanged, reading at most a
 placement's floor and `x`, `y` (to say where a device sits on the building). The new
 fields therefore need nothing from it beyond validation, with one consequence: the
-schema is strict and a reader refuses a version newer than its own, so a Reticulyne
-build carrying a version 1 schema refuses a version 2 file outright (it does not drop the
-fields). Reticulyne takes the version 2 schema by re-syncing its copy of
-`@accurona/core` when the schema ships, and has nothing else to change.
+schema is strict and a reader refuses a version newer than its own, so a build carrying
+a version 1 schema refuses a version 2 file outright (it does not drop the fields).
 
 ### Diagram views (`iso` and `schematic`)
 
 A diagram view is a network drawing on a grid of tiles. `iso` draws the grid
-isometrically, which is Reticulyne's view today; `schematic` draws the same grid
+isometrically; `schematic` draws the same grid
 flat, with 2D symbols, in the style of a conventional network diagram. **The two
 kinds share one shape**, so a diagram can be switched between them without losing
 anything.
@@ -414,7 +407,7 @@ interface Connector {
   width?: number;
   style?: 'SOLID' | 'DOTTED' | 'DASHED';
   direction?: 'START_TO_END' | 'END_TO_START' | 'BOTH' | 'NONE';
-  glyph?: string;         // one of Reticulyne's connector glyphs
+  glyph?: string;         // a connector glyph, named by the editor
   animated?: boolean;
   animationRate?: number; // 0 to 1
   animationFlow?: 'forward' | 'reverse' | 'both';
@@ -472,7 +465,7 @@ interface Group {
   editor does not let it be selected on the canvas, so it cannot be moved, edited or
   deleted until it is unlocked. It is a view property, like `layer`: the same object
   can be locked in one view and not in another.
-- Group membership lives on the member, not as a list on the group, as in Reticulyne:
+- Group membership lives on the member, not as a list on the group:
   "the members of G" is a filter, and two people editing one diagram never race on one
   array.
 
@@ -514,8 +507,6 @@ interface Icon {
 
 interface Color { id: Id; value: string } // #rrggbb
 ```
-
-These are Reticulyne's icon and colour entries unchanged.
 
 ## Writing a scene from code
 
@@ -687,8 +678,8 @@ remote-management console and a network-monitoring console.
 
 ## Crossover: one object in both editors
 
-Axonometra draws the plan views and Reticulyne the diagram views of one scene, and
-each keeps the other's views when it saves. An object placed in both is linked by
+Axonometra draws the plan views of a scene and a diagram editor its diagram views,
+and each keeps the other's views when it saves. An object placed in both is linked by
 its `id` and by nothing else, so the links are read straight out of the scene.
 `@accurona/core` reads them for both editors:
 
@@ -714,21 +705,21 @@ floorsOf(scene, objectIds): FloorLocation[]
   where its objects are: a diagram per storey maps to that storey, a diagram of a
   whole site maps to several floors, and a diagram of cloud services maps to none.
   Nothing has to be kept in step when a device moves floor.
-- **At catalogue level** the two libraries relate by the free-form cross-reference
-  (an entry in Reticulyne's catalogue linking `{ source: 'accurona', ref: '<element
-  id>' }`), so a plan object with an `element` can be drawn in a diagram with its
-  Reticulyne twin. The scene never stores that cross-reference.
+- **At catalogue level** a diagram tool's catalogue can relate to the element library
+  by the free-form cross-reference (an entry linking `{ source: 'accurona', ref:
+  '<element id>' }`), so a plan object with an `element` can be drawn in a diagram
+  with its twin there. The scene never stores that cross-reference.
 
 ## Migrating from today's formats
 
-The scene format replaces the formats each project uses today: Axonometra's plan
-format (version 2), Reticulyne's model, and Accurona's own JSON and SVG output for
-drawings. The old formats are **read, never written**:
+The scene format replaces the formats used before it: Axonometra's plan format
+(version 2), and Accurona's own JSON and SVG output for drawings. The old formats are
+**read, never written**:
 
-- **On load**, an editor that is given a plan v2 file or a Reticulyne model converts
-  it to a scene as below, and from then on works on the scene.
-- **On save**, it writes only the scene format. There is no "save as plan v2" or "save
-  as Reticulyne model", and no round trip back to either.
+- **On load**, an editor that is given a plan v2 file converts it to a scene as below,
+  and from then on works on the scene.
+- **On save**, it writes only the scene format. There is no "save as plan v2", and no
+  round trip back.
 - **Exports are separate and unchanged.** Exporting a drawing as SVG, PDF or PNG is
   output, not a file format, and works as it does today.
 
@@ -757,28 +748,6 @@ plan becomes one scene with one `plan` view.
 | `zIndex` | none | derived from mount height and placement order when drawn |
 | `furnitureId`, `wallNodeId` counters | none | ids are strings; an editor keeps its own counters |
 | `units` | `units` | unchanged; absent is `mm` in both |
-
-### Reticulyne model
-
-The Reticulyne model schema is in
-[src/schemas](https://github.com/qant-au/reticulyne/tree/main/src/schemas). A model
-becomes one scene with one `iso` view per Reticulyne view.
-
-| Reticulyne | Scene | Note |
-|---|---|---|
-| `title`, `description` | `title`, `description` | |
-| `items[]` (`id`, `name`, `description`, `icon`) | `objects[]` | same ids; `icon` stays an icon reference |
-| `icons[]`, `colors[]` | `icons[]`, `colors[]` | unchanged |
-| `views[]` | `views[]` with `kind: 'iso'` | |
-| view `items[]` (`id`, `tile`, `labelHeight`, `parentGroupId`) | `placements[]` (`object`, `tile`, `labelHeight`, `group`) | a view item's `id` is its model item's id |
-| `connectors[]` | `connectors[]` | anchor `ref.item` becomes `ref.object`; no `connection` |
-| `rectangles[]`, `textBoxes[]`, `groups[]` | same | `parentGroupId` becomes `group` |
-| `version` (string) | none | the scene carries its own `version` |
-
-Reticulyne connectors carry no logical connection today. On load, a connector
-whose two ends are objects may also create a `Connection` between them; an editor
-that does so must do it only when asked, since two connectors between the same pair
-are not necessarily two cables.
 
 ## Validation
 

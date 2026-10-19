@@ -3,8 +3,8 @@ import { LENGTH_UNITS } from '../units.js';
 import { migrateScene } from './migrate.js';
 import { checkReferences } from './references.js';
 
-// The scene format, version 2: the native file format of Accurona,
-// Axonometra and Reticulyne. docs/scene-format.md is the prose; this is the
+// The scene format, version 2: the native file format of Accurona and
+// Axonometra. docs/scene-format.md is the prose; this is the
 // definition. Keep the two in step.
 
 export const SCENE_FORMAT = 'accurona-scene';

@@ -198,7 +198,7 @@ test('serializeScene writes $schema first and refuses an invalid scene', () => {
   assert.throws(() => serializeScene(bad), /invalid scene/);
 });
 
-// A plan view, owned by Axonometra, beside Reticulyne's diagram.
+// A plan view, owned by Axonometra, beside a diagram another editor owns.
 const shared = () => {
   const s = base();
   s.objects.push({ id: 'sofa', element: 'sofa-3', props: { colour: 'grey' } });
@@ -218,7 +218,7 @@ const shared = () => {
 
 test('merge keeps views and object fields the editor does not own', () => {
   const opened = shared();
-  // Reticulyne renames A and moves it; it knows nothing of the plan.
+  // The diagram editor renames A and moves it; it knows nothing of the plan.
   const merged = mergeScene(opened, {
     viewKinds: ['iso', 'schematic'],
     views: [

@@ -1,8 +1,7 @@
 # @accurona/core
 
-The framework-free core shared by [Axonometra](https://github.com/qant-au/axonometra)
-(floor plans) and [Reticulyne](https://github.com/qant-au/reticulyne) (network
-diagrams): the **scene format** both save their files in, and **length units**.
+The framework-free core of [Axonometra](https://github.com/qant-au/axonometra)
+(floor plans): the **scene format** it saves its files in, and **length units**.
 
 ```sh
 npm install @accurona/core

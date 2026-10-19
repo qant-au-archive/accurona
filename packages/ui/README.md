@@ -1,9 +1,8 @@
 # @accurona/ui
 
-The shared screen parts of [Axonometra](https://github.com/qant-au/axonometra) and
-[Reticulyne](https://github.com/qant-au/reticulyne): an [MUI](https://mui.com)
-theme, toolbar buttons and menus, panels, dialogs and notifications, so the two
-editors look and behave the same.
+The shared screen parts of [Axonometra](https://github.com/qant-au/axonometra): an
+[MUI](https://mui.com) theme, toolbar buttons and menus, panels, dialogs and
+notifications, so every editor built on them looks and behaves the same.
 
 ```sh
 npm install @accurona/ui @mui/material @emotion/react @emotion/styled react react-dom

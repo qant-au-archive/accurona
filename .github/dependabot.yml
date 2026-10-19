@@ -20,7 +20,7 @@ updates:
       - dependency-name: "@types/node"
         versions: [">=23"]
       # TypeScript majors are toolchain decisions taken deliberately, in step
-      # with Axonometra and Reticulyne, never per-repo by a bot.
+      # with Axonometra, never per-repo by a bot.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
     groups:
