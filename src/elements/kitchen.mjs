@@ -239,8 +239,7 @@ export default [
         x: 0, y: 0, z: 0, w: 90, d: 50, h: 8, role: 'metal',
         top: [
           { line: [[33, 25], [0, 50]], dash: '3 2', view: 'plan' },
-          { line: [[57, 25], [90, 50]], dash: '3 2', view: 'plan' },
-          { line: [[33, 0], [0, 0]], view: 'iso' }
+          { line: [[57, 25], [90, 50]], dash: '3 2', view: 'plan' }
         ],
         front: [{ rect: [70, 3, 14, 2], fill: 'dark' }]
       },

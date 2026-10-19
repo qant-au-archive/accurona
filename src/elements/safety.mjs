@@ -175,7 +175,7 @@ const symbols = [
     // Authored facing up (diffuser on top), installed facing down.
     parts: [
       { x: 0, y: 0, z: 0, w: 30, d: 9, h: 3, r: 1 },
-      { x: 2, y: 1.5, z: 3, w: 26, d: 6, h: 2, role: 'glass', top: [{ rect: [22, 2, 2, 2], accent: 'fire', view: 'iso' }] }
+      { x: 2, y: 1.5, z: 3, w: 26, d: 6, h: 2, role: 'glass' }
     ]
   },
   {

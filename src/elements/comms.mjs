@@ -23,7 +23,6 @@ function rack({ id, name, w, d, u, mount, sizeLabel }) {
         top: [
           { rect: [6, 6, w - 12, d - 12], stroke: 'soft' },
           { rect: [w / 2 - 12, 9, 24, 4], r: 1, fill: 'soft', stroke: 'soft' },
-          { rect: [w / 2 - 12, d - 13, 24, 4], r: 1, fill: 'soft', stroke: 'soft', view: 'iso' },
           { rect: [w / 2 - 8, d - 3.5, 16, 2.5], r: 1, accent: 'network', view: 'plan' }
         ],
         front: [
@@ -243,8 +242,7 @@ const cooling = [
       { x: 0, y: 0, z: 0, w: 5, d: 10, h: 200, role: 'metal' },
       { x: 115, y: 0, z: 0, w: 5, d: 10, h: 200, role: 'metal', outline: true },
       {
-        x: 5, y: 0, z: 190, w: 110, d: 10, h: 10, role: 'metal', outline: true,
-        front: [{ rect: [51, 3, 8, 3], accent: 'cooling', view: 'iso' }]
+        x: 5, y: 0, z: 190, w: 110, d: 10, h: 10, role: 'metal', outline: true
       },
       { x: 5, y: 3, z: 0, w: 55, d: 4, h: 190, role: 'glass', front: [{ line: [[49, 80], [49, 110]], stroke: 'outline' }] },
       { x: 60, y: 3, z: 0, w: 55, d: 4, h: 190, role: 'glass', front: [{ line: [[6, 80], [6, 110]], stroke: 'outline' }] }
@@ -294,10 +292,7 @@ const fire = [
 // Cable tray fittings. They match the 1 m straight section: 30 cm wide, a
 // 1.5 cm base, 8.5 cm side rails 1.5 cm thick, hung below the ceiling, three dashed
 // cable runs down the middle. Every fitting's straight ends meet a section
-// flush, entering from the left. The bends and junctions draw their top
-// view as the 2D schematic: from the front each is only a length of rail
-// (a cross is two stubs either side of its branch opening), so the shape
-// that tells them apart is the one seen from above.
+// flush, entering from the left.
 const TRAY = 30; // width
 const RAIL = 1.5;
 const TRAY_GAP = 10; // hung 10 cm below the ceiling (top at 2.6 m under a 2.7 m one)
@@ -336,7 +331,6 @@ function trayBend(deg, id) {
     size: { w: extent(0), d: extent(1), h: 10 },
     mount: TRAY_GAP,
     mountFrom: 'ceiling',
-    schematic: 'plan',
     parts: [
       trayBase(band(R, R + TRAY), [9, 15, 21].map((v) => ({ arc: [cx, cy, R + TRAY - v, -90, a1], dash: '4 3' }))),
       trayRail(band(R + TRAY - RAIL, R + TRAY)),
@@ -386,7 +380,6 @@ function trayJunction({ id, name, back }) {
     size: { w: L, d, h: 10 },
     mount: TRAY_GAP,
     mountFrom: 'ceiling',
-    schematic: 'plan',
     parts: [
       trayBase([...topEdge, ...bottomEdge], [...runs, ...branches]),
       corner(-1, 1),

@@ -1,14 +1,12 @@
 {
   "name": "@accurona/elements",
   "version": "0.4.0",
-  "description": "Accurona: the shared element library for Axonometra and Reticulyne. One model per element, rendered as plan, isometric, 2D schematic and 3D views.",
+  "description": "Accurona: the shared element library for Axonometra. One model per element, rendered as plan and 3D views.",
   "license": "MIT",
   "type": "module",
   "keywords": [
     "floor-plan",
-    "network-diagram",
     "svg",
-    "isometric",
     "icons"
   ],
   "repository": {
@@ -23,8 +21,6 @@
     "./manifest.json": "./dist/manifest.json",
     "./models.json": "./dist/models.json",
     "./plan/*": "./dist/plan/*",
-    "./iso/*": "./dist/iso/*",
-    "./schematic/*": "./dist/schematic/*",
     "./package.json": "./package.json"
   },
   "files": [

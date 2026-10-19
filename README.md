@@ -5,18 +5,16 @@
 # Accurona
 
 The shared core behind [Axonometra](https://github.com/qant-au/axonometra) (floor
-plans and 3D) and [Reticulyne](https://github.com/qant-au/reticulyne) (network
-diagrams): one source of truth for what the two tools draw, so the same thing looks
-and measures the same in both, and so other tools can build on it too.
+plans and 3D): one source of truth for what it draws, so the same thing looks and
+measures the same everywhere, and so other tools can build on it too.
 
 Today Accurona is the **element library**: furniture, fixtures, comms and security
 equipment, with one set of groups, ids and look. It also holds the
-[shared keymap](docs/keymap.md) both tools follow, and the
-[scene format](docs/scene-format.md): one file for floor plans, isometric and 2D
-diagrams, with one stable id per object: the file format both tools open and save,
-implemented in `@accurona/core`.
-And it holds the [shared UI](#shared-ui): the MUI theme, menus and panels both
-tools are built from, so that switching between them needs no retraining.
+[keymap](docs/keymap.md), and the [scene format](docs/scene-format.md): one file for
+floor plans and diagram views, with one stable id per object, implemented in
+`@accurona/core`.
+And it holds the [shared UI](#shared-ui): the MUI theme, menus and panels the
+editor is built from.
 
 ## Elements
 
@@ -24,39 +22,18 @@ Each element is modelled **once**, as a few simple solids at real size in
 centimetres. Every view is generated from that model:
 
 - **Plan** (Axonometra): top-down, true to scale. _Built._
-- **Isometric** (Reticulyne): shaded 30° view. _Experimental: generated but
-  not yet reviewed item by item._ Needed only for the elements a Reticulyne
-  catalogue item draws with (below).
 - **3D** (Axonometra's 3D view): the same solids as meshes, from
   `dist/models.json` (solids with colours resolved; decals left out). _Built._
-- **2D schematic** (Reticulyne's flat, Visio-style view): not to scale, one
-  line weight for every symbol. A ceiling or wall device draws its plan
-  pictogram (see Symbols); anything else is seen from the front, with the
-  ports, LEDs and bezels on its front face. An element whose telling face is
-  its top (a desk phone's keypad) sets `schematic: 'plan'` to draw its
-  top-down view instead. _Built; reviewed for the elements a Reticulyne
-  catalogue item cross-references._
 
 ### What belongs in the library
 
 The library holds **physical things**: anything with a real size that can be
 placed on a floor plan. An element has no ports and knows nothing about
-connections.
-
-Reticulyne keeps its **own catalogue** of the things a network diagram connects:
-devices with their ports, and virtual things that never appear on a floor plan,
-such as a cloud service or a VPN link. Ports, media and protocols are defined
-there, not here.
-
-Many things belong in both: a switch, an access point, a smoke detector. Each
-catalogue keeps its own entry, and the two are related by a **free-form
-cross-reference**: an entry names the other catalogue's id, in the same
-`{ source, ref }` shape a scene uses for
-[links to external tools](docs/scene-format.md#links-back-to-external-tools).
-Neither schema depends on it, and a missing or stale reference breaks only
-itself. A Reticulyne item that cross-references an element can be drawn with
-that element's isometric view (and, in the flat view, its schematic), so a rack is still the same rack, the same size
-and colours, on a floor plan and in a network diagram.
+connections. A tool with its own catalogue (a network diagram's devices and
+ports, say) can relate an entry to an element by a **free-form
+cross-reference**, in the same `{ source, ref }` shape a scene uses for
+[links to external tools](docs/scene-format.md#links-back-to-external-tools);
+neither schema depends on it.
 
 ## Packages
 
@@ -64,7 +41,7 @@ Three packages on npm, all MIT:
 
 | Package                                                                  | What                                                                     |
 | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| [`@accurona/elements`](https://www.npmjs.com/package/@accurona/elements) | This library, built: `manifest.json`, `models.json`, `plan/<id>.svg`, `iso/<id>.svg` and `schematic/<id>.svg`. |
+| [`@accurona/elements`](https://www.npmjs.com/package/@accurona/elements) | This library, built: `manifest.json`, `models.json` and `plan/<id>.svg`. |
 | [`@accurona/core`](packages/core/)                                       | The scene format (a Zod schema and its JSON Schema), length units and the shared keymap. |
 | [`@accurona/ui`](packages/ui/)                                           | The shared MUI theme, menus, panels and notifications.                   |
 
@@ -83,9 +60,9 @@ import sofaUrl from '@accurona/elements/plan/sofa-3.svg?url';
 ```sh
 npm install
 npm test                 # rules every element must meet
-npm run build            # dist/manifest.json, dist/models.json, dist/plan/<id>.svg, dist/iso/<id>.svg (iso experimental), dist/schematic/<id>.svg
+npm run build            # dist/manifest.json, dist/models.json, dist/plan/<id>.svg
 npm run sheet            # review/<group>.png contact sheets
-npm run sheet -- comms --iso --schematic
+npm run sheet -- comms   # one group
 ```
 
 A release (a `v*` tag) runs the tests and the build and publishes all three
@@ -98,7 +75,7 @@ packages to npm (`.github/workflows/publish.yml`).
 | `src/groups.mjs`                 | The groups, in display order.                         |
 | `src/elements/<group>.mjs`       | The elements of one group (default export: an array). |
 | `src/palette.mjs`                | Colours and line weights.                             |
-| `src/render/plan.mjs`, `iso.mjs`, `schematic.mjs` | The three renderers.                   |
+| `src/render/plan.mjs`, `model.mjs` | The plan renderer and the 3D model.  |
 | `ITEMS.md`                       | The item list: the ids, names and sizes built from.   |
 | `packages/core/`                 | `@accurona/core`: scene format, units, keymap.        |
 | `packages/ui/`                   | `@accurona/ui`, the shared UI (below).                |
@@ -130,7 +107,7 @@ packages to npm (`.github/workflows/publish.yml`).
 **Axes.** x runs left to right, y runs **back to front**, z runs up. The back
 of the element (the side against a wall) is at y = 0, the top edge of the plan;
 the side you use it from faces y = d, the bottom edge. Doors and fronts face the
-bottom. In the isometric view the front (y = d) and right (x = w) faces show.
+bottom.
 
 **Mounting and facing.** Parts are always authored facing up, z counting up from the
 underside; `facing: 'down'` mirrors them inside the item's height. `mountFrom` and
@@ -144,11 +121,8 @@ whose top carries things (tables, desks, benches, base cabinets, sideboards, TV 
 bedside tables, filing cabinets) gives that top's height as `surface`, and bench-top
 gear (monitors, the laptop, the desk phone, the router and desktop switch, the NAS, the
 microwave, the table lamp) is `mountFrom: 'surface'`, standing on whatever carrying item an editor places
-it over and on the floor when there is none. The renderers draw an element as installed:
+it over and on the floor when there is none. The views show an element as installed:
 
-- **Isometric**: the solids mirrored (a dome hangs below its rim), front and side
-  decals mirrored with them, and `top` decals left out, because they are on the
-  underside the view cannot see. A down arrow on the top marks the item as facing down.
 - **3D** (`models.json`): the solids mirrored; a dome that narrows downwards carries
   `down: true`.
 - **Plan**: drawn as authored, because a ceiling item on a plan is read as a reflected
@@ -158,9 +132,8 @@ it over and on the floor when there is none. The renderers draw an element as in
 
 ### Parts
 
-Solids, in cm, all inside `size`, never overlapping each other (the isometric
-renderer orders parts by assuming they are separate; overlapping solids draw in
-the wrong order).
+Solids, in cm, all inside `size`, never overlapping each other (a test enforces
+it for boxes).
 
 | Part                               | Shape                                                                                     |
 | ---------------------------------- | ----------------------------------------------------------------------------------------- |
@@ -193,17 +166,17 @@ face's top edge.
 
 Options: `fill` (a role or accent), `stroke` (a role, `outline` or `detail`;
 default `detail`), `accent` (a tag colour, filled, for LEDs and status marks),
-`dash`, `weight: 'outline'` (heavy line), and `view: 'plan'` or `'iso'` to
-draw in one view only. A decal on `top` that only makes sense seen from above
-(louvres, seat lines on an item mounted high) takes `view: 'plan'`.
+`dash`, `weight: 'outline'` (heavy line), and `view: 'plan'` to draw it on the
+plan only. A decal on `top` that only makes sense seen from above (louvres, seat
+lines on an item mounted high) takes `view: 'plan'`. The plan draws `top` decals;
+`front` and `side` decals record the marks on those faces as part of the model.
 
 ### Symbols
 
 Ceiling and wall devices (cameras, detectors, access points, sensors, call
 points) are far too small to see at plan scale. They set `symbol`, and the plan
 draws a **40 × 40 cm** frame with a pictogram instead of the model, while
-`size` and `parts` still describe the real device for the isometric and 3D
-views.
+`size` and `parts` still describe the real device for the 3D view.
 
 ```js
 symbol: {
@@ -217,9 +190,9 @@ of the symbol.
 
 ## Shared UI
 
-`@accurona/ui` (`packages/ui/`) is what Axonometra and Reticulyne share on
-screen. Both use [MUI](https://mui.com); these are the parts that must look and
-behave the same in both:
+`@accurona/ui` (`packages/ui/`) is the shared on-screen kit, built on
+[MUI](https://mui.com); these are the parts that must look and behave the same
+everywhere they are used:
 
 | Export                                 | What                                                                   |
 | -------------------------------------- | ---------------------------------------------------------------------- |

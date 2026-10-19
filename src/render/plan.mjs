@@ -9,7 +9,8 @@ import {
 } from '../palette.mjs';
 import { bounds, ellipsePts, f, pts } from './geometry.mjs';
 
-const forPlan = (dc) => dc.view !== 'iso';
+// A decal with `view: 'plan'` is drawn on the plan only; one without, everywhere.
+const forPlan = (dc) => dc.view === undefined || dc.view === 'plan';
 
 // A decal in face-local cm, offset to the part's top-left corner.
 function decal(dc, ox, oy, sw) {
@@ -82,8 +83,7 @@ function svg(w, d, body) {
 }
 
 // Ceiling and wall devices: a 40 cm frame with a pictogram, so they read on a
-// plan at any zoom. Pictogram coordinates are in the 40 × 40 symbol box. The
-// 2D schematic view draws the same pictogram (see schematic.mjs).
+// plan at any zoom. Pictogram coordinates are in the 40 × 40 symbol box.
 export function symbolBody(el, { reflected = false } = {}) {
   const { frame = 'circle', glyph = [] } = el.symbol;
   const dash = reflected ? ' stroke-dasharray="4 3"' : '';

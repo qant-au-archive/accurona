@@ -14,7 +14,7 @@ const splayedLeg = ([x1, y1, x2, y2], t = 2.5) => {
 
 // The same leg as a solid: a strut `h` cm deep under the seat (top at z1),
 // running from the seat out to the top of an upright leg, so the leg meets
-// the seat in the isometric and front views. Its ring runs clockwise.
+// the seat in the 3D view. Its ring runs clockwise.
 const legStrut = (l, t, z1, h = 3) => {
   const ring = splayedLeg(l, t).line;
   const area = ring.reduce((a, [x0, y0], i) => {

@@ -5,8 +5,6 @@ import { TAGS } from '../src/palette.mjs';
 import { bounds } from '../src/render/geometry.mjs';
 import { mountingErrors } from '../src/mounting.mjs';
 import { planSvg } from '../src/render/plan.mjs';
-import { isoSvg } from '../src/render/iso.mjs';
-import { schematicSvg } from '../src/render/schematic.mjs';
 import { titleCase } from './title-case.mjs';
 
 const elements = await loadElements();
@@ -15,8 +13,7 @@ const groupIds = new Set(GROUPS.map((g) => g.id));
 const LEGACY_IDS = ['bed', 'chair', 'table'];
 const TOLERANCE = 0.5; // cm
 
-// Solids must not overlap: the isometric renderer orders parts by assuming
-// they are separate. Only box against box is checked, because for cylinders,
+// Solids must not overlap: each part is one separate solid of the model. Only box against box is checked, because for cylinders,
 // domes and polygons the bounding boxes can overlap while the shapes do not.
 const isBox = (p) => !p.cyl && !p.dome && !p.poly;
 const overlap = (a, b, k, s) =>
@@ -114,17 +111,5 @@ for (const el of elements) {
     const plan = planSvg(el);
     assert.ok(!/NaN|undefined|Infinity/.test(plan), 'plan has a bad number');
     assert.ok(plan.length < 4096, `plan SVG is ${plan.length} bytes`);
-    const iso = isoSvg(el);
-    assert.ok(!/NaN|undefined|Infinity/.test(iso), 'iso has a bad number');
-    assert.ok(
-      el.schematic === undefined || el.schematic === 'plan',
-      `schematic ${el.schematic}`
-    );
-    const schematic = schematicSvg(el);
-    assert.ok(
-      !/NaN|undefined|Infinity/.test(schematic),
-      'schematic has a bad number'
-    );
-    assert.match(schematic, /^<svg [^>]*viewBox="[-\d. ]+"/);
   });
 }

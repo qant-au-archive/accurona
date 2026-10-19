@@ -32,7 +32,7 @@ Please include:
 
 - The element definitions and build scripts (`src/`, `scripts/`).
 - The published packages `@accurona/core` and `@accurona/ui` (`packages/`), including scene parsing and validation.
-- The generated files other projects consume (`dist/manifest.json`, `dist/models.json`, `dist/plan/*.svg`, `dist/iso/*.svg`, `dist/schematic/*.svg`): for example SVG content that could run script when inlined, or JSON that could break a consumer's parser.
+- The generated files other projects consume (`dist/manifest.json`, `dist/models.json`, `dist/plan/*.svg`): for example SVG content that could run script when inlined, or JSON that could break a consumer's parser.
 
 ## Out of scope
 

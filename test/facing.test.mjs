@@ -6,10 +6,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { installedParts } from '../src/render/geometry.mjs';
-import { isoSvg } from '../src/render/iso.mjs';
 import { modelOf } from '../src/render/model.mjs';
 import { planSvg } from '../src/render/plan.mjs';
-import { schematicSvg } from '../src/render/schematic.mjs';
 
 const dir = new URL('./snapshots/', import.meta.url);
 
@@ -64,7 +62,6 @@ const box = {
 
 test('facing up leaves the parts as authored', () => {
   assert.equal(installedParts(cylinder), cylinder.parts);
-  assert.doesNotMatch(isoSvg(cylinder), /data-facing/);
 });
 
 test('facing down mirrors each part inside the height: z = H - z - h', () => {
@@ -81,9 +78,6 @@ test('facing down mirrors each part inside the height: z = H - z - h', () => {
 
 test('flipped cylinder', () => {
   const el = down(cylinder);
-  const iso = isoSvg(el);
-  assert.match(iso, /data-facing="down"/);
-  snapshot('cylinder-down.iso.svg', iso);
   snapshot('cylinder-down.plan.svg', planSvg(el));
   assert.deepEqual(
     modelOf(el).map((s) => [s.z, s.h]),
@@ -100,19 +94,9 @@ test('flipped dome narrows downwards', () => {
   assert.deepEqual([ring.z, ring.h], [11, 3]);
   assert.deepEqual([cap.z, cap.h, cap.down], [0, 11, true]);
   assert.equal(modelOf(dome)[1].down, undefined);
-  const iso = isoSvg(el);
-  assert.notEqual(iso, isoSvg(dome));
-  snapshot('dome-down.iso.svg', iso);
-  snapshot('dome-up.iso.svg', isoSvg(dome));
 });
 
-test('flipped top-decorated box: top decals go to the underside', () => {
-  const up = isoSvg(box);
-  const flipped = isoSvg(down(box));
-  // Up: the face polygons plus two top slots and one front badge.
-  const polygons = (s) => (s.match(/<polygon /g) ?? []).length;
-  assert.equal(polygons(flipped), polygons(up) - 2);
-  snapshot('box-down.iso.svg', flipped);
+test('flipped top-decorated box: the plan shows the face as authored', () => {
   // The plan shows the face as authored, as a reflected ceiling plan does.
   assert.equal(planSvg(down(box)), planSvg(box));
 });
@@ -126,17 +110,4 @@ test('a ceiling element is drawn reflected (dashed) on the plan', () => {
   snapshot('box-ceiling.plan.svg', plan);
   const symbol = { ...ceiling, symbol: { frame: 'circle', glyph: [] } };
   assert.match(planSvg(symbol), /<circle [^>]*stroke-dasharray="4 3"/);
-});
-
-test('the schematic front view is drawn as installed', () => {
-  // The box's front badge, 3 cm down from its top, is 3 cm up from its bottom
-  // when the box faces down: y = 25 - 3 - 4 = 18.
-  assert.match(schematicSvg(box), /<rect x="5" y="3" width="10" height="4"/);
-  assert.match(schematicSvg(down(box)), /<rect x="5" y="18" width="10" height="4"/);
-  // The dome hangs below its ring: its points reach the bottom of the drawing.
-  const ys = (s) => [...s.matchAll(/<polygon points="([^"]+)"/g)][0][1]
-    .split(' ').map((p) => +p.split(',')[1]);
-  assert.equal(Math.max(...ys(schematicSvg(dome))), 11);
-  assert.equal(Math.max(...ys(schematicSvg(down(dome)))), 14);
-  snapshot('dome-down.schematic.svg', schematicSvg(down(dome)));
 });
